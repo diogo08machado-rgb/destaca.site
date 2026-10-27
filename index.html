@@ -412,8 +412,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .hero-row { display: contents; }
   .hero-row h1 { font-size: 18px; margin-bottom: auto; }
   .hero-row .btn { order: 2; margin-bottom: 20px; }
-  .wordmark { font-size: 27vw; line-height: .8; }
-  .wordmark > span > span { display: block; }
+  .wordmark { line-height: .8; }
   .intro-col { width: 78%; padding-top: 0; }
   .intro { padding-block: 72px 96px; row-gap: 40px; }
   .svc { padding-block: 96px; }
@@ -469,6 +468,10 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .pager { right: 12px; bottom: 12px; height: 48px; }
   .pager button { min-width: 46px; }
   .pg-now { min-width: 7.5em !important; font-size: 14px; }
+}
+
+@media (max-width: 520px) {
+  .wordmark > span > span { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
