@@ -18,7 +18,7 @@ const ERR = {
   html: ['Este endereço não devolve uma página HTML.', 'This address does not return an HTML page.'],
   timeout: ['O site demorou demasiado a responder.', 'The site took too long to respond.'],
   open: ['Não conseguimos abrir este site.', 'We could not open this site.'],
-  shield: ['Este site tem uma proteção anti-robôs que bloqueia análises automáticas. Pede-nos uma análise manual grátis em ola@destaca.site.', 'This site has bot protection that blocks automatic checks. Ask us for a free manual review at ola@destaca.site.'],
+  shield: ['Este site tem uma proteção anti-robôs que bloqueia análises automáticas. Pede-nos uma análise manual grátis em contacto@destaca.site.', 'This site has bot protection that blocks automatic checks. Ask us for a free manual review at contacto@destaca.site.'],
   status: ['O site respondeu com um erro ({code}), por isso não há página para analisar.', 'The site answered with an error ({code}), so there is no page to analyse.'],
 };
 class Known extends Error { constructor(key) { super(key); this.key = key; } }

@@ -167,7 +167,7 @@
       requestAnimationFrame(count);
       const bad = data.checks.filter(c => c.status !== 'ok').map(c => `- ${c.label}: ${c.detail}`).join('\n');
       const host = new URL(data.url).hostname;
-      $('#r-mail').href = `mailto:ola@destaca.site?subject=${encodeURIComponent(T.mailSubject(host, data.score))}&body=${encodeURIComponent(T.mailBody(data.url, data.score, bad))}`;
+      $('#r-mail').href = `mailto:contacto@destaca.site?subject=${encodeURIComponent(T.mailSubject(host, data.score))}&body=${encodeURIComponent(T.mailBody(data.url, data.score, bad))}`;
       status.textContent = T.done(data.score);
       $$('[data-reveal]', result).forEach(x => x.classList.add('in'));
       go(result);
@@ -180,4 +180,7 @@
       btn.firstChild.textContent = T.idle;
     }
   });
+  // links like destaca.site/?analisar=example.pt run the check straight away
+  const pre = new URLSearchParams(location.search).get('analisar');
+  if (pre) { checker.url.value = pre.slice(0, 200); checker.requestSubmit(); }
 })();
