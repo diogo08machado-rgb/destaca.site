@@ -212,6 +212,7 @@
     if (a) prefill({ topics: [a.dataset.topic], plan: a.dataset.plan });
     if (e.target.closest('#r-mail') && lastCheck) prefill({ topics: T.fixTopics, plan: T.fixPlan, site: lastCheck.url, summary: T.fixSummary(lastCheck.url, lastCheck.score, lastCheck.bad) });
   });
+  const track = event => { if (window.dataLayer?.gtmLoaded) dataLayer.push({ event }); }; // conversions, only with consent
   // Both forms post to Web3Forms, which emails contacto@destaca.site; on failure we offer a filled-in mailto
   const wire = (fm, build, onDone) => fm.addEventListener('submit', async e => {
     e.preventDefault();
@@ -239,7 +240,7 @@
   wire(form, f => {
     const fields = { Nome: f.get('nome'), Empresa: f.get('empresa') || '-', Email: f.get('email'), Telefone: f.get('telefone') || '-', Site: f.get('site') || '-', 'Tópicos': f.getAll('topicos').join(', ') || '-', Plano: f.get('plano'), Resumo: f.get('resumo'), 'Língua': lang };
     return { fields, subject: T.subject(fields.Empresa !== '-' ? `${fields.Nome} (${fields.Empresa})` : fields.Nome) };
-  }, () => { form.hidden = true; done.hidden = false; done.focus(); go(done.closest('section')); remember('sent'); });
+  }, () => { form.hidden = true; done.hidden = false; done.focus(); go(done.closest('section')); remember('sent'); track('pedido_orcamento'); });
   $('#pedido-again').addEventListener('click', () => { form.reset(); fstatus.textContent = ''; done.hidden = true; form.hidden = false; form.resumo.focus(); });
 
   // Free consultation pop-up: once, after 1 minute on the page, never over another dialog or a half-filled form
@@ -262,5 +263,32 @@
   wire(cform, f => {
     const fields = { Pedido: T.consultKind, Empresa: f.get('empresa'), Cidade: f.get('cidade') || '-', Site: f.get('site') || '-', Nome: f.get('nome'), Email: f.get('email'), Telefone: f.get('telefone') || '-', Resumo: f.get('resumo'), 'Língua': lang };
     return { fields, subject: T.consultSubject(fields.Empresa) };
-  }, () => { step('done'); remember('sent'); });
+  }, () => { step('done'); remember('sent'); track('consultoria_gratuita'); });
+
+  // Analytics: Google Tag Manager loads only after the visitor accepts (RGPD); the choice can be changed in the footer
+  const bar = $('#cookie-bar'), CK = 'destaca-cookies';
+  const choice = () => { try { return localStorage.getItem(CK); } catch { return null; } };
+  const loadGTM = () => {
+    if (window.dataLayer?.gtmLoaded) return;
+    window.dataLayer = window.dataLayer || [];
+    dataLayer.gtmLoaded = true;
+    dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+    const s = d.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-TCTL7RHK';
+    d.head.append(s);
+  };
+  if (choice() === 'yes') loadGTM(); else if (!choice()) bar.hidden = false;
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('[data-cookies]');
+    if (!b) return;
+    try { localStorage.setItem(CK, b.dataset.cookies); } catch {}
+    bar.hidden = true;
+    if (b.dataset.cookies === 'yes') return loadGTM();
+    // declined after accepting: drop the Analytics cookies and reload without the tag
+    if (window.dataLayer?.gtmLoaded) {
+      d.cookie.split(';').map(c => c.split('=')[0].trim()).filter(n => /^_g/.test(n))
+        .forEach(n => { d.cookie = `${n}=; Max-Age=0; path=/; domain=.${location.hostname}`; d.cookie = `${n}=; Max-Age=0; path=/`; });
+      location.reload();
+    }
+  });
+  $$('[data-cookie-prefs]').forEach(b => b.addEventListener('click', () => { bar.hidden = false; $('button', bar).focus(); }));
 })();
