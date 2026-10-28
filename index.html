@@ -252,6 +252,17 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .check .fix { color: #fff; margin-top: 4px; }
 .checks details summary { cursor: pointer; font-family: var(--display); font-style: italic; text-transform: uppercase; font-size: 1.5rem; padding: 8px 0 12px; }
 
+/* ---------- Clients ---------- */
+.clients { padding-block: clamp(72px, 8vw, 120px); }
+.clients-head { margin-bottom: clamp(32px, 4vw, 56px); }
+.logos { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--g); }
+.logos li { display: grid; }
+.logos li > *, .logos li > img { display: grid; place-items: center; height: 170px; padding: 24px; background: #fff; transition: transform .35s var(--ease); }
+.logos li:hover > * { transform: translateY(-4px); }
+.logos img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1); opacity: .85; transition: filter .3s, opacity .3s; }
+.logos li:hover img, .logos a:focus-visible img { filter: none; opacity: 1; }
+.logos a img { padding: 0; height: 100%; }
+
 /* ---------- Why + stats ---------- */
 .why-grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 5vw, 96px); align-items: start; }
 .why-text { display: grid; gap: 20px; max-width: 40em; }
@@ -510,6 +521,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .work-frame { grid-column: 8 / span 5; }
   .work-item { display: grid; gap: 4px; }
   .plans { grid-template-columns: 1fr; max-width: 560px; }
+  .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .foot-cols { grid-column: 1 / -1; }
 }
 
@@ -527,6 +539,9 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .hero-scene .stage { font-size: 2vw; }
   .ring { width: 160px; height: 160px; }
   .stats b { font-size: 3rem; }
+  .logos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .logos li:last-child { grid-column: span 2; }
+  .logos li > *, .logos li > img { height: 130px; padding: 18px; }
   .site-mock, .local { grid-template-columns: 1fr; }
   .site-mock img { aspect-ratio: 16 / 10; }
   .local svg { height: 180px; }
@@ -645,6 +660,21 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
       </div>
       <div class="checks" id="r-checks"></div>
     </div>
+  </section>
+
+  <!-- Clients -->
+  <section class="clients f-paper wrap" id="clientes" data-title="Clientes" aria-labelledby="clientes-h">
+    <div class="clients-head">
+      <p class="eyebrow" data-reveal>Clientes</p>
+      <h2 class="display h2" id="clientes-h" data-reveal>Empresas que <span class="acc">confiam em nós.</span></h2>
+    </div>
+    <ul class="logos">
+      <li data-reveal><a href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/nk-suspension.webp" alt="NK Suspension" width="415" height="170" loading="lazy" decoding="async"></a></li>
+      <li data-reveal><img src="/assets/clientes/inforportateis.webp" alt="Inforportáteis" width="306" height="80" loading="lazy" decoding="async"></li>
+      <li data-reveal><img src="/assets/clientes/fernando-pereira.webp" alt="Fernando Pereira, Construção Civil" width="227" height="53" loading="lazy" decoding="async"></li>
+      <li data-reveal><img src="/assets/clientes/baton-rouge.webp" alt="Baton Rouge, centro de estética" width="279" height="289" loading="lazy" decoding="async"></li>
+      <li data-reveal><img src="/assets/clientes/cafetaria-ding-dong.webp" alt="Cafetaria Ding Dong" width="566" height="555" loading="lazy" decoding="async"></li>
+    </ul>
   </section>
 
   <!-- Why -->
