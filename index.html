@@ -50,6 +50,7 @@
       "logo": "https://destaca.site/icon-512.png",
       "image": "https://destaca.site/og.png",
       "email": "ola@destaca.site",
+      "sameAs": ["https://www.instagram.com/destacasite/"],
       "priceRange": "€€",
       "address": { "@type": "PostalAddress", "addressCountry": "PT" },
       "areaServed": [{ "@type": "Country", "name": "Portugal" }, { "@type": "Place", "name": "Mundo" }],
@@ -141,7 +142,8 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .h2 { font-size: var(--h2); }
 .h3 { font-size: var(--h3); line-height: .95; }
 .acc { color: var(--or); }
-.f-or .acc { color: var(--or); background: var(--ink); padding: 0 .12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.f-or .display { line-height: 1.04; }
+.f-or .acc { color: var(--or); background: var(--ink); padding: .02em .14em 0; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .f-paper .acc { color: #e0620c; }
 .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: var(--small); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--acc); }
 .eyebrow::before { content: ""; width: 28px; height: 3px; background: currentColor; }
@@ -165,8 +167,9 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .f-or .ticks li::before { background: var(--ink); }
 
 /* ---------- Sticky header ---------- */
-.site-header { position: sticky; top: 0; z-index: 60; height: var(--header); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-inline: var(--m); background: var(--ink); color: #fff; transition: box-shadow .3s; }
+.site-header { position: sticky; top: 0; z-index: 60; height: var(--header); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-inline: var(--m); background: var(--ink); color: #fff; transition: box-shadow .3s, transform .4s var(--ease); }
 .site-header.scrolled { box-shadow: 0 1px 0 rgba(255,255,255,.1); }
+.site-header.hide { transform: translateY(-100%); }
 .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 1.125rem; letter-spacing: -.02em; }
 .logo svg { width: 32px; height: 32px; }
 .site-nav { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); font-size: 15px; font-weight: 500; }
@@ -446,10 +449,19 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .faq details p { max-width: 52ch; padding: 0 24px 24px; color: var(--fg2); }
 
 /* ---------- Contact ---------- */
-.contact { min-height: calc(100svh - var(--header)); display: grid; grid-template-rows: auto 1fr; padding-block: var(--sec) var(--m); }
-.contact-top { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
-.contact-top > div { display: grid; gap: 18px; max-width: 40em; }
-.email-wrap { align-self: end; padding-top: 64px; }
+.contact { padding-block: var(--sec) var(--m); }
+.contact-grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 5vw, 96px); align-items: end; }
+.contact-copy { display: grid; gap: 22px; }
+.contact-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+.channels { display: grid; gap: 10px; }
+.channel { display: grid; grid-template-columns: 52px 1fr auto; gap: 16px; align-items: center; padding: 18px 20px; background: var(--ink-2); text-decoration: none; transition: background-color .25s, transform .35s var(--ease); }
+.channel:hover { background: var(--ink-3); transform: translateX(4px); }
+.channel > svg:first-child { width: 52px; height: 52px; padding: 13px; background: var(--or); color: var(--ink); }
+.channel b { display: block; font-size: 1.125rem; font-weight: 600; }
+.channel small { font-size: 14px; color: var(--fg2); }
+.channel > svg:last-child { width: 18px; height: 18px; color: var(--or); transition: transform .3s var(--ease); }
+.channel:hover > svg:last-child { transform: translate(3px, -3px); }
+.email-wrap { padding-top: clamp(64px, 8vw, 120px); }
 .email { position: relative; z-index: 0; display: block; font-family: var(--display); font-style: italic; font-weight: 700; letter-spacing: -.01em; line-height: 1; white-space: nowrap; font-size: 11vw; text-decoration: none; color: var(--or); }
 .email > span { display: block; width: max-content; padding-right: .05em; }
 .email::before { content: ""; position: absolute; z-index: -1; inset: 6% -.06em 2%; background: var(--or); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); }
@@ -473,14 +485,14 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .legal p { max-width: 90ch; }
 
 /* ---------- Pager ---------- */
-.pager { position: fixed; z-index: 50; right: var(--m); bottom: var(--m); display: flex; align-items: stretch; height: 52px; background: var(--or); color: var(--ink); opacity: 0; visibility: hidden; translate: 0 16px; transition: opacity .3s, visibility .3s, translate .4s var(--ease); }
-.pager.show { opacity: 1; visibility: visible; translate: 0 0; }
-.pager.on-or { background: var(--ink); color: var(--or); }
-.pager button { display: grid; place-items: center; min-width: 52px; transition: background-color .2s; }
-.pager button:hover { background: rgba(255, 255, 255, .25); }
-.pager svg { width: 16px; height: 16px; }
-.pg-now { position: relative; padding: 0 14px !important; min-width: 9.5em !important; font-size: 14px; font-weight: 600; }
-.pg-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: currentColor; transform-origin: left; transform: scaleX(var(--sp, 0)); }
+.rail { position: fixed; z-index: 50; right: 14px; top: 50%; translate: 0 -50%; display: grid; gap: 2px; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
+.rail.show { opacity: 1; visibility: visible; }
+.rail button { position: relative; display: flex; justify-content: flex-end; align-items: center; width: 40px; height: 22px; }
+.rail button::after { content: ""; width: 14px; height: 3px; background: #8a96a0; transition: width .35s var(--ease), background-color .25s; }
+.rail button:hover::after { width: 22px; background: #fff; }
+.rail button[aria-current="true"]::after { width: 30px; background: var(--or); }
+.rail span { position: absolute; right: 44px; padding: 5px 10px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; translate: 6px 0; pointer-events: none; transition: opacity .2s, translate .25s var(--ease); }
+.rail button:hover span, .rail button:focus-visible span { opacity: 1; translate: 0 0; }
 
 /* ---------- Menu dialog ---------- */
 .menu { margin: 0 0 0 auto; height: 100dvh; max-height: none; width: min(440px, 100%); border: 0; padding: var(--m); background: var(--ink); color: #fff; box-shadow: -24px 0 60px rgba(0, 0, 0, .35); /* taste-skill-ignore: real overlay */ }
@@ -496,7 +508,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .menu .btn { margin-top: 32px; }
 
 /* ---------- Entrances ---------- */
-.js [data-reveal] { opacity: 0; translate: 0 26px; transition: opacity .7s var(--ease) var(--d, 0ms), translate .9s var(--ease) var(--d, 0ms); }
+.js [data-reveal] { opacity: 0; translate: 0 26px; transition: opacity .7s var(--ease) var(--d, 0ms), translate .9s var(--ease) var(--d, 0ms), transform .35s var(--ease), background-color .25s, box-shadow .25s; }
 .js [data-reveal].in { opacity: 1; translate: 0 0; }
 
 /* ---------- Tablet ---------- */
@@ -522,6 +534,8 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .work-item { display: grid; gap: 4px; }
   .plans { grid-template-columns: 1fr; max-width: 560px; }
   .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rail { display: none; }
+  .contact-grid { grid-template-columns: 1fr; }
   .foot-cols { grid-column: 1 / -1; }
 }
 
@@ -569,9 +583,6 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .email { font-size: 15vw; }
   .email > span > span { display: block; }
   .foot-cols { grid-template-columns: 1fr 1fr; }
-  .pager { right: 12px; bottom: 12px; height: 48px; }
-  .pager button { min-width: 46px; }
-  .pg-now { min-width: 7.5em !important; font-size: 13px; }
 }
 @media (max-width: 520px) {
   .wordmark > span > span { display: block; }
@@ -1014,13 +1025,30 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 
   <!-- Contact -->
   <section class="contact f-ink wrap" id="contacto" data-title="Contacto" aria-labelledby="contacto-h">
-    <div class="contact-top">
-      <div>
-        <p class="eyebrow" data-reveal>Contacto</p>
-        <h2 class="display h2" id="contacto-h" data-reveal>Conta-nos o que fazes. <span class="acc">O diagnóstico é grátis.</span></h2>
-        <p class="soft" data-reveal>Respondemos em 24 horas úteis, por email ou numa chamada. Portugal, e reuniões online para todo o mundo.</p>
+    <div class="contact-grid">
+      <div class="contact-copy">
+        <div>
+          <p class="eyebrow" data-reveal>Contacto</p>
+          <h2 class="display h2" id="contacto-h" data-reveal>Conta-nos o que fazes. <span class="acc">O diagnóstico é grátis.</span></h2>
+        </div>
+        <p class="lead soft" data-reveal>Respondemos em 24 horas úteis, por email, numa chamada ou por mensagem no Instagram. Portugal, e reuniões online para todo o mundo.</p>
+        <div class="contact-actions" data-reveal>
+          <a class="btn" href="mailto:ola@destaca.site?subject=Pedido%20de%20or%C3%A7amento&amp;body=Ol%C3%A1%20Destaca%2C%0A%0AO%20meu%20neg%C3%B3cio%3A%20%0AO%20meu%20site%20(se%20tiver)%3A%20%0AO%20que%20preciso%3A%20%0A">Pedir orçamento <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+          <a class="btn btn-ghost" href="#inicio">Fazer a análise grátis</a>
+        </div>
       </div>
-      <a class="btn" data-reveal href="mailto:ola@destaca.site?subject=Pedido%20de%20or%C3%A7amento&amp;body=Ol%C3%A1%20Destaca%2C%0A%0AO%20meu%20neg%C3%B3cio%3A%20%0AO%20meu%20site%20(se%20tiver)%3A%20%0AO%20que%20preciso%3A%20%0A">Pedir orçamento <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+      <div class="channels">
+        <a class="channel" data-reveal href="mailto:ola@destaca.site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14"/><path d="m3 6 9 7 9-7"/></svg>
+          <span><b>ola@destaca.site</b><small>Email, resposta em 24 horas úteis</small></span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 11 11 5M6 5h5v5"/></svg>
+        </a>
+        <a class="channel" data-reveal href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <span><b>@destacasite</b><small>Instagram, trabalhos e novidades</small></span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 11 11 5M6 5h5v5"/></svg>
+        </a>
+      </div>
     </div>
     <p class="email-wrap" data-reveal><a class="email" data-fit href="mailto:ola@destaca.site?subject=Diagn%C3%B3stico%20gr%C3%A1tis"><span><span>ola@</span><span>destaca.site</span></span></a></p>
   </section>
@@ -1031,6 +1059,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   <div class="grid foot-row">
     <div class="places">
       <a href="mailto:ola@destaca.site">ola@destaca.site</a>
+      <a href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">@destacasite</a>
       <span>destaca o teu site!</span>
     </div>
     <div class="foot-cols">
@@ -1045,11 +1074,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   </div>
 </footer>
 
-<nav class="pager" aria-label="Paginação das secções">
-  <button type="button" class="pg-prev" aria-label="Secção anterior"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l5-5 5 5"/></svg></button>
-  <button type="button" class="pg-now" data-open-menu aria-haspopup="dialog" aria-controls="menu"><span class="pg-name">Início</span><span class="pg-bar"></span></button>
-  <button type="button" class="pg-next" aria-label="Secção seguinte"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l5 5 5-5"/></svg></button>
-</nav>
+<nav class="rail" aria-label="Paginação das secções"></nav>
 
 <dialog class="menu" id="menu" aria-label="Secções da página">
   <div class="menu-top"><span>destaca.site</span><form method="dialog"><button>Fechar</button></form></div>
@@ -1131,11 +1156,18 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
     t.el.addEventListener('pointerleave', () => { t.tx = 0; t.ty = 0; });
   });
 
-  // Scroll-linked 3D: hero lift, page anatomy, map, footer name; header, pager
+  // Scroll-linked 3D: hero lift, page anatomy, map, footer name; header, pagination rail
   const header = $('.site-header'), hero = $('.hero'), anat = $('.anat'), stack = $('.stack'), layers = $$('.layer'), anatItems = $$('.anat-list li');
-  const map = $('[data-map]'), foot = $('.footer'), pager = $('.pager'), pgName = $('.pg-name'), pgBar = $('.pg-bar');
+  const map = $('[data-map]'), foot = $('.footer'), rail = $('.rail');
   const menuLinks = $$('#menu-list a');
-  let current = -1, active = -1;
+  rail.innerHTML = sections.map(s => `<button type="button" aria-label="${s.dataset.title}"><span>${s.dataset.title}</span></button>`).join('');
+  const railBtns = $$('button', rail);
+  railBtns.forEach((b, i) => b.addEventListener('click', () => go(sections[i])));
+  let current = -1, active = -1, dirty = true, lastY = 0;
+  // only recompute when something moved: scroll, resize or the pointer easing the tilt
+  addEventListener('scroll', () => { dirty = true; }, { passive: true });
+  addEventListener('resize', () => { dirty = true; });
+  d.addEventListener('pointermove', () => { dirty = true; }, { passive: true });
 
   const setActive = i => {
     if (i === active) return;
@@ -1145,8 +1177,14 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   };
 
   const frame = () => {
+    requestAnimationFrame(frame);
+    const easing = tilts.some(t => Math.abs(t.tx - t.x) > 0.001 || Math.abs(t.ty - t.y) > 0.001);
+    if (!dirty && !easing) return;
+    dirty = false;
     const vh = innerHeight, y = scrollY, hh = header.offsetHeight;
     header.classList.toggle('scrolled', y > 8);
+    // hide the bar while reading down, bring it back on the way up
+    if (Math.abs(y - lastY) > 4) { header.classList.toggle('hide', y > lastY && y > vh * 0.8 && !menu.open && !header.contains(d.activeElement)); lastY = y; }
     if (!reduce) {
       hero.style.setProperty('--hp', clamp(y / (vh * 0.9)).toFixed(4));
 
@@ -1172,19 +1210,13 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
     sections.forEach((s, i) => { if (!s.hidden && s.getBoundingClientRect().top <= vh * 0.45) c = i; });
     if (c !== current) {
       current = c;
-      pgName.textContent = sections[c].dataset.title;
-      pager.classList.toggle('on-or', sections[c].classList.contains('f-or'));
       menuLinks.forEach((a, i) => a.setAttribute('aria-current', i === c ? 'true' : 'false'));
+      railBtns.forEach((b, i) => b.setAttribute('aria-current', i === c ? 'true' : 'false'));
     }
-    pager.classList.toggle('show', y > vh * 0.6 && foot.getBoundingClientRect().top > vh * 0.6);
-    pgBar.style.setProperty('--sp', clamp(y / (root.scrollHeight - vh)).toFixed(4));
-    requestAnimationFrame(frame);
+    rail.classList.toggle('show', y > vh * 0.6 && foot.getBoundingClientRect().top > vh * 0.5);
   };
   if (reduce) setActive(4);
   requestAnimationFrame(frame);
-
-  $('.pg-prev').addEventListener('click', () => go(sections[Math.max(0, current - 1)]));
-  $('.pg-next').addEventListener('click', () => go(sections[Math.min(sections.length - 1, current + 1)]));
 
   // Concepts: one preview, swapped by hover, focus or tap
   const items = $$('.work-item'), mocks = $$('.mock');
