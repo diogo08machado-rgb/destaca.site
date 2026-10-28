@@ -431,3 +431,4 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .js [data-reveal] { opacity: 1; translate: none; }
 }
 .menu .menu-top a { display: inline; font-family: var(--sans); font-size: inherit; color: var(--or); }
+.logos img.native { height: 56px; }
