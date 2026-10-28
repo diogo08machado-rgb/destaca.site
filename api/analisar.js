@@ -18,6 +18,8 @@ const ERR = {
   html: ['Este endereço não devolve uma página HTML.', 'This address does not return an HTML page.'],
   timeout: ['O site demorou demasiado a responder.', 'The site took too long to respond.'],
   open: ['Não conseguimos abrir este site.', 'We could not open this site.'],
+  shield: ['Este site tem uma proteção anti-robôs que bloqueia análises automáticas. Pede-nos uma análise manual grátis em ola@destaca.site.', 'This site has bot protection that blocks automatic checks. Ask us for a free manual review at ola@destaca.site.'],
+  status: ['O site respondeu com um erro ({code}), por isso não há página para analisar.', 'The site answered with an error ({code}), so there is no page to analyse.'],
 };
 class Known extends Error { constructor(key) { super(key); this.key = key; } }
 
@@ -162,6 +164,12 @@ module.exports = async function handler(req, res) {
     let page;
     try { page = await get(target.href); } catch (e) {
       if (target.protocol === 'https:' && !['blocked', 'domain'].includes(e.key)) { target.protocol = 'http:'; page = await get(target.href); } else throw e;
+    }
+    // a bot wall or an error page is not the site: say so instead of scoring it
+    if (page.status >= 400) {
+      const wall = page.headers.get('cf-mitigated') || /just a moment|attention required|checking your browser|security checkpoint|captcha/i.test(page.text.slice(0, 5000));
+      if (wall || page.status === 403 || page.status === 429) return fail(422, 'shield');
+      return send(422, { error: ERR.status[en ? 1 : 0].replace('{code}', page.status) });
     }
     if (!/html/i.test(page.headers.get('content-type') || '')) return fail(422, 'html');
     const [robots, sitemap] = await robotsAndSitemap(page.url.origin);
