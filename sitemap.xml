@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://destaca.site/</loc><lastmod>2026-10-27</lastmod></url>
-  <url><loc>https://destaca.site/legal.html</loc><lastmod>2026-10-27</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://destaca.site/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
+  </url>
+  <url>
+    <loc>https://destaca.site/en/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
+  </url>
+  <url><loc>https://destaca.site/legal.html</loc><lastmod>2026-10-28</lastmod></url>
 </urlset>

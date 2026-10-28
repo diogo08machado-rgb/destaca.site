@@ -9,6 +9,7 @@
 <meta name="author" content="Diogo Machado, Afonso Fernandes">
 <link rel="canonical" href="https://destaca.site/">
 <link rel="alternate" hreflang="pt-PT" href="https://destaca.site/">
+<link rel="alternate" hreflang="en" href="https://destaca.site/en/">
 <link rel="alternate" hreflang="x-default" href="https://destaca.site/">
 <meta name="theme-color" content="#050f16">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -19,6 +20,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_PT">
+<meta property="og:locale:alternate" content="en_GB">
 <meta property="og:site_name" content="destaca.site">
 <meta property="og:url" content="https://destaca.site/">
 <meta property="og:title" content="destaca.site destaca o teu site!">
@@ -26,7 +28,7 @@
 <meta property="og:image" content="https://destaca.site/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="destaca.site, em letras grandes sobre fundo laranja">
+<meta property="og:image:alt" content="destaca.site, destaca o teu site!">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="destaca.site destaca o teu site!">
 <meta name="twitter:description" content="Análise SEO grátis, páginas de apresentação e SEO para empresas. Feito em Portugal, para Portugal e para o mundo.">
@@ -34,6 +36,7 @@
 
 <link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
 
 <script type="application/ld+json">
 {
@@ -69,7 +72,7 @@
     },
     { "@type": "Person", "@id": "https://destaca.site/#diogo-machado", "name": "Diogo Machado", "jobTitle": "Cofundador e CEO", "worksFor": { "@id": "https://destaca.site/#empresa" }, "knowsAbout": ["Desenvolvimento web", "SEO técnico"] },
     { "@type": "Person", "@id": "https://destaca.site/#afonso-fernandes", "name": "Afonso Fernandes", "jobTitle": "Cofundador e CEO", "worksFor": { "@id": "https://destaca.site/#empresa" }, "knowsAbout": ["Marketing digital", "SEO local"] },
-    { "@type": "WebSite", "@id": "https://destaca.site/#site", "url": "https://destaca.site/", "name": "destaca.site", "alternateName": ["Destaca", "destaca.site"], "inLanguage": "pt-PT", "publisher": { "@id": "https://destaca.site/#empresa" } },
+    { "@type": "WebSite", "@id": "https://destaca.site/#site", "url": "https://destaca.site/", "name": "destaca.site", "alternateName": ["Destaca", "destaca.site"], "inLanguage": ["pt-PT", "en"], "publisher": { "@id": "https://destaca.site/#empresa" } },
     { "@type": "WebPage", "@id": "https://destaca.site/#pagina", "url": "https://destaca.site/", "name": "destaca.site", "isPartOf": { "@id": "https://destaca.site/#site" }, "about": { "@id": "https://destaca.site/#empresa" }, "inLanguage": "pt-PT" },
     {
       "@type": "FAQPage",
@@ -87,567 +90,34 @@
   ]
 }
 </script>
-
-<style>
-@font-face { font-family: "Instrument Serif"; src: url(/assets/fonts/instrument-serif-normal.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Instrument Serif"; src: url(/assets/fonts/instrument-serif-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
-@font-face { font-family: "Hanken Grotesk"; src: url(/assets/fonts/hanken-grotesk-latin.woff2) format("woff2"); font-weight: 400 600; font-display: swap; }
-
-:root {
-  --or: #ff7a1f; --or-2: #ff8a3a; --ink: #050f16; --ink-2: #0c1923; --ink-3: #132530; --paper: #f1f3f4; --muted: #5a2306;
-  --display: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --m: clamp(20px, 3vw, 48px);
-  --g: clamp(16px, 1.7vw, 24px);
-  --small: clamp(.8125rem, .79rem + .1vw, .875rem);
-  --body: clamp(1.0625rem, 1rem + .2vw, 1.1875rem);
-  --lead: clamp(1.25rem, 1.1rem + .6vw, 1.5rem);
-  --h3: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
-  --h2: clamp(2.6rem, 1.6rem + 3.6vw, 4.75rem);
-  --h1: clamp(3.2rem, 1.6rem + 5.2vw, 6.6rem);
-  --ease: cubic-bezier(.2, .7, .1, 1);
-  --sec: clamp(96px, 11vw, 168px);
-  --header: 68px;
-}
-
-*, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: var(--header); }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
-body { margin: 0; font-family: "Hanken Grotesk", system-ui, sans-serif; font-size: var(--body); line-height: 1.5; color: var(--ink); background: var(--ink); -webkit-font-smoothing: antialiased; overflow-x: clip; }
-h1, h2, h3, p, ul, ol, figure, dl, dd { margin: 0; }
-ul, ol { padding: 0; list-style: none; }
-img { display: block; max-width: 100%; height: auto; }
-a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: 2px; }
-button, input { font: inherit; color: inherit; }
-button { background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
-:focus-visible { outline: 3px solid var(--or); outline-offset: 3px; }
-::selection { background: var(--or); color: var(--ink); }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.skip { position: absolute; left: var(--m); top: -100px; z-index: 100; background: var(--or); color: var(--ink); padding: 12px 16px; font-weight: 600; }
-.skip:focus { top: 12px; }
-
-/* Fields */
-.f-ink   { --fg: #fff; --fg2: #a9b4bc; --acc: var(--or); --tone: var(--ink-2); --line: rgba(255,255,255,.12); background: var(--ink); color: var(--fg); }
-.f-paper { --fg: var(--ink); --fg2: #4a5560; --acc: #a8460a; --tone: #fff; --line: rgba(5,15,22,.12); background: var(--paper); color: var(--fg); }
-.f-or    { --fg: var(--ink); --fg2: var(--muted); --acc: var(--ink); --tone: var(--or-2); --line: rgba(5,15,22,.18); background: var(--or); color: var(--fg); }
-
-.wrap { padding-inline: var(--m); }
-.sec { padding-block: var(--sec); }
-.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--g); }
-.soft { color: var(--fg2); }
-
-/* Type */
-.display { font-family: var(--display); font-weight: 400; letter-spacing: -.015em; line-height: 1.02; text-wrap: balance; }
-.h2 { font-size: var(--h2); }
-.h3 { font-size: var(--h3); line-height: .95; }
-.acc { color: var(--or); font-style: italic; }
-.f-or .display { line-height: 1.04; }
-.f-or .acc { color: var(--or); background: var(--ink); padding: .02em .14em 0; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.f-paper .acc { color: #e0620c; }
-.eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: var(--small); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--acc); }
-.eyebrow::before { content: ""; width: 28px; height: 3px; background: currentColor; }
-.lead { font-size: var(--lead); line-height: 1.4; }
-
-/* Buttons and chips */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: .6em; min-height: 54px; padding: .7em 1.4em; background: var(--or); color: var(--ink); text-decoration: none; font-family: "Hanken Grotesk", system-ui, sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: -.005em; line-height: 1; white-space: nowrap; border-radius: 999px; transition: transform .25s var(--ease), background-color .2s, box-shadow .2s; }
-.btn svg { width: 1em; height: 1em; transition: transform .25s var(--ease); }
-.btn:hover { background: #ff8f42; }
-.btn:hover svg { transform: translateX(4px); }
-.btn:active { transform: scale(.97); transition-duration: .08s; }
-.f-or .btn { background: var(--ink); color: var(--or); }
-.f-or .btn:hover { background: #142634; }
-.btn-ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 2px var(--line); }
-.btn-ghost:hover { background: transparent; box-shadow: inset 0 0 0 2px currentColor; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chips li { padding: 6px 12px; font-size: var(--small); font-weight: 500; background: var(--tone); color: var(--fg); }
-.ticks { display: grid; gap: 10px; }
-.ticks li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; }
-.ticks li::before { content: ""; width: 20px; height: 20px; margin-top: .15em; background: var(--or); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 10.5l4 4 8-9' fill='none' stroke='black' stroke-width='2.6'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 10.5l4 4 8-9' fill='none' stroke='black' stroke-width='2.6'/%3E%3C/svg%3E") center / contain no-repeat; }
-.f-or .ticks li::before { background: var(--ink); }
-
-/* ---------- Sticky header ---------- */
-.site-header { position: sticky; top: 0; z-index: 60; height: var(--header); margin-bottom: calc(var(--header) * -1); padding: 8px clamp(8px, 1.4vw, 20px); color: #fff; pointer-events: none; }
-.bar { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-inline: clamp(12px, 1.6vw, 28px); border-radius: 18px; pointer-events: auto; background: transparent; border: 1px solid transparent; transition: background-color .45s var(--ease), border-color .45s, box-shadow .45s, backdrop-filter .45s; }
-/* liquid glass once the page scrolls */
-.site-header.scrolled .bar { background: rgba(8, 17, 25, .66); border-color: rgba(255, 255, 255, .14); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), inset 0 -1px 0 rgba(255, 255, 255, .04), 0 12px 36px -12px rgba(0, 0, 0, .45); /* taste-skill-ignore: floating glass header requested */ }
-.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 1.125rem; letter-spacing: -.02em; }
-.logo svg { width: 32px; height: 32px; }
-.site-nav { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); font-size: 15px; font-weight: 500; }
-.site-nav a:not(.btn) { text-decoration: none; color: #d5dce1; padding: 6px 0; transition: color .2s; }
-.site-nav a:not(.btn):hover { color: var(--or); }
-.site-nav .btn { min-height: 44px; font-size: 1.05rem; padding: .55em 1.1em; }
-.nav-menu { display: none; font-weight: 600; min-height: 44px; padding: 0 4px; }
-
-/* ---------- Hero ---------- */
-.hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(32px, 5vw, 96px); padding-block: calc(var(--header) + clamp(32px, 5vw, 72px)) clamp(48px, 6vw, 96px); overflow: hidden; isolation: isolate; }
-.hero::before { content: ""; position: absolute; z-index: -1; width: 70vw; height: 70vw; right: -20vw; top: -10vw; background: radial-gradient(closest-side, rgba(255, 122, 31, .16), transparent 70%); /* taste-skill-ignore: soft glow behind the hero visual */ }
-.hero-visual { position: relative; padding: 24px 0 40px; }
-.dash { background: #fff; color: var(--ink); border-radius: 20px; overflow: hidden; box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .06); }
-.dash-bar { display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px; background: #f1f3f4; font-size: 13px; color: #5f6368; }
-.dash-bar i { width: 10px; height: 10px; border-radius: 50%; background: #d3d6d9; }
-.dash-bar span { margin-left: 12px; }
-.dash-body { display: grid; grid-template-columns: 180px 1fr; gap: 20px 28px; padding: 28px; }
-.dash-score { position: relative; display: grid; justify-items: center; align-content: start; gap: 8px; }
-.dash-score svg { width: 150px; height: 150px; }
-.dash-score div { position: absolute; top: 0; width: 150px; height: 150px; display: grid; place-content: center; text-align: center; }
-.dash-score b { font-family: var(--display); font-size: 3.4rem; font-weight: 400; line-height: .9; }
-.dash-score span { font-size: 12px; color: #5f6368; }
-.dash-score p { font-size: 13px; color: #5f6368; }
-.dash-checks { display: grid; gap: 10px; align-content: center; font-size: 15px; }
-.dash-checks li { display: flex; align-items: center; gap: 10px; }
-.dash-checks li::before { content: "✓"; display: grid; place-items: center; width: 22px; height: 22px; flex: none; border-radius: 50%; background: #e3f7ec; color: #11804a; font-size: 12px; font-weight: 700; }
-.dash-checks li.warn::before { content: "!"; background: #fff4dc; color: #a86a00; }
-.dash-chart { grid-column: 1 / -1; padding-top: 16px; box-shadow: inset 0 1px 0 #eef0f1; }
-.dash-chart p { display: flex; justify-content: space-between; font-size: 14px; color: #5f6368; margin-bottom: 8px; }
-.dash-chart b { color: #11804a; font-weight: 600; }
-.dash-chart svg { width: 100%; height: 80px; display: block; }
-.float-card { position: absolute; display: grid; gap: 2px; padding: 14px 18px; background: rgba(255, 255, 255, .92); color: var(--ink); border-radius: 14px; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 20px 40px -16px rgba(0, 0, 0, .5); animation: floaty 7s ease-in-out infinite; }
-.float-card span { font-size: 13px; color: #5f6368; }
-.float-card b { font-family: var(--display); font-size: 1.9rem; font-weight: 400; line-height: 1; }
-.float-card em { font-style: normal; font-size: 13px; font-weight: 600; color: #11804a; }
-.fc-1 { left: -36px; bottom: 6px; }
-.fc-2 { right: -18px; top: -2px; grid-template-columns: auto 1fr; column-gap: 10px; align-items: center; animation-delay: -3.5s; }
-.fc-2 i { grid-row: span 2; width: 10px; height: 10px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 0 4px #dff7ea; }
-.fc-2 span { color: var(--ink); font-weight: 600; font-size: 14px; }
-.fc-2 small { font-size: 12px; color: #5f6368; }
-@keyframes floaty { 50% { transform: translateY(-10px); } }
-.hero-copy { position: relative; z-index: 2; }
-.hero h1 { font-size: var(--h1); margin-bottom: 28px; }
-.hero-lead { max-width: 34em; color: #d5dce1; margin-bottom: 32px; }
-.checker { display: flex; max-width: 640px; background: #fff; padding: 6px; border-radius: 999px; }
-.checker label { padding-left: 18px !important; }
-.checker label { display: flex; align-items: center; flex: 1; gap: 10px; padding-left: 14px; color: #5f6368; }
-.checker svg { width: 22px; height: 22px; flex: none; }
-.checker input { flex: 1; min-width: 0; height: 52px; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 18px; }
-.checker input::placeholder { color: #7a838a; }
-.checker:focus-within { outline: 3px solid var(--or); outline-offset: 3px; }
-/* softer, more product-like corners across cards */
-.plan, .channel, .browser, .person, .logos li > *, .logos li > img, .faq details, .check, .kpis div, .sim-stage, .work-frame, .why-pic img, .result .ring, .mono { border-radius: 16px; }
-.browser, .work-frame, .sim-stage { overflow: hidden; }
-.channel > svg:first-child, .plan-tag, .chips li { border-radius: 10px; }
-.checker .btn[aria-busy="true"] { pointer-events: none; opacity: .85; }
-.checker-status { min-height: 1.5em; margin-top: 12px; font-size: 15px; color: #d5dce1; }
-.checker-status.err { color: #ffb38a; }
-.trust { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 10px; font-size: 15px; color: #d5dce1; }
-.trust li { display: flex; align-items: center; gap: 8px; }
-.trust li::before { content: ""; width: 16px; height: 16px; background: var(--or); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 10.5l4 4 8-9' fill='none' stroke='black' stroke-width='2.8'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 10.5l4 4 8-9' fill='none' stroke='black' stroke-width='2.8'/%3E%3C/svg%3E") center / contain no-repeat; }
-
-/* The search page in 3D, shared by the hero and the simulator */
-.stage { position: absolute; inset: 0; pointer-events: none; display: grid; place-items: center; perspective: 1500px; perspective-origin: 50% 20%; font-size: clamp(7px, .82vw, 13px); }
-.serp { position: relative; width: 46em; padding: 2em 2.2em 2.4em; background: #fff; color: #202124; transform-style: preserve-3d; transform: translateY(var(--ty, 0%)) rotateX(var(--rx)) rotateZ(var(--rz)); }
-.serp-bar { display: flex; align-items: center; gap: .9em; height: 3.4em; padding: 0 1.4em; border-radius: 2em; background: #f1f3f4; font-size: 1.1em; }
-.serp-bar svg { width: 1.1em; height: 1.1em; flex: none; }
-.serp-slot { height: 11em; margin: 1.4em 0 .6em; background: #e9e2dc; }
-.serp-res { display: grid; gap: .25em; padding: .9em 0; }
-.u { font-size: .95em; color: #4d5156; display: flex; align-items: center; gap: .55em; }
-.t { font-size: 1.45em; line-height: 1.2; color: #1a0dab; }
-.s { font-size: 1em; line-height: 1.45; color: #4d5156; }
-.lift { position: absolute; left: 2.2em; right: 2.2em; top: 6.8em; height: 11em; transform-style: preserve-3d; transform: translateZ(var(--lz, 4.5em)); }
-.lift-in { position: absolute; inset: 0; transform-style: preserve-3d; animation: bob 6s ease-in-out infinite; }
-@keyframes bob { 50% { transform: translateZ(1.4em); } }
-.card { position: absolute; inset: 0; display: grid; align-content: start; gap: .3em; padding: 1.3em 1.5em; background: var(--or); color: var(--ink); transform-style: preserve-3d; }
-.card .t { color: var(--ink); font-weight: 500; }
-.card .u, .card .s { color: #3b1704; }
-.fav { display: grid; place-items: center; width: 1.9em; height: 1.9em; border-radius: 50%; background: var(--ink); color: var(--or); font-style: normal; font-weight: 600; font-size: .9em; }
-.edge { position: absolute; background: #c4560b; }
-.edge-b { left: 0; right: 0; top: 100%; height: .9em; transform-origin: top; transform: rotateX(-90deg); }
-.edge-r { top: 0; bottom: 0; left: 100%; width: .9em; transform-origin: left; transform: rotateY(90deg); background: #a34505; }
-
-
-/* ---------- Analysis result ---------- */
-.result { background: var(--ink-2); }
-.result[hidden] { display: none; }
-.result-grid { display: grid; grid-template-columns: minmax(260px, 4fr) 8fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
-.score { position: sticky; top: calc(var(--header) + 32px); display: grid; gap: 20px; justify-items: start; }
-.ring { position: relative; width: 200px; height: 200px; }
-.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.ring circle { fill: none; stroke-width: 12; }
-.ring .bg { stroke: var(--ink-3); }
-.ring .fg { stroke: var(--or); stroke-dasharray: 326.7; stroke-dashoffset: 326.7; transition: stroke-dashoffset 1.4s var(--ease); }
-.ring b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 4.5rem; line-height: 1; }
-.ring b small { font-size: .35em; color: var(--fg2); margin-left: .1em; }
-.score-url { font-size: 15px; color: var(--fg2); word-break: break-all; }
-.score-verdict { font-size: var(--lead); line-height: 1.3; font-weight: 500; }
-.score-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.checks h3 { font-family: var(--display); font-size: 1.5rem; margin: 8px 0 12px; letter-spacing: .01em; }
-.checks h3 + ul { margin-bottom: 28px; }
-.check { display: grid; grid-template-columns: 30px 1fr; gap: 14px; padding: 16px 18px; background: var(--ink-3); }
-.check + .check { margin-top: 6px; }
-.check i { display: grid; place-items: center; width: 30px; height: 30px; font-style: normal; font-weight: 700; color: var(--ink); background: #3ddc84; }
-.check.erro i { background: #ff5a4f; }
-.check.aviso i { background: #ffc24b; }
-.check b { display: block; font-weight: 600; }
-.check p { font-size: 15px; color: var(--fg2); overflow-wrap: anywhere; }
-.check .fix { color: #fff; margin-top: 4px; }
-.checks details summary { cursor: pointer; font-family: var(--display); font-size: 1.5rem; padding: 8px 0 12px; }
-
-/* ---------- Clients ---------- */
-.clients { padding-block: clamp(72px, 8vw, 120px); }
-.clients-head { margin-bottom: clamp(32px, 4vw, 56px); }
-.logos { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--g); }
-.logos li { display: grid; }
-.logos li > *, .logos li > img { display: grid; place-items: center; height: 170px; padding: 24px; background: #fff; transition: transform .35s var(--ease); }
-.logos li:hover > * { transform: translateY(-4px); }
-.logos img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1); opacity: .85; transition: filter .3s, opacity .3s; }
-.logos li:hover img, .logos a:focus-visible img { filter: none; opacity: 1; }
-.logos a img { padding: 0; height: 100%; }
-
-/* ---------- Why + stats ---------- */
-.why-grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 5vw, 96px); align-items: start; }
-.why-text { display: grid; gap: 20px; max-width: 40em; }
-.why-text p { color: var(--fg2); }
-.why-text p.lead { color: var(--fg); }
-.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--g); margin-top: 32px; }
-.stats li { padding-left: 18px; box-shadow: inset 3px 0 0 var(--or); display: grid; gap: 6px; }
-.stats b { font-family: var(--display); font-size: clamp(3rem, 2rem + 3vw, 4.75rem); line-height: .9; color: var(--or); }
-.stats span { font-size: 15px; color: var(--fg2); max-width: 22ch; }
-.why-pic img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-.why-pic figcaption { margin-top: 10px; font-size: var(--small); color: var(--fg2); }
-
-/* ---------- Services (alternating rows) ---------- */
-.svc-head { max-width: 1100px; margin-bottom: clamp(56px, 7vw, 104px); }
-.svc-row { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(32px, 5vw, 96px); align-items: center; }
-.svc-row + .svc-row { margin-top: clamp(72px, 9vw, 140px); }
-.svc-row:nth-of-type(even) .svc-copy { order: 2; }
-.svc-copy { display: grid; gap: 22px; align-content: start; }
-.svc-copy > p { color: var(--fg2); }
-.svc-copy .link { font-weight: 600; justify-self: start; text-decoration: none; box-shadow: inset 0 -2px 0 var(--or); padding-bottom: 2px; }
-.svc-copy .link:hover { color: #e0620c; }
-.browser { background: #fff; box-shadow: 0 30px 60px -30px rgba(5, 15, 22, .45); /* taste-skill-ignore: interface fragment */ transition: transform .5s var(--ease); }
-.svc-row:hover .browser { transform: translateY(-6px); }
-.browser-bar { display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px; background: #e9e7e4; font-size: 13px; color: #4d5156; }
-.browser-bar i { width: 11px; height: 11px; border-radius: 50%; background: #c9c6c1; }
-.browser-bar span { margin-left: 12px; padding: 3px 12px; background: #fff; border-radius: 20px; }
-.site-mock { display: grid; grid-template-columns: 1fr 1fr; min-height: 360px; }
-.site-mock img { width: 100%; height: 100%; object-fit: cover; }
-.site-mock div { background: #1f3d2b; color: #f3ede0; padding: 32px 28px; display: grid; align-content: center; gap: 14px; }
-.site-mock b { font-family: var(--display); font-size: 2.6rem; line-height: .9; }
-.site-mock span { font-size: 15px; }
-.site-mock em { justify-self: start; font-style: normal; background: #f3ede0; color: #1f3d2b; padding: 9px 14px; font-size: 14px; font-weight: 600; }
-.local { display: grid; grid-template-columns: 1fr 1fr; min-height: 360px; }
-.local svg { width: 100%; height: 100%; display: block; }
-.local ol { display: grid; align-content: start; }
-.local li { display: grid; gap: 2px; padding: 16px 18px; font-size: 14px; color: #4d5156; box-shadow: inset 0 -1px 0 #ebe8e4; }
-.local li b { font-size: 16px; color: #1a0dab; font-weight: 500; }
-.local li.top { background: #fff3ea; box-shadow: inset 4px 0 0 var(--or); }
-.local li.top b { color: var(--ink); font-weight: 600; }
-.report { padding: 24px; display: grid; gap: 18px; color: var(--ink); }
-.rep-head { display: flex; justify-content: space-between; align-items: baseline; }
-.rep-head b { font-family: var(--display); font-size: 1.6rem; }
-.rep-head span { font-size: 14px; color: #4d5156; }
-.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.kpis div { background: var(--paper); padding: 14px; display: grid; gap: 2px; }
-.kpis span { font-size: 13px; color: #4d5156; }
-.kpis b { font-family: var(--display); font-size: 2.2rem; line-height: 1; }
-.kpis em { font-style: normal; font-size: 13px; font-weight: 600; color: #11804a; }
-.report svg { width: 100%; height: 90px; }
-.report table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.report th, .report td { text-align: left; padding: 8px 0; border-bottom: 1px solid #ebe8e4; }
-.report th { font-weight: 500; color: #4d5156; }
-.report td:last-child, .report th:last-child, .report td:nth-child(2), .report th:nth-child(2) { text-align: right; }
-.report td:last-child { font-weight: 600; color: #11804a; }
-.mock-note { font-size: 13px; color: #6b737a; }
-
-/* ---------- Anatomy (pinned, 3D) ---------- */
-.anat { position: relative; height: 300vh; }
-.anat-sticky { position: sticky; top: 0; height: 100svh; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--g); align-items: center; padding-inline: var(--m); overflow: hidden; }
-.anat-copy { grid-column: 1 / span 5; display: grid; gap: 36px; }
-.anat-list li { padding: .45em 0; }
-.anat-list h3 { font-family: var(--display); font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem); line-height: 1; color: #6f7c86; transition: color .3s; }
-.anat-list li.on h3 { color: var(--or); }
-.dwrap { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .45s var(--ease); }
-.js .anat-list li:not(.on) .dwrap { grid-template-rows: 0fr; }
-.dwrap > p { overflow: hidden; max-width: 40ch; color: #d5dce1; padding-top: .4em; }
-.anat-stage { grid-column: 6 / span 7; position: relative; height: 100%; display: grid; place-items: center; perspective: 1700px; font-size: clamp(8px, 1.02vw, 15px); }
-.stack { position: relative; width: 24em; height: 30em; transform-style: preserve-3d; transform: translateY(20%) rotateX(58deg) rotateZ(-36deg); }
-.layer { position: absolute; inset: 0; overflow: hidden; background: #fff; color: #111; transform: translateZ(calc(var(--i) * var(--e, 1) * 6.8em + var(--on, 0) * 3em)); transition: transform .6s var(--ease), opacity .4s; }
-.stack.split .layer:not(.on) { opacity: .38; }
-.layer.on { --on: 1; }
-.l-speed { background: #12232f; color: #e9eef1; display: grid; align-content: center; justify-items: center; padding: 2em; }
-.rings { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.6em 2.4em; }
-.l-speed .ring-s { display: grid; justify-items: center; gap: .5em; text-align: center; }
-.l-speed svg { width: 5.2em; height: 5.2em; }
-.l-speed b { font-size: 1.1em; font-weight: 500; }
-.l-struct { background: #e7ecef; padding: 1.6em; display: grid; grid-template-rows: 2.6em 2em 5em 1fr 1fr 2.6em; gap: .8em; }
-.l-struct > span { background: #c9d3da; color: #233440; display: flex; align-items: center; padding: 0 .9em; }
-.l-struct > span:nth-child(3) { background: #9fb0bc; }
-.l-data { background: #0b1720; color: #cfe3ef; padding: 1.8em; }
-.l-data pre { margin: 0; font-size: .95em; line-height: 1.55; white-space: pre-wrap; }
-.l-data .k { color: #ff9d57; }
-.l-text { padding: 2.2em 2em; display: grid; align-content: start; gap: 1em; }
-.l-text b { font-size: 2em; font-weight: 500; letter-spacing: -.03em; line-height: 1; }
-.l-text p { font-size: 1.05em; line-height: 1.5; color: #2b2b2b; }
-.l-design { display: grid; grid-template-rows: 58% 42%; }
-.l-design img { width: 100%; height: 100%; object-fit: cover; }
-.mini-band { background: #1f3d2b; color: #f3ede0; padding: 1.4em 1.6em; display: grid; align-content: start; gap: .6em; }
-.mini-band b { font-size: 1.9em; font-weight: 500; letter-spacing: -.03em; line-height: 1; }
-.mini-band i { justify-self: start; font-style: normal; background: #f3ede0; color: #1f3d2b; padding: .55em .9em; font-size: .95em; font-weight: 500; }
-
-/* ---------- Process ---------- */
-.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--g); margin-top: clamp(48px, 6vw, 88px); counter-reset: s; }
-.steps li { display: grid; align-content: start; gap: 14px; padding-top: 22px; box-shadow: inset 0 3px 0 var(--ink); }
-.steps li::before { counter-increment: s; content: "0" counter(s); font-family: var(--display); font-weight: 400; font-size: clamp(3.5rem, 2.4rem + 3vw, 5.5rem); line-height: .85; color: var(--ink); }
-.steps h3 { font-family: var(--display); font-size: clamp(1.6rem, 1.2rem + 1vw, 2.2rem); line-height: .95; }
-.steps p { color: var(--fg2); }
-
-/* ---------- Simulator ---------- */
-.sim .grid { align-items: stretch; row-gap: 48px; }
-.sim-copy { grid-column: 1 / span 5; display: grid; align-content: start; gap: 24px; }
-.sim form { display: grid; gap: 18px; margin-top: 8px; }
-.field { display: grid; gap: 6px; }
-.field label { font-size: 15px; font-weight: 600; }
-.field input { width: 100%; min-height: 52px; padding: 12px 14px; background: #fff; border: 0; border-bottom: 2px solid var(--ink); border-radius: 0; font-size: 17px; }
-.field input:focus { outline: 3px solid var(--or); outline-offset: 0; }
-.meters { display: grid; gap: 4px; font-size: 15px; color: var(--fg2); }
-.meters .over { color: #b3261e; font-weight: 600; }
-.sim-stage { grid-column: 6 / span 7; position: relative; min-height: 600px; background: var(--ink); overflow: hidden; }
-.sim-stage .stage { font-size: clamp(8px, .8vw, 12px); perspective-origin: 50% 30%; }
-.sim .serp { --ty: -4%; --rx: calc(34deg - var(--my, 0) * 5deg); --rz: calc(-12deg + var(--mx, 0) * 6deg); --lz: 5em; }
-.sim-note { position: absolute; left: 24px; bottom: 20px; right: 24px; color: #a9b4bc; font-size: 14px; }
-
-/* ---------- Concepts ---------- */
-.work-list { grid-column: 1 / span 7; }
-.work-item { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; width: 100%; padding: 12px 0; color: #6f7c86; box-shadow: inset 0 -1px 0 var(--line); transition: color .2s; }
-.work-item .n { font-family: var(--display); font-size: clamp(2.25rem, 1.4rem + 3vw, 4.25rem); line-height: .95; }
-.work-item .m { font-size: 14px; white-space: nowrap; color: var(--fg2); }
-.work-item.on, .work-item:hover { color: #fff; }
-.work-item.on .n { color: var(--or); }
-.work-item img { display: none; }
-.work-frame { grid-column: 9 / span 4; position: sticky; top: calc(var(--header) + 40px); align-self: start; aspect-ratio: 4 / 5; overflow: hidden; background: var(--ink-2); }
-.mock { position: absolute; inset: 0; opacity: 0; transition: opacity .3s; display: grid; grid-template-rows: 1fr auto; }
-.mock.on { opacity: 1; }
-.mock img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; scale: 1.06; transition: scale 6s linear; }
-.mock.on img { scale: 1; }
-.mock-band { position: relative; grid-row: 2; background: var(--c); color: var(--ci); padding: 18px 16px 20px; display: grid; gap: 12px; }
-.mock-band b { font-size: var(--lead); font-weight: 500; letter-spacing: -.02em; line-height: 1.1; }
-.mock-band i { justify-self: start; font-style: normal; background: var(--ci); color: var(--c); padding: 8px 12px; font-size: 14px; font-weight: 600; }
-
-/* ---------- Team ---------- */
-.team-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(32px, 5vw, 96px); align-items: start; }
-.team-grid > div:first-child { display: grid; gap: 22px; }
-.team-grid > div:first-child p { color: var(--fg2); }
-.people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--g); }
-.person { background: #fff; padding: 28px; display: grid; gap: 16px; align-content: start; }
-.mono { width: 96px; height: 96px; display: grid; place-items: center; background: var(--or); font-family: var(--display); font-size: 3rem; line-height: 1; }
-.person h3 { font-family: var(--display); font-size: 2rem; line-height: .95; }
-.person p { color: var(--fg2); }
-.person .chips li { background: var(--paper); }
-
-/* ---------- World ---------- */
-.world-head { align-items: end; row-gap: 28px; margin-bottom: 64px; }
-.world-head > div { grid-column: 1 / span 6; }
-.world-head p { grid-column: 8 / span 5; color: #d5dce1; }
-.map { perspective: 1600px; perspective-origin: 50% 0; }
-.map-plane { position: relative; transform-origin: 50% 100%; transform: rotateX(calc((1 - var(--mp, 1)) * 50deg)) scale(calc(.84 + var(--mp, 1) * .16)); }
-.map-plane img { width: 100%; }
-.pin { position: absolute; left: 33.8%; top: 30.5%; display: flex; align-items: center; gap: 8px; translate: -9px -9px; }
-.pin i { width: 18px; height: 18px; border-radius: 50%; background: var(--or); outline: 3px solid var(--ink); animation: pulse 2.4s ease-in-out infinite; }
-.pin span { background: var(--ink); color: var(--or); font-size: 14px; font-weight: 600; padding: 4px 8px; }
-@keyframes pulse { 50% { transform: scale(1.35); } }
-.map figcaption { margin-top: 18px; font-size: var(--small); color: var(--fg2); }
-
-/* ---------- Pricing ---------- */
-.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--g); margin-top: clamp(48px, 6vw, 80px); align-items: stretch; }
-.plan { --fg: #fff; --fg2: #a9b4bc; background: var(--ink); color: #fff; padding: clamp(24px, 2.6vw, 40px); display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 18px; transition: transform .35s var(--ease); }
-.plan:hover { transform: translateY(-6px); }
-.plan.best { box-shadow: inset 0 0 0 3px #fff; }
-.plan-tag { justify-self: start; background: var(--or); color: var(--ink); font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 5px 10px; }
-.plan-tag.ghost { background: transparent; padding: 5px 0; color: var(--fg2); }
-.plan h3 { font-family: var(--display); font-size: 2.1rem; line-height: .95; }
-.plan .price { font-family: var(--display); font-size: clamp(3.5rem, 2.6rem + 2.4vw, 5rem); line-height: .9; color: var(--or); }
-.plan .price small { font-family: "Hanken Grotesk", sans-serif; font-style: normal; font-size: 15px; color: var(--fg2); margin-right: 6px; }
-.plan .price span { font-size: .4em; }
-.plan .ticks { font-size: 16px; color: #d5dce1; }
-.f-or .plan .btn { width: 100%; background: var(--or); color: var(--ink); }
-.f-or .plan .btn:hover { background: #ff8f42; }
-.f-or .plan .ticks li::before { background: var(--or); }
-.plans-note { margin-top: 24px; font-size: 15px; }
-
-/* ---------- FAQ ---------- */
-.faq-grid { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(32px, 5vw, 96px); align-items: start; }
-.faq-grid > div:first-child { position: sticky; top: calc(var(--header) + 40px); display: grid; gap: 20px; }
-.faq details { background: #fff; transition: background-color .25s; }
-.faq details + details { margin-top: 8px; }
-.faq summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 24px; cursor: pointer; font-size: var(--lead); font-weight: 500; line-height: 1.25; }
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: "+"; flex: none; display: grid; place-items: center; width: 36px; height: 36px; background: var(--paper); font-size: 24px; font-weight: 400; transition: transform .3s var(--ease), background-color .2s; }
-.faq details[open] summary::after { transform: rotate(45deg); background: var(--or); }
-.faq details p { max-width: 52ch; padding: 0 24px 24px; color: var(--fg2); }
-
-/* ---------- Contact ---------- */
-.contact { padding-block: var(--sec) var(--m); }
-.contact-grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 5vw, 96px); align-items: end; }
-.contact-copy { display: grid; gap: 22px; }
-.contact-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
-.channels { display: grid; gap: 10px; }
-.channel { display: grid; grid-template-columns: 52px 1fr auto; gap: 16px; align-items: center; padding: 18px 20px; background: var(--ink-2); text-decoration: none; transition: background-color .25s, transform .35s var(--ease); }
-.channel:hover { background: var(--ink-3); transform: translateX(4px); }
-.channel > svg:first-child { width: 52px; height: 52px; padding: 13px; background: var(--or); color: var(--ink); }
-.channel b { display: block; font-size: 1.125rem; font-weight: 600; }
-.channel small { font-size: 14px; color: var(--fg2); }
-.channel > svg:last-child { width: 18px; height: 18px; color: var(--or); transition: transform .3s var(--ease); }
-.channel:hover > svg:last-child { transform: translate(3px, -3px); }
-.email-wrap { padding-top: clamp(64px, 8vw, 120px); }
-.email { position: relative; z-index: 0; display: block; font-family: var(--display); font-weight: 400; letter-spacing: -.01em; line-height: 1; white-space: nowrap; font-size: 11vw; text-decoration: none; color: var(--or); }
-.email > span { display: block; width: max-content; padding-right: .05em; }
-.email::before { content: ""; position: absolute; z-index: -1; inset: 6% -.06em 2%; background: var(--or); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); }
-.email:hover, .email:focus-visible { color: var(--ink); }
-.email:hover::before, .email:focus-visible::before { transform: scaleX(1); }
-
-/* ---------- Footer ---------- */
-.footer { padding: clamp(48px, 6vw, 96px) var(--m) var(--m); overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
-.wordmark { font-weight: 500; letter-spacing: -.06em; line-height: .8; white-space: nowrap; font-size: 17vw; padding-top: .06em; color: var(--or); transform-origin: 0 100%; scale: calc(.94 + var(--fp, 1) * .06); }
-.wordmark > span { display: block; width: max-content; padding-right: .07em; }
-.foot-row { margin-top: 64px; row-gap: 48px; }
-.places { grid-column: 1 / span 5; display: grid; gap: 10px; font-size: clamp(1.375rem, 2.5vw, 2.25rem); letter-spacing: -.02em; line-height: 1.15; }
-.places a { justify-self: start; text-decoration: none; color: var(--or); }
-.places a:hover { text-decoration: underline; }
-.foot-cols { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; font-size: 15px; }
-.foot-cols h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-.foot-cols li + li { margin-top: 8px; }
-.foot-cols a { text-decoration: none; color: #d5dce1; }
-.foot-cols a:hover { color: var(--or); text-decoration: underline; }
-.legal { margin-top: 80px; display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; font-size: var(--small); color: #a9b4bc; }
-.legal p { max-width: 90ch; }
-
-/* ---------- Pager ---------- */
-.rail { position: fixed; z-index: 50; right: 14px; top: 50%; translate: 0 -50%; display: grid; gap: 2px; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
-.rail.show { opacity: 1; visibility: visible; }
-.rail button { position: relative; display: flex; justify-content: flex-end; align-items: center; width: 40px; height: 22px; }
-.rail button::after { content: ""; width: 14px; height: 3px; background: #8a96a0; transition: width .35s var(--ease), background-color .25s; }
-.rail button:hover::after { width: 22px; background: #fff; }
-.rail button[aria-current="true"]::after { width: 30px; background: var(--or); }
-.rail span { position: absolute; right: 44px; padding: 5px 10px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; translate: 6px 0; pointer-events: none; transition: opacity .2s, translate .25s var(--ease); }
-.rail button:hover span, .rail button:focus-visible span { opacity: 1; translate: 0 0; }
-
-/* ---------- Menu dialog ---------- */
-.menu { margin: 0 0 0 auto; height: 100dvh; max-height: none; width: min(440px, 100%); border: 0; padding: var(--m); background: var(--ink); color: #fff; box-shadow: -24px 0 60px rgba(0, 0, 0, .35); /* taste-skill-ignore: real overlay */ }
-.menu::backdrop { background: rgba(5, 15, 22, .6); }
-.menu[open] { animation: slide .4s var(--ease); }
-@keyframes slide { from { transform: translateX(40px); opacity: 0; } }
-.menu-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; font-size: 15px; }
-.menu-top button { font-weight: 600; min-height: 44px; }
-.menu ol { display: grid; gap: 2px; }
-.menu a { display: inline-block; font-family: var(--display); font-weight: 400; font-size: 2rem; line-height: 1.1; text-decoration: none; }
-.menu a:hover { color: var(--or); }
-.menu a[aria-current="true"] { color: var(--or); }
-.menu .btn { margin-top: 32px; }
-
-/* ---------- Entrances ---------- */
-.js [data-reveal] { opacity: 0; translate: 0 26px; transition: opacity .7s var(--ease) var(--d, 0ms), translate .9s var(--ease) var(--d, 0ms), transform .35s var(--ease), background-color .25s, box-shadow .25s; }
-.js [data-reveal].in { opacity: 1; translate: 0 0; }
-
-/* ---------- Tablet ---------- */
-@media (max-width: 1100px) {
-  .site-nav a:not(.btn) { display: none; }
-  .nav-menu { display: block; }
-  .hero { grid-template-columns: 1fr; }
-  .result-grid, .why-grid, .svc-row, .team-grid, .faq-grid { grid-template-columns: 1fr; }
-  .score, .faq-grid > div:first-child { position: static; }
-  .svc-row:nth-of-type(even) .svc-copy { order: 0; }
-  .anat-sticky { grid-template-columns: 1fr; grid-template-rows: 54% 46%; align-items: stretch; padding-block: 24px; }
-  .anat-copy { grid-column: 1; grid-row: 2; gap: 16px; align-content: start; }
-  .anat-stage { grid-column: 1; grid-row: 1; font-size: 1.5vw; }
-  .stack { transform: translateY(14%) rotateX(58deg) rotateZ(-36deg); }
-  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
-  .sim-copy, .sim-stage { grid-column: 1 / -1; }
-  .sim-stage { min-height: 520px; }
-  .sim-stage .stage { font-size: 1.3vw; }
-  .work-list { grid-column: 1 / span 7; }
-  .work-frame { grid-column: 8 / span 5; }
-  .work-item { display: grid; gap: 4px; }
-  .plans { grid-template-columns: 1fr; max-width: 560px; }
-  .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .rail { display: none; }
-  .contact-grid { grid-template-columns: 1fr; }
-  .foot-cols { grid-column: 1 / -1; }
-}
-
-/* ---------- Phone ---------- */
-@media (max-width: 760px) {
-  :root { --header: 60px; }
-  .grid > * { grid-column: 1 / -1 !important; }
-  .logo span { display: none; }
-  .site-nav .btn { font-size: .95rem; padding: .5em .8em; min-height: 40px; }
-  .hero h1 { margin-bottom: 20px; }
-  .checker { flex-direction: column; gap: 6px; border-radius: 22px; }
-  .dash-body { grid-template-columns: 1fr; padding: 20px; }
-  .dash-score { grid-template-columns: 110px 1fr; justify-items: start; align-items: center; }
-  .dash-score svg, .dash-score div { width: 110px; height: 110px; }
-  .dash-score b { font-size: 2.6rem; }
-  .fc-1 { left: -6px; bottom: 0; }
-  .fc-2 { right: -6px; top: 0; }
-  .checker label { padding: 0 8px; }
-  .checker .btn { width: 100%; }
-  .ring { width: 160px; height: 160px; }
-  .stats b { font-size: 3rem; }
-  .logos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .logos li:last-child { grid-column: span 2; }
-  .logos li > *, .logos li > img { height: 130px; padding: 18px; }
-  .site-mock, .local { grid-template-columns: 1fr; }
-  .site-mock img { aspect-ratio: 16 / 10; }
-  .local svg { height: 180px; }
-  .kpis { grid-template-columns: 1fr 1fr; }
-  .kpis div:last-child { grid-column: span 2; }
-  .anat-sticky { grid-template-rows: 50% 50%; }
-  .anat-list li { padding: .15em 0; }
-  .anat-list h3 { font-size: 1.4rem; }
-  .dwrap > p { font-size: 16px; }
-  .anat-stage { font-size: 2.2vw; }
-  .steps { grid-template-columns: 1fr; }
-  .sim-stage { min-height: 440px; }
-  .sim-stage .stage { font-size: 1.9vw; }
-  .work-frame { display: none; }
-  .work-list { display: grid; gap: 32px; }
-  .work-item { color: #fff; padding: 0 0 16px; }
-  .work-item img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; margin-bottom: 8px; }
-  .work-item .n { font-size: 2.6rem; }
-  .people { grid-template-columns: 1fr; }
-  .world-head p { grid-column: 1 / -1; }
-  .map { margin-inline: calc(var(--m) * -1); }
-  .map figcaption { padding-inline: var(--m); }
-  .faq summary { font-size: 18px; padding: 18px; }
-  .faq details p { padding: 0 18px 18px; }
-  .email { font-size: 15vw; }
-  .email > span > span { display: block; }
-  .foot-cols { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 520px) {
-  .wordmark > span > span { display: block; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
-  .js [data-reveal] { opacity: 1; translate: none; }
-}
-</style>
 </head>
 <body>
 <a class="skip" href="#conteudo">Saltar para o conteúdo</a>
 
 <header class="site-header">
   <div class="bar">
-  <a class="logo" href="#inicio" aria-label="destaca.site, início">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#ff7a1f"/><circle cx="27" cy="39" r="11" fill="none" stroke="#050f16" stroke-width="7"/><rect x="34.5" y="11" width="7" height="39" fill="#050f16"/><rect x="47" y="43" width="7" height="7" fill="#050f16"/></svg>
-    <span>destaca.site</span>
-  </a>
-  <nav class="site-nav" aria-label="Principal">
-    <a href="#servicos">Serviços</a>
-    <a href="#processo">Processo</a>
-    <a href="#precos">Preços</a>
-    <a href="#perguntas">Perguntas</a>
-    <a href="#contacto">Contacto</a>
-    <a class="btn" href="#contacto">Pedir orçamento</a>
-    <button class="nav-menu" type="button" data-open-menu aria-haspopup="dialog" aria-controls="menu">Menu</button>
-  </nav>
+    <a class="logo" href="#inicio" aria-label="destaca.site, início">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#ff7a1f"/><circle cx="27" cy="39" r="11" fill="none" stroke="#050f16" stroke-width="7"/><rect x="34.5" y="11" width="7" height="39" fill="#050f16"/><rect x="47" y="43" width="7" height="7" fill="#050f16"/></svg>
+      <span>destaca.site</span>
+    </a>
+    <nav class="site-nav" aria-label="Principal">
+      <a href="#servicos">Serviços</a>
+      <a href="#casos">Casos</a>
+      <a href="#precos">Preços</a>
+      <a href="#perguntas">Perguntas</a>
+      <a href="#contacto">Contacto</a>
+      <div class="lang" aria-label="Língua"><span aria-current="true">PT</span><a href="/en/" hreflang="en" lang="en">EN</a></div>
+      <a class="btn" href="#contacto">Pedir orçamento</a>
+      <button class="nav-menu" type="button" data-open-menu aria-haspopup="dialog" aria-controls="menu">Menu</button>
+    </nav>
   </div>
 </header>
+
 <main id="conteudo">
 
-  <!-- Hero: headline, the free SEO check and an analysis dashboard -->
+  <!-- Hero: headline, the free SEO check and an analysis that plays on a loop -->
   <section class="hero f-ink wrap" id="inicio" data-title="Início">
-    <div class="hero-copy">
+    <div>
       <p class="eyebrow">Sites e SEO para empresas, feito em Portugal</p>
       <h1 class="display">Destaca o teu site <span class="acc">no Google.</span></h1>
       <p class="lead hero-lead">Criamos páginas de apresentação rápidas e fazemos SEO para empresas portuguesas e do resto do mundo. Começa por uma análise grátis ao teu site.</p>
@@ -662,27 +132,28 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
     <div class="hero-visual" aria-hidden="true">
       <div class="dash" data-ui>
         <div class="dash-bar"><i></i><i></i><i></i><span>destaca.site · análise SEO</span></div>
+        <div class="scan"></div>
         <div class="dash-body">
           <div class="dash-score">
-            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#eef0f1" stroke-width="10"/><circle cx="60" cy="60" r="50" fill="none" stroke="#ff7a1f" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="25" transform="rotate(-90 60 60)"/></svg>
+            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#eef0f1" stroke-width="10"/><circle class="fg" cx="60" cy="60" r="50" fill="none" stroke="#ff7a1f" stroke-width="10" stroke-linecap="round" transform="rotate(-90 60 60)"/></svg>
             <div><b>92</b><span>Nota SEO</span></div>
-            <p>tascadolargo.pt</p>
+            <p>o-teu-site.pt</p>
           </div>
           <ul class="dash-checks">
-            <li class="ok">Título e descrição</li>
-            <li class="ok">Preparado para telemóvel</li>
-            <li class="ok">Dados estruturados</li>
-            <li class="ok">Sitemap e robots.txt</li>
+            <li>Título e descrição</li>
+            <li>Preparado para telemóvel</li>
+            <li>Dados estruturados</li>
+            <li>Sitemap e robots.txt</li>
             <li class="warn">Tempo de resposta: 920 ms</li>
           </ul>
           <div class="dash-chart">
             <p><span>Visitas do Google</span><b>+38%</b></p>
-            <svg viewBox="0 0 300 80" preserveAspectRatio="none"><path d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12 L300 80 L0 80 Z" fill="#fff1e6"/><path d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12" fill="none" stroke="#ff7a1f" stroke-width="2.5"/></svg>
+            <svg viewBox="0 0 300 80" preserveAspectRatio="none"><path class="area" d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12 L300 80 L0 80 Z" fill="#fff1e6"/><path class="line" d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12" fill="none" stroke="#ff7a1f" stroke-width="2.5"/></svg>
           </div>
         </div>
       </div>
-      <div class="float-card fc-1"><span>restaurante braga</span><b>1.º lugar</b><em>subiu 6 posições</em></div>
-      <div class="float-card fc-2"><i></i><span>Novo pedido de reserva</span><small>há 2 minutos</small></div>
+      <div class="float-card fc-1"><span>pesquisa local</span><b>1.º lugar</b><em>subiu 6 posições</em></div>
+      <div class="float-card fc-2"><i></i><span>Novo pedido de orçamento</span><small>há 2 minutos</small></div>
     </div>
   </section>
 
@@ -696,7 +167,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
         <h2 class="score-verdict" id="resultado-h"></h2>
         <div class="score-actions">
           <a class="btn" id="r-mail" href="mailto:ola@destaca.site">Quero corrigir isto</a>
-          <a class="btn btn-ghost" href="#inicio" id="r-again">Analisar outro</a>
+          <a class="btn btn-ghost" href="#inicio">Analisar outro</a>
         </div>
       </div>
       <div class="checks" id="r-checks"></div>
@@ -705,16 +176,16 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 
   <!-- Clients -->
   <section class="clients f-paper wrap" id="clientes" data-title="Clientes" aria-labelledby="clientes-h">
-    <div class="clients-head">
+    <div class="head-block">
       <p class="eyebrow" data-reveal>Clientes</p>
       <h2 class="display h2" id="clientes-h" data-reveal>Empresas que <span class="acc">confiam em nós.</span></h2>
     </div>
     <ul class="logos">
       <li data-reveal><a href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/nk-suspension.webp" alt="NK Suspension" width="415" height="170" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><img src="/assets/clientes/inforportateis.webp" alt="Inforportáteis" width="306" height="80" loading="lazy" decoding="async"></li>
-      <li data-reveal><img src="/assets/clientes/fernando-pereira.webp" alt="Fernando Pereira, Construção Civil" width="227" height="53" loading="lazy" decoding="async"></li>
-      <li data-reveal><img src="/assets/clientes/baton-rouge.webp" alt="Baton Rouge, centro de estética" width="279" height="289" loading="lazy" decoding="async"></li>
-      <li data-reveal><img src="/assets/clientes/cafetaria-ding-dong.webp" alt="Cafetaria Ding Dong" width="566" height="555" loading="lazy" decoding="async"></li>
+      <li data-reveal><a href="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/clientes/inforportateis.webp" alt="Inforportáteis" width="306" height="80" loading="lazy" decoding="async"></a></li>
+      <li data-reveal><a href="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/fernando-pereira.webp" alt="Fernando Pereira, Construção Civil" width="227" height="53" loading="lazy" decoding="async"></a></li>
+      <li data-reveal><a href="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img src="/assets/clientes/baton-rouge.svg" alt="Baton Rouge, Estética, Braga" width="320" height="110" loading="lazy" decoding="async"></a></li>
+      <li data-reveal><a href="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/clientes/cafetaria-ding-dong.webp" alt="Pastelaria Ding Dong" width="566" height="555" loading="lazy" decoding="async"></a></li>
     </ul>
   </section>
 
@@ -724,9 +195,10 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
       <div>
         <p class="eyebrow" data-reveal>Porquê</p>
         <h2 class="display h2" id="porque-h" data-reveal>Quem não aparece, <span class="acc">não é escolhido.</span></h2>
-        <div class="why-text" data-reveal style="margin-top:28px">
+        <div class="why-text" data-reveal>
           <p class="lead">Quando alguém procura o que vendes, escolhe entre os primeiros resultados. Se não estás lá, a decisão é tomada sem ti.</p>
-          <p>Destacar é sair do fundo e ficar à vista, como o único toldo laranja numa fachada de janelas iguais. É isso que fazemos: páginas de apresentação claras, rápidas e bem escritas, feitas para o Google entender e para as pessoas confiarem. Sem jargão e sem contratos longos.</p>
+          <p>Destacar é sair do fundo e ficar à vista, como o único toldo laranja numa fachada de janelas iguais. É isso que fazemos: páginas claras, rápidas e bem escritas, feitas para o Google entender e para as pessoas confiarem.</p>
+          <p>Somos portugueses e trabalhamos primeiro para negócios portugueses, em português de Portugal. Para quem nos procura de fora, trabalhamos em inglês ou espanhol, com reuniões online.</p>
         </div>
         <ul class="stats">
           <li data-reveal><b>4+</b><span>anos em desenvolvimento web e marketing digital</span></li>
@@ -744,7 +216,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 
   <!-- Services -->
   <section class="f-paper sec wrap" id="servicos" data-title="Serviços" aria-labelledby="servicos-h">
-    <div class="svc-head">
+    <div class="head-block">
       <p class="eyebrow" data-reveal>Serviços</p>
       <h2 class="display h2" id="servicos-h" data-reveal>Tudo para o teu site <span class="acc">aparecer.</span></h2>
     </div>
@@ -760,12 +232,12 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
           <li>Domínio em teu nome e alojamento na Europa</li>
         </ul>
         <ul class="chips" data-reveal><li>Português</li><li>Inglês</li><li>Espanhol</li><li>Acessível</li></ul>
-        <a class="link" href="#precos" data-reveal>Ver preços</a>
+        <a class="link" href="#casos" data-reveal>Ver casos reais</a>
       </div>
-      <div class="browser" data-ui data-reveal aria-hidden="true">
-        <div class="browser-bar"><i></i><i></i><i></i><span>tascadolargo.pt</span></div>
-        <div class="site-mock"><img src="/assets/img/tasca.webp" alt="" width="960" height="1200" loading="lazy" decoding="async"><div><b>Tasca do Largo</b><span>Petiscos do Minho, ao almoço e ao jantar, a dois passos da Sé de Braga.</span><em>Reservar mesa</em></div></div>
-      </div>
+      <figure class="browser" data-reveal>
+        <div class="browser-bar"><i></i><i></i><i></i><span>fernandopereiraconstrucoes.pt</span></div>
+        <img src="/assets/casos/fernando-pereira.webp" alt="Página inicial do site da Fernando Pereira, Construção Civil, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async">
+      </figure>
     </article>
 
     <article class="svc-row">
@@ -784,8 +256,9 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
         <div class="browser-bar"><i></i><i></i><i></i><span>pesquisa: restaurante braga</span></div>
         <div class="local">
           <svg viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice"><rect width="300" height="360" fill="#ece8e1"/><path d="M-10 250 C 60 220, 120 260, 310 190" stroke="#bcd6e6" stroke-width="26" fill="none"/><path d="M40 -10 L 90 370 M 180 -10 L 150 370 M -10 90 L 310 120 M -10 300 L 310 280" stroke="#fff" stroke-width="9"/><path d="M230 -10 L 270 370" stroke="#fff" stroke-width="5"/><circle cx="160" cy="110" r="14" fill="#ff7a1f" stroke="#050f16" stroke-width="3"/><circle cx="95" cy="170" r="9" fill="#9aa4ab"/><circle cx="235" cy="215" r="9" fill="#9aa4ab"/></svg>
-          <ol><li class="top"><b>Tasca do Largo</b>Restaurante, aberto até às 23h<br>Rua do Souto, Braga</li><li><b>Restaurante exemplo</b>Restaurante, Braga</li><li><b>Outro restaurante</b>Restaurante, Braga</li></ol>
+          <ol><li class="top"><b>O teu negócio</b>Restaurante, aberto até às 23h<br>Centro, Braga</li><li><b>Concorrente</b>Restaurante, Braga</li><li><b>Outro concorrente</b>Restaurante, Braga</li></ol>
         </div>
+        <p class="mock-note">Exemplo ilustrativo.</p>
       </div>
     </article>
 
@@ -804,138 +277,59 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
       <div class="browser" data-ui data-reveal aria-hidden="true">
         <div class="browser-bar"><i></i><i></i><i></i><span>relatório mensal</span></div>
         <div class="report">
-          <div class="rep-head"><b>Relatório de outubro</b><span>tascadolargo.pt</span></div>
-          <div class="kpis"><div><span>Visitas</span><b>1240</b><em>+18%</em></div><div><span>Pedidos de reserva</span><b>37</b><em>+9</em></div><div><span>Posição média</span><b>2,1</b><em>era 4,2</em></div></div>
-          <svg viewBox="0 0 400 90" preserveAspectRatio="none"><polyline points="0,78 50,72 100,74 150,60 200,55 250,42 300,36 350,24 400,14" fill="none" stroke="#ff7a1f" stroke-width="3"/></svg>
-          <table><thead><tr><th>Pesquisa</th><th>Antes</th><th>Agora</th></tr></thead><tbody><tr><td>restaurante braga</td><td>7</td><td>3</td></tr><tr><td>petiscos braga</td><td>4</td><td>1</td></tr><tr><td>tasca centro braga</td><td>2</td><td>1</td></tr></tbody></table>
-          <p class="mock-note">Exemplo ilustrativo com uma marca fictícia.</p>
+          <div class="rep-head"><b>Relatório de outubro</b><span>o-teu-site.pt</span></div>
+          <div class="kpis"><div><span>Visitas</span><b>1240</b><em>+18%</em></div><div><span>Pedidos de contacto</span><b>37</b><em>+9</em></div><div><span>Posição média</span><b>2,1</b><em>era 4,2</em></div></div>
+          <svg viewBox="0 0 400 80" preserveAspectRatio="none"><polyline points="0,70 50,64 100,66 150,52 200,48 250,36 300,30 350,20 400,10" fill="none" stroke="#ff7a1f" stroke-width="3"/></svg>
+          <table><thead><tr><th>Pesquisa</th><th>Antes</th><th>Agora</th></tr></thead><tbody><tr><td>restaurante braga</td><td>7</td><td>3</td></tr><tr><td>petiscos braga</td><td>4</td><td>1</td></tr></tbody></table>
+          <p class="mock-note">Exemplo ilustrativo.</p>
         </div>
       </div>
     </article>
   </section>
 
-  <!-- Anatomy: a page taken apart in 3D as you scroll -->
-  <section class="anat f-ink" id="anatomia" data-title="Anatomia" aria-labelledby="anatomia-h">
-    <div class="anat-sticky">
-      <div class="anat-copy">
-        <div>
-          <p class="eyebrow">Por dentro de uma página</p>
-          <h2 class="display h2" id="anatomia-h">Cinco camadas, <span class="acc">um resultado.</span></h2>
-        </div>
-        <ul class="anat-list">
-          <li class="on" data-layer="4"><h3>Design</h3><div class="dwrap"><p>A tua marca, legível em qualquer ecrã, desenhada para levar a pessoa a ligar, reservar ou pedir orçamento.</p></div></li>
-          <li data-layer="3"><h3>Conteúdo</h3><div class="dwrap"><p>Textos escritos para os teus clientes, com as palavras que eles realmente pesquisam.</p></div></li>
-          <li data-layer="2"><h3>Dados para o Google</h3><div class="dwrap"><p>Título, descrição e dados estruturados que dizem ao Google o que és, onde estás e quando abres.</p></div></li>
-          <li data-layer="1"><h3>Estrutura</h3><div class="dwrap"><p>HTML semântico: títulos, secções e ligações que o Google lê sem ter de adivinhar.</p></div></li>
-          <li data-layer="0"><h3>Alojamento e velocidade</h3><div class="dwrap"><p>Imagens otimizadas, código leve e alojamento na Europa. A página abre antes de a pessoa desistir.</p></div></li>
-        </ul>
-      </div>
-      <div class="anat-stage" aria-hidden="true">
-        <div class="stack">
-          <div class="layer l-speed" style="--i:0" data-ui>
-            <div class="rings">
-              <div class="ring-s"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="#24414f" stroke-width="3.4"/><circle cx="18" cy="18" r="15" fill="none" stroke="#3ddc84" stroke-width="3.4" stroke-dasharray="94.2" transform="rotate(-90 18 18)"/><text x="18" y="22.5" text-anchor="middle" font-size="11" fill="#e9eef1">100</text></svg><b>Desempenho</b></div>
-              <div class="ring-s"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="#24414f" stroke-width="3.4"/><circle cx="18" cy="18" r="15" fill="none" stroke="#3ddc84" stroke-width="3.4" stroke-dasharray="94.2" transform="rotate(-90 18 18)"/><text x="18" y="22.5" text-anchor="middle" font-size="11" fill="#e9eef1">100</text></svg><b>Acessibilidade</b></div>
-              <div class="ring-s"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="#24414f" stroke-width="3.4"/><circle cx="18" cy="18" r="15" fill="none" stroke="#3ddc84" stroke-width="3.4" stroke-dasharray="94.2" transform="rotate(-90 18 18)"/><text x="18" y="22.5" text-anchor="middle" font-size="11" fill="#e9eef1">100</text></svg><b>Boas práticas</b></div>
-              <div class="ring-s"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="#24414f" stroke-width="3.4"/><circle cx="18" cy="18" r="15" fill="none" stroke="#3ddc84" stroke-width="3.4" stroke-dasharray="94.2" transform="rotate(-90 18 18)"/><text x="18" y="22.5" text-anchor="middle" font-size="11" fill="#e9eef1">100</text></svg><b>SEO</b></div>
-            </div>
-          </div>
-          <div class="layer l-struct" style="--i:1" data-ui><span>header</span><span>nav</span><span>h1</span><span>section</span><span>section</span><span>footer</span></div>
-          <div class="layer l-data" style="--i:2" data-ui><pre><code><span class="k">&lt;title&gt;</span>Tasca do Largo | Restaurante em Braga<span class="k">&lt;/title&gt;</span>
-
-<span class="k">&lt;meta name="description"</span>
-  content="Petiscos do Minho ao almoço
-  e ao jantar, no centro de Braga."<span class="k">&gt;</span>
-
-{
-  <span class="k">"@type"</span>: "Restaurant",
-  <span class="k">"servesCuisine"</span>: "Portuguesa",
-  <span class="k">"openingHours"</span>: "Tu-Su 12:00-23:00",
-  <span class="k">"address"</span>: "Braga, Portugal"
-}</code></pre></div>
-          <div class="layer l-text" style="--i:3" data-ui>
-            <b>Tasca do Largo</b>
-            <p>Petiscos do Minho, ao almoço e ao jantar, a dois passos da Sé de Braga.</p>
-            <p>Rojões, papas de sarrabulho e vinho verde da casa. Reservas para grupos até 20 pessoas.</p>
-            <p>Terça a domingo, das 12h às 15h e das 19h às 23h.</p>
-          </div>
-          <div class="layer l-design" style="--i:4" data-ui>
-            <img src="/assets/img/tasca.webp" alt="" width="960" height="1200" loading="lazy" decoding="async">
-            <div class="mini-band"><b>Tasca do Largo</b><span>Petiscos do Minho, ao almoço e ao jantar.</span><i>Reservar mesa</i></div>
+  <!-- Case studies -->
+  <section class="f-ink sec wrap" id="casos" data-title="Casos" aria-labelledby="casos-h">
+    <div class="head-block">
+      <p class="eyebrow" data-reveal>Casos reais</p>
+      <h2 class="display h2" id="casos-h" data-reveal>Sites que fizemos <span class="acc">e estão online.</span></h2>
+      <p class="soft" data-reveal>Passa por cada nome para ver o site. Carrega para o abrir.</p>
+    </div>
+    <div class="cases">
+      <ul class="case-list">
+        <li data-reveal><a class="case on" href="https://www.nksuspension.pt/" data-url="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/casos/nk-suspension.webp" alt="Site da NK Suspension" width="1200" height="600" loading="lazy" decoding="async"><span class="n">NK Suspension</span><span class="m">Oficina de suspensões de motas</span><span class="go">Ver site ↗</span></a></li>
+        <li data-reveal><a class="case" href="https://inforportateis.com/" data-url="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/casos/inforportateis.webp" alt="Site da Inforportáteis" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Inforportáteis</span><span class="m">Loja e assistência técnica, Vila Nova de Famalicão</span><span class="go">Ver site ↗</span></a></li>
+        <li data-reveal><a class="case" href="https://fernandopereiraconstrucoes.pt/" data-url="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/casos/fernando-pereira.webp" alt="Site da Fernando Pereira Construção Civil" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Fernando Pereira</span><span class="m">Construção civil, Póvoa de Varzim</span><span class="go">Ver site ↗</span></a></li>
+        <li data-reveal><a class="case" href="https://batonrougeestetica.com/" data-url="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img src="/assets/casos/baton-rouge.webp" alt="Site da Baton Rouge Estética" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Baton Rouge</span><span class="m">Centro de estética, Braga</span><span class="go">Ver site ↗</span></a></li>
+        <li data-reveal><a class="case" href="https://pastelariadingdong.com/" data-url="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/casos/ding-dong.webp" alt="Site da Pastelaria Ding Dong" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Ding Dong</span><span class="m">Pastelaria e confeitaria, Braga</span><span class="go">Ver site ↗</span></a></li>
+      </ul>
+      <figure class="case-frame" aria-hidden="true">
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i><span>site do cliente</span></div>
+          <div class="shots">
+            <img class="on" src="/assets/casos/nk-suspension.webp" alt="" width="1200" height="600" loading="lazy" decoding="async">
+            <img src="/assets/casos/inforportateis.webp" alt="" width="1200" height="600" loading="lazy" decoding="async">
+            <img src="/assets/casos/fernando-pereira.webp" alt="" width="1200" height="600" loading="lazy" decoding="async">
+            <img src="/assets/casos/baton-rouge.webp" alt="" width="1200" height="600" loading="lazy" decoding="async">
+            <img src="/assets/casos/ding-dong.webp" alt="" width="1200" height="600" loading="lazy" decoding="async">
           </div>
         </div>
-      </div>
+        <figcaption>Ver site: <a href="https://www.nksuspension.pt/" target="_blank" rel="noopener">nksuspension.pt</a></figcaption>
+      </figure>
     </div>
   </section>
 
   <!-- Process -->
   <section class="f-or sec wrap" id="processo" data-title="Processo" aria-labelledby="processo-h">
-    <p class="eyebrow" data-reveal>Como trabalhamos</p>
-    <h2 class="display h2" id="processo-h" data-reveal>Da conversa ao Google <span class="acc">em quatro passos.</span></h2>
+    <div class="head-block">
+      <p class="eyebrow" data-reveal>Como trabalhamos</p>
+      <h2 class="display h2" id="processo-h" data-reveal>Da conversa ao Google <span class="acc">em quatro passos.</span></h2>
+    </div>
     <ol class="steps">
       <li data-reveal><h3>Ouvimos o teu negócio</h3><p>Uma conversa de 30 minutos e um diagnóstico grátis ao que já tens online.</p></li>
       <li data-reveal><h3>Desenhamos a página</h3><p>Proposta com preço fechado. Vês o design antes de escrevermos código.</p></li>
       <li data-reveal><h3>Lançamos e indexamos</h3><p>Domínio, alojamento, Search Console e Google Business Profile tratados por nós.</p></li>
       <li data-reveal><h3>Continuamos contigo</h3><p>Relatório mensal em linguagem simples e ajustes sempre que o negócio muda.</p></li>
     </ol>
-  </section>
-
-  <!-- Simulator -->
-  <section class="sim f-paper sec wrap" id="simulador" data-title="Simulador" aria-labelledby="simulador-h">
-    <div class="grid">
-      <div class="sim-copy">
-        <p class="eyebrow" data-reveal>Simulador</p>
-        <h2 class="display h2" id="simulador-h" data-reveal>Vê o teu negócio <span class="acc">em primeiro.</span></h2>
-        <p data-reveal>Escreve o nome, o que fazes e onde. Mostramos como o teu resultado pode aparecer no Google e onde o Google corta o texto.</p>
-        <form id="sim" data-reveal autocomplete="off">
-          <div class="field"><label for="sim-nome">Nome do negócio</label><input id="sim-nome" name="nome" value="Padaria Aurora" maxlength="60"></div>
-          <div class="field"><label for="sim-atividade">O que fazes</label><input id="sim-atividade" name="atividade" value="Padaria artesanal" maxlength="60"></div>
-          <div class="field"><label for="sim-local">Onde</label><input id="sim-local" name="local" value="Coimbra" maxlength="40"></div>
-          <div class="meters" aria-live="polite"><span id="m-title">Título: 45 de cerca de 60 caracteres</span><span id="m-desc">Descrição: 131 de cerca de 155 caracteres</span></div>
-          <div><a class="btn" id="sim-mail" href="mailto:ola@destaca.site?subject=Quero%20destacar%20o%20meu%20site">Quero este resultado</a></div>
-        </form>
-      </div>
-      <div class="sim-stage" data-tilt data-reveal>
-        <div class="stage" aria-hidden="true">
-          <div class="serp" data-ui>
-            <div class="serp-bar"><svg viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.4"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span id="s-q">padaria artesanal coimbra</span></div>
-            <div class="serp-slot"></div>
-            <div class="serp-res"><span class="u">diretorio.exemplo.pt › coimbra</span><span class="t">As melhores opções em Coimbra, 2026</span><span class="s">Lista com moradas, horários e opiniões de clientes.</span></div>
-            <div class="serp-res"><span class="u">mapas.exemplo.pt</span><span class="t">Resultados perto de si</span><span class="s">Veja no mapa os negócios abertos agora.</span></div>
-            <div class="lift"><div class="lift-in"><div class="card">
-              <span class="u"><i class="fav" id="s-fav">P</i><span id="s-url">padariaaurora.pt</span></span>
-              <span class="t" id="s-title">Padaria Aurora | Padaria artesanal em Coimbra</span>
-              <span class="s" id="s-desc">Padaria artesanal em Coimbra. Padaria Aurora: serviços, horários, contactos e localização. Fale connosco e peça já o seu orçamento.</span>
-              <i class="edge edge-b"></i><i class="edge edge-r"></i>
-            </div></div></div>
-          </div>
-        </div>
-        <p class="sim-note">Pré-visualização ilustrativa. A posição real depende da concorrência e do trabalho de SEO.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Concepts -->
-  <section class="f-ink sec wrap" id="conceitos" data-title="Conceitos" aria-labelledby="conceitos-h">
-    <p class="eyebrow" data-reveal>Páginas-conceito</p>
-    <h2 class="display h2" id="conceitos-h" data-reveal>O que podemos fazer <span class="acc">pelo teu setor.</span></h2>
-    <p class="soft" data-reveal style="margin:20px 0 48px">Marcas fictícias, criadas para mostrar o nosso trabalho.</p>
-    <div class="grid">
-      <ul class="work-list">
-        <li data-reveal><button class="work-item on" type="button"><img src="/assets/img/tasca.webp" alt="Tábua de madeira com legumes frescos, cebola roxa e pimenta" width="960" height="1200" loading="lazy" decoding="async"><span class="n">Tasca do Largo</span><span class="m">Restaurante, Braga</span></button></li>
-        <li data-reveal><button class="work-item" type="button"><img src="/assets/img/atelier.webp" alt="Esquina de um edifício branco em degraus contra um céu azul claro" width="960" height="1200" loading="lazy" decoding="async"><span class="n">Atelier Traço</span><span class="m">Arquitetura, Lisboa</span></button></li>
-        <li data-reveal><button class="work-item" type="button"><img src="/assets/img/quinta.webp" alt="Cacho de uvas escuras pendurado na videira" width="960" height="1200" loading="lazy" decoding="async"><span class="n">Quinta da Ribeira</span><span class="m">Enoturismo, Douro</span></button></li>
-        <li data-reveal><button class="work-item" type="button"><img src="/assets/img/livraria.webp" alt="Livro aberto pousado numa mesa de madeira" width="960" height="1200" loading="lazy" decoding="async"><span class="n">Livraria Margem</span><span class="m">Livraria, Porto</span></button></li>
-        <li data-reveal><button class="work-item" type="button"><img src="/assets/img/miradouro.webp" alt="Binóculos de miradouro virados para o mar" width="960" height="1200" loading="lazy" decoding="async"><span class="n">Miradouro Guest House</span><span class="m">Alojamento local, Ericeira</span></button></li>
-      </ul>
-      <div class="work-frame" aria-hidden="true">
-        <div class="mock on" style="--c:#1f3d2b;--ci:#f3ede0" data-ui><img src="/assets/img/tasca.webp" alt="" width="960" height="1200" loading="lazy" decoding="async"><div class="mock-band"><b>Petiscos do Minho, todos os dias ao almoço.</b><i>Reservar mesa</i></div></div>
-        <div class="mock" style="--c:#ffffff;--ci:#111111" data-ui><img src="/assets/img/atelier.webp" alt="" width="960" height="1200" loading="lazy" decoding="async"><div class="mock-band"><b>Casas desenhadas para a luz do sul.</b><i>Ver projetos</i></div></div>
-        <div class="mock" style="--c:#4a1e2c;--ci:#f6e9ec" data-ui><img src="/assets/img/quinta.webp" alt="" width="960" height="1200" loading="lazy" decoding="async"><div class="mock-band"><b>Provas de vinho no Douro, ao fim de semana.</b><i>Marcar prova</i></div></div>
-        <div class="mock" style="--c:#0f3b5f;--ci:#eef4f8" data-ui><img src="/assets/img/livraria.webp" alt="" width="960" height="1200" loading="lazy" decoding="async"><div class="mock-band"><b>Livros novos e usados, na Baixa do Porto.</b><i>Ver novidades</i></div></div>
-        <div class="mock" style="--c:#e6f0f4;--ci:#0b2a3c" data-ui><img src="/assets/img/miradouro.webp" alt="" width="960" height="1200" loading="lazy" decoding="async"><div class="mock-band"><b>Quartos com vista para o Atlântico.</b><i>Ver disponibilidade</i></div></div>
-      </div>
-    </div>
   </section>
 
   <!-- Team -->
@@ -964,69 +358,32 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
     </div>
   </section>
 
-  <!-- Portugal and the world -->
-  <section class="f-ink sec wrap" id="mundo" data-title="Mundo" aria-labelledby="mundo-h">
-    <div class="grid world-head">
-      <div>
-        <p class="eyebrow" data-reveal>Portugal e o mundo</p>
-        <h2 class="display h2" id="mundo-h" data-reveal>Portugal primeiro. <span class="acc">Depois, o mundo.</span></h2>
-      </div>
-      <p data-reveal>Em 1502, um cartógrafo português desenhou o mundo conhecido. Continuamos a partir daqui: trabalhamos em português com empresas portuguesas e em inglês ou espanhol com quem nos procura de fora. Reuniões online, faturação em euros, fuso horário de Lisboa.</p>
-    </div>
-    <figure class="map" data-map>
-      <div class="map-plane">
-        <img src="/assets/img/cantino-1502.webp" alt="Planisfério de Cantino, mapa-múndi português de 1502, com a costa de África, o Brasil e a Índia" width="1600" height="752" loading="lazy" decoding="async">
-        <span class="pin"><i></i><span>Daqui</span></span>
-      </div>
-      <figcaption>Planisfério de Cantino, cartógrafo português anónimo, 1502. Domínio público, via Wikimedia Commons.</figcaption>
-    </figure>
-  </section>
-
   <!-- Pricing -->
   <section class="f-or sec wrap" id="precos" data-title="Preços" aria-labelledby="precos-h">
-    <p class="eyebrow" data-reveal>Preços</p>
-    <h2 class="display h2" id="precos-h" data-reveal>Preço fechado. <span class="acc">Sem surpresas.</span></h2>
+    <div class="head-block">
+      <p class="eyebrow" data-reveal>Preços</p>
+      <h2 class="display h2" id="precos-h" data-reveal>Preço fechado. <span class="acc">Sem surpresas.</span></h2>
+    </div>
     <div class="plans">
       <article class="plan best" data-reveal>
         <span class="plan-tag">Para começar</span>
         <h3>Página de apresentação</h3>
         <p class="price">490<span> €</span></p>
-        <ul class="ticks">
-          <li>Design à medida numa página</li>
-          <li>Textos escritos por nós</li>
-          <li>Versão para telemóvel</li>
-          <li>SEO de base e dados estruturados</li>
-          <li>Google Business Profile</li>
-          <li>Domínio e alojamento no 1.º ano</li>
-        </ul>
+        <ul class="ticks"><li>Design à medida numa página</li><li>Textos escritos por nós</li><li>Versão para telemóvel</li><li>SEO de base e dados estruturados</li><li>Google Business Profile</li><li>Domínio e alojamento no 1.º ano</li></ul>
         <a class="btn" href="mailto:ola@destaca.site?subject=Pedido%20de%20proposta%3A%20p%C3%A1gina%20de%20apresenta%C3%A7%C3%A3o">Pedir proposta</a>
       </article>
       <article class="plan" data-reveal>
         <span class="plan-tag ghost">Para crescer</span>
         <h3>Site profissional</h3>
         <p class="price"><small>desde</small>990<span> €</span></p>
-        <ul class="ticks">
-          <li>Até seis páginas</li>
-          <li>Blogue para artigos</li>
-          <li>Várias línguas</li>
-          <li>SEO on-page completo</li>
-          <li>Formulários e integrações</li>
-          <li>Domínio e alojamento no 1.º ano</li>
-        </ul>
+        <ul class="ticks"><li>Até seis páginas</li><li>Blogue para artigos</li><li>Várias línguas</li><li>SEO on-page completo</li><li>Formulários e integrações</li><li>Domínio e alojamento no 1.º ano</li></ul>
         <a class="btn" href="mailto:ola@destaca.site?subject=Pedido%20de%20proposta%3A%20site%20profissional">Pedir proposta</a>
       </article>
       <article class="plan" data-reveal>
         <span class="plan-tag ghost">Para subir no Google</span>
         <h3>SEO mensal</h3>
         <p class="price"><small>desde</small>190<span> €/mês</span></p>
-        <ul class="ticks">
-          <li>Auditoria inicial completa</li>
-          <li>SEO local e Google Business Profile</li>
-          <li>Dois artigos por mês</li>
-          <li>Manutenção e segurança do site</li>
-          <li>Relatório mensal simples</li>
-          <li>Sem fidelização</li>
-        </ul>
+        <ul class="ticks"><li>Auditoria inicial completa</li><li>SEO local e Google Business Profile</li><li>Dois artigos por mês</li><li>Manutenção e segurança do site</li><li>Relatório mensal simples</li><li>Sem fidelização</li></ul>
         <a class="btn" href="mailto:ola@destaca.site?subject=Pedido%20de%20proposta%3A%20SEO%20mensal">Pedir proposta</a>
       </article>
     </div>
@@ -1069,7 +426,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
       </div>
       <div class="channels">
         <a class="channel" data-reveal href="mailto:ola@destaca.site">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14"/><path d="m3 6 9 7 9-7"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
           <span><b>ola@destaca.site</b><small>Email, resposta em 24 horas úteis</small></span>
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 11 11 5M6 5h5v5"/></svg>
         </a>
@@ -1086,7 +443,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 
 <footer class="footer f-ink">
   <p class="wordmark" data-fit aria-hidden="true"><span><span>destaca</span><span>.site</span></span></p>
-  <div class="grid foot-row">
+  <div class="foot-row">
     <div class="places">
       <a href="mailto:ola@destaca.site">ola@destaca.site</a>
       <a href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">@destacasite</a>
@@ -1094,12 +451,12 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
     </div>
     <div class="foot-cols">
       <nav aria-label="Serviços"><h3>Serviços</h3><ul><li><a href="#servicos">Páginas de apresentação</a></li><li><a href="#servicos">SEO local e técnico</a></li><li><a href="#servicos">Manutenção</a></li><li><a href="#inicio">Análise SEO grátis</a></li></ul></nav>
-      <nav aria-label="Empresa"><h3>Empresa</h3><ul><li><a href="#processo">Processo</a></li><li><a href="#conceitos">Conceitos</a></li><li><a href="#equipa">Equipa</a></li><li><a href="#perguntas">Perguntas</a></li></ul></nav>
+      <nav aria-label="Empresa"><h3>Empresa</h3><ul><li><a href="#casos">Casos reais</a></li><li><a href="#processo">Processo</a></li><li><a href="#equipa">Equipa</a></li><li><a href="/en/" hreflang="en">English</a></li></ul></nav>
       <nav aria-label="Legal"><h3>Legal</h3><ul><li><a href="/legal.html#privacidade">Política de privacidade</a></li><li><a href="/legal.html#cookies">Política de cookies</a></li><li><a href="/legal.html#termos">Termos e condições</a></li><li><a href="https://www.livroreclamacoes.pt/Inicio/" target="_blank" rel="noopener">Livro de Reclamações</a></li><li><a href="/legal.html#litigios">Resolução de litígios</a></li></ul></nav>
     </div>
   </div>
   <div class="legal">
-    <p>© 2026 Destaca, Portugal. Mapa: Planisfério de Cantino (1502), domínio público, via Wikimedia Commons. Fotografias: Unsplash.</p>
+    <p>© 2026 Destaca, Portugal. Fotografia da fachada: Roman Kraft, Unsplash.</p>
     <a href="#inicio">Voltar ao topo</a>
   </div>
 </footer>
@@ -1107,246 +464,12 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 <nav class="rail" aria-label="Paginação das secções"></nav>
 
 <dialog class="menu" id="menu" aria-label="Secções da página">
-  <div class="menu-top"><span>destaca.site</span><form method="dialog"><button>Fechar</button></form></div>
+  <div class="menu-top"><span>destaca.site · <a href="/en/" hreflang="en">English</a></span><form method="dialog"><button>Fechar</button></form></div>
   <ol id="menu-list"></ol>
   <a class="btn" href="#contacto">Pedir orçamento</a>
 </dialog>
 
-<script src="/assets/js/lenis.min.js"></script>
-<script>
-(() => {
-  const d = document, root = d.documentElement;
-  const $ = (s, c = d) => c.querySelector(s), $$ = (s, c = d) => [...c.querySelectorAll(s)];
-  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  root.classList.add('js');
-
-  // Smooth scrolling (off when the visitor asks for less motion)
-  let lenis = null;
-  if (!reduce && window.Lenis) {
-    lenis = new Lenis({ lerp: 0.1 });
-    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
-    requestAnimationFrame(raf);
-  }
-  const headerH = () => $('.site-header').offsetHeight;
-  const go = el => {
-    if (lenis) lenis.scrollTo(el, { duration: 1.2, offset: el.id === 'inicio' ? -999 : -headerH() });
-    else el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-  };
-
-  // Menu dialog doubles as the full section index
-  const menu = $('#menu'), sections = $$('main > section[data-title]');
-  $('#menu-list').innerHTML = sections.map(s => `<li><a href="#${s.id}">${s.dataset.title}</a></li>`).join('');
-  $$('[data-open-menu]').forEach(b => b.addEventListener('click', () => { menu.showModal(); lenis?.stop(); }));
-  menu.addEventListener('close', () => lenis?.start());
-
-  d.addEventListener('click', e => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-    const t = $(a.getAttribute('href'));
-    if (!t) return;
-    e.preventDefault();
-    if (menu.open) menu.close();
-    go(t);
-    if (t.id === 'inicio') { $('#url').focus({ preventScroll: true }); return; }
-    t.setAttribute('tabindex', '-1');
-    t.focus({ preventScroll: true });
-    history.replaceState(null, '', a.getAttribute('href'));
-  });
-
-  // Fit the big words to the measure
-  const fit = () => $$('[data-fit]').forEach(el => {
-    const inner = el.firstElementChild;
-    el.style.fontSize = '100px';
-    const w = inner.getBoundingClientRect().width;
-    if (w) el.style.fontSize = (100 * el.clientWidth / w * 0.995) + 'px';
-  });
-  fit();
-  d.fonts?.ready.then(fit);
-  addEventListener('resize', fit);
-
-  // Entrances: the parts of each section arrive in turn
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-  }), { rootMargin: '0px 0px -8% 0px' });
-  const reveal = scope => {
-    $$('section, article, footer', scope).forEach(s => $$(':scope [data-reveal]', s).forEach((el, i) => el.style.setProperty('--d', Math.min(i, 6) * 80 + 'ms')));
-    $$('[data-reveal]', scope).forEach(el => io.observe(el));
-  };
-  reveal(d);
-
-  // Pointer tilt on the 3D search pages
-  const tilts = $$('[data-tilt]').map(el => ({ el, x: 0, y: 0, tx: 0, ty: 0 }));
-  if (!reduce && matchMedia('(pointer: fine)').matches) tilts.forEach(t => {
-    t.el.addEventListener('pointermove', e => {
-      const r = t.el.getBoundingClientRect();
-      t.tx = (e.clientX - r.left) / r.width * 2 - 1;
-      t.ty = (e.clientY - r.top) / r.height * 2 - 1;
-    });
-    t.el.addEventListener('pointerleave', () => { t.tx = 0; t.ty = 0; });
-  });
-
-  // Scroll-linked 3D: hero lift, page anatomy, map, footer name; header, pagination rail
-  const header = $('.site-header'), hero = $('.hero'), anat = $('.anat'), stack = $('.stack'), layers = $$('.layer'), anatItems = $$('.anat-list li');
-  const map = $('[data-map]'), foot = $('.footer'), rail = $('.rail');
-  const menuLinks = $$('#menu-list a');
-  rail.innerHTML = sections.map(s => `<button type="button" aria-label="${s.dataset.title}"><span>${s.dataset.title}</span></button>`).join('');
-  const railBtns = $$('button', rail);
-  railBtns.forEach((b, i) => b.addEventListener('click', () => go(sections[i])));
-  let current = -1, active = -1, dirty = true;
-  // only recompute when something moved: scroll, resize or the pointer easing the tilt
-  addEventListener('scroll', () => { dirty = true; }, { passive: true });
-  addEventListener('resize', () => { dirty = true; });
-  d.addEventListener('pointermove', () => { dirty = true; }, { passive: true });
-
-  const setActive = i => {
-    if (i === active) return;
-    active = i;
-    anatItems.forEach(li => li.classList.toggle('on', +li.dataset.layer === i));
-    layers.forEach((l, j) => l.classList.toggle('on', j === i));
-  };
-
-  const frame = () => {
-    requestAnimationFrame(frame);
-    const easing = tilts.some(t => Math.abs(t.tx - t.x) > 0.001 || Math.abs(t.ty - t.y) > 0.001);
-    if (!dirty && !easing) return;
-    dirty = false;
-    const vh = innerHeight, y = scrollY, hh = header.offsetHeight;
-    header.classList.toggle('scrolled', y > 8);
-    if (!reduce) {
-      hero.style.setProperty('--hp', clamp(y / (vh * 0.9)).toFixed(4));
-
-      const ar = anat.getBoundingClientRect();
-      const p = clamp(-ar.top / (ar.height - vh));
-      const e = clamp(p / 0.16);
-      stack.style.setProperty('--e', (e * e * (3 - 2 * e)).toFixed(4));
-      stack.classList.toggle('split', e > 0.6);
-      setActive(4 - Math.min(4, Math.floor(clamp((p - 0.1) / 0.9) * 5)));
-
-      map.style.setProperty('--mp', clamp((vh - map.getBoundingClientRect().top) / (vh * 0.85)).toFixed(4));
-      foot.style.setProperty('--fp', clamp((vh - foot.getBoundingClientRect().top) / (vh * 0.8)).toFixed(4));
-
-      tilts.forEach(t => {
-        t.x += (t.tx - t.x) * 0.08; t.y += (t.ty - t.y) * 0.08;
-        t.el.style.setProperty('--mx', t.x.toFixed(4));
-        t.el.style.setProperty('--my', t.y.toFixed(4));
-      });
-    }
-
-    // Pagination: which section is under the reading line
-    let c = 0;
-    sections.forEach((s, i) => { if (!s.hidden && s.getBoundingClientRect().top <= vh * 0.45) c = i; });
-    if (c !== current) {
-      current = c;
-      menuLinks.forEach((a, i) => a.setAttribute('aria-current', i === c ? 'true' : 'false'));
-      railBtns.forEach((b, i) => b.setAttribute('aria-current', i === c ? 'true' : 'false'));
-    }
-    rail.classList.toggle('show', y > vh * 0.6 && foot.getBoundingClientRect().top > vh * 0.5);
-  };
-  if (reduce) setActive(4);
-  requestAnimationFrame(frame);
-
-  // Concepts: one preview, swapped by hover, focus or tap
-  const items = $$('.work-item'), mocks = $$('.mock');
-  items.forEach((it, i) => {
-    const on = () => { items.forEach((x, j) => x.classList.toggle('on', i === j)); mocks.forEach((m, j) => m.classList.toggle('on', i === j)); };
-    it.addEventListener('mouseenter', on);
-    it.addEventListener('focus', on);
-    it.addEventListener('click', on);
-  });
-
-  // Free SEO check
-  const checker = $('#checker'), status = $('#checker-status'), result = $('#resultado'), btn = $('button', checker);
-  const steps = ['A abrir o site…', 'A ler o título e a descrição…', 'A verificar a versão para telemóvel…', 'A procurar o sitemap e o robots.txt…', 'A medir a velocidade…'];
-  const el = (tag, cls, text) => { const n = d.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
-  const verdict = s => s >= 85 ? 'Bom ponto de partida. Há afinações que te podem pôr à frente da concorrência.' : s >= 60 ? 'Há trabalho a fazer: estes pontos estão a custar-te visitas.' : 'O teu site está a perder clientes no Google. Dá para resolver.';
-  const renderChecks = checks => {
-    const box = $('#r-checks'); box.replaceChildren();
-    const group = (title, list, open = true) => {
-      if (!list.length) return;
-      const ul = el('ul');
-      list.forEach(c => {
-        const li = el('li', 'check ' + c.status);
-        li.append(el('i', null, c.status === 'ok' ? '✓' : c.status === 'aviso' ? '!' : '✕'));
-        const body = el('div');
-        body.append(el('b', null, c.label), el('p', null, c.detail));
-        if (c.fix) body.append(el('p', 'fix', c.fix));
-        li.append(body); ul.append(li);
-      });
-      if (open) box.append(el('h3', null, title), ul);
-      else { const det = el('details'); det.append(el('summary', null, title), ul); box.append(det); }
-    };
-    group('A corrigir', checks.filter(c => c.status === 'erro'));
-    group('A melhorar', checks.filter(c => c.status === 'aviso'));
-    const ok = checks.filter(c => c.status === 'ok');
-    group(`${ok.length} verificações passaram`, ok, false);
-  };
-  checker.addEventListener('submit', async e => {
-    e.preventDefault();
-    const url = checker.url.value.trim();
-    status.classList.remove('err');
-    if (!url) { status.textContent = 'Escreve o endereço do teu site, por exemplo o-teu-site.pt.'; status.classList.add('err'); checker.url.focus(); return; }
-    btn.setAttribute('aria-busy', 'true');
-    btn.firstChild.textContent = 'A analisar… ';
-    let si = 0; status.textContent = steps[0];
-    const tick = setInterval(() => { si = Math.min(si + 1, steps.length - 1); status.textContent = steps[si]; }, 1200);
-    try {
-      const r = await fetch('/api/analisar?url=' + encodeURIComponent(url));
-      const data = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(data.error || 'Não conseguimos analisar este site. Tenta outra vez.');
-      result.hidden = false;
-      $('#r-url').textContent = data.url;
-      $('#resultado-h').textContent = verdict(data.score);
-      renderChecks(data.checks);
-      const num = $('#r-score'), fg = $('.ring .fg');
-      fg.style.strokeDashoffset = 326.7;
-      requestAnimationFrame(() => requestAnimationFrame(() => { fg.style.strokeDashoffset = 326.7 * (1 - data.score / 100); }));
-      const t0 = performance.now();
-      const count = t => { const k = clamp((t - t0) / 1200); num.textContent = Math.round(data.score * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(count); };
-      requestAnimationFrame(count);
-      const bad = data.checks.filter(c => c.status !== 'ok').map(c => `- ${c.label}: ${c.detail}`).join('\n');
-      const host = new URL(data.url).hostname;
-      $('#r-mail').href = `mailto:ola@destaca.site?subject=${encodeURIComponent(`Análise SEO de ${host}: ${data.score}/100`)}&body=${encodeURIComponent(`Olá Destaca,\n\nFiz a análise grátis ao meu site (${data.url}) e tive ${data.score}/100.\n\nPontos a corrigir:\n${bad || '- Nenhum'}\n\nGostava de ajuda para melhorar.\n`)}`;
-      status.textContent = `Análise concluída: ${data.score} em 100.`;
-      go(result);
-    } catch (err) {
-      status.textContent = err.message === 'Failed to fetch' ? 'Sem ligação à internet. Tenta outra vez.' : err.message;
-      status.classList.add('err');
-    } finally {
-      clearInterval(tick);
-      btn.removeAttribute('aria-busy');
-      btn.firstChild.textContent = 'Analisar grátis ';
-    }
-  });
-
-  // Simulator: your business as the first result
-  const f = $('#sim');
-  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-  const cut = (s, n) => s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s;
-  const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '') || 'oteunegocio';
-  const sim = () => {
-    const n = f.nome.value.trim() || 'O teu negócio';
-    const a = f.atividade.value.trim() || 'O que fazes';
-    const l = f.local.value.trim() || 'a tua cidade';
-    const title = `${n} | ${cap(a)} em ${l}`;
-    const text = `${cap(a)} em ${l}. ${n}: serviços, horários, contactos e localização. Fale connosco e peça já o seu orçamento.`;
-    $('#s-q').textContent = `${a} ${l}`.toLowerCase();
-    $('#s-url').textContent = slug(n) + '.pt';
-    $('#s-fav').textContent = n.charAt(0).toUpperCase();
-    $('#s-title').textContent = cut(title, 60);
-    $('#s-desc').textContent = cut(text, 155);
-    const mt = $('#m-title'), md = $('#m-desc');
-    mt.textContent = `Título: ${title.length} de cerca de 60 caracteres${title.length > 60 ? ', o Google vai cortar' : ''}`;
-    md.textContent = `Descrição: ${text.length} de cerca de 155 caracteres${text.length > 155 ? ', o Google vai cortar' : ''}`;
-    mt.classList.toggle('over', title.length > 60);
-    md.classList.toggle('over', text.length > 155);
-    const body = `Olá Destaca,\n\nO meu negócio: ${n}\nO que fazemos: ${a}\nOnde: ${l}\n\nGostava de receber um diagnóstico grátis.\n`;
-    $('#sim-mail').href = `mailto:ola@destaca.site?subject=${encodeURIComponent('Quero destacar o meu site: ' + n)}&body=${encodeURIComponent(body)}`;
-  };
-  f.addEventListener('input', sim);
-  f.addEventListener('submit', e => e.preventDefault());
-  sim();
-})();
-</script>
+<script src="/assets/js/lenis.min.js" defer></script>
+<script src="/assets/js/main.js" defer></script>
 </body>
 </html>

@@ -18,11 +18,16 @@
 
 Restaurantes, clínicas, oficinas, advogados, ginásios, imobiliárias, alojamento local, lojas, arquitetos, contabilistas, cabeleireiros e startups.
 
-## Clientes
+## Clientes e sites feitos (casos reais)
 
-NK Suspension, Inforportáteis, Fernando Pereira Construção Civil, Baton Rouge (centro de estética) e Cafetaria Ding Dong.
+- NK Suspension, oficina de suspensões de motas: https://www.nksuspension.pt/
+- Inforportáteis, loja e assistência técnica em Vila Nova de Famalicão: https://inforportateis.com/
+- Fernando Pereira, construção civil na Póvoa de Varzim: https://fernandopereiraconstrucoes.pt/
+- Baton Rouge, centro de estética em Braga: https://batonrougeestetica.com/
+- Pastelaria Ding Dong, pastelaria em Braga: https://pastelariadingdong.com/
 
 ## Páginas
 
-- [Página principal](https://destaca.site/): serviços, processo, preços, perguntas frequentes e contacto.
+- [Página principal](https://destaca.site/): serviços, casos reais, processo, preços, perguntas frequentes e contacto.
+- [English version](https://destaca.site/en/): the same page in English.
 - [Informação legal](https://destaca.site/legal.html): privacidade, cookies, termos, Livro de Reclamações e resolução de litígios.
