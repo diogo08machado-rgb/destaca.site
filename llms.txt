@@ -10,9 +10,15 @@
 
 ## Serviços e preços (sem IVA)
 
-- Página de apresentação: 490 €, preço fechado. Design à medida, textos, versão para telemóvel, SEO de base, Google Business Profile, domínio e alojamento no primeiro ano.
-- Site profissional: desde 1090 €. Até seis páginas, blogue, várias línguas, SEO on-page completo.
-- SEO mensal: desde 190 €/mês, sem fidelização. SEO local, conteúdo, manutenção e relatório mensal.
+Sites:
+- Melhoramento: 290 €. Para quem já tem site: correção dos problemas de SEO, títulos e descrições, velocidade, telemóvel, HTTPS, Google Search Console e relatório antes e depois.
+- Página de apresentação: 490 €, preço fechado (melhor valor). Design à medida numa página, textos, versão para telemóvel, botões para ligar, WhatsApp e mapa, SEO de base, Google Business Profile, domínio e alojamento no primeiro ano.
+- Página profissional: desde 1090 €. Até seis páginas, blogue, várias línguas, SEO on-page completo, formulários e integrações.
+
+SEO mensal (sem fidelização):
+- SEO Mensal Iniciante: 90 €/mês. Google Business Profile otimizado, duas publicações por mês, monitorização técnica, atualizações e relatório mensal.
+- SEO Mensal: 190 €/mês (melhor valor). Tudo do Iniciante, auditoria inicial, SEO local, dois artigos por mês com blogue incluído e relatório com posições.
+- SEO Mensal Profissional: 290 €/mês. Tudo do SEO Mensal, quatro artigos por mês, análise da concorrência, diretórios locais, otimização para pesquisas com IA e reunião mensal.
 
 ## Para quem
 

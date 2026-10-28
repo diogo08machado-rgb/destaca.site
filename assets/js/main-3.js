@@ -183,4 +183,11 @@
   // links like destaca.site/?analisar=example.pt run the check straight away
   const pre = new URLSearchParams(location.search).get('analisar');
   if (pre) { checker.url.value = pre.slice(0, 200); checker.requestSubmit(); }
+
+  // "Ver mais" opens the whole row, so the three plans stay side by side for comparison
+  document.querySelectorAll('.plans').forEach((row) => {
+    const all = row.querySelectorAll('.plan-more');
+    const sideBySide = () => getComputedStyle(row).gridTemplateColumns.split(' ').length > 1; // stacked on phones: open one at a time
+    all.forEach((d) => d.addEventListener('toggle', () => sideBySide() && all.forEach((o) => { if (o.open !== d.open) o.open = d.open; })));
+  });
 })();

@@ -280,13 +280,31 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .person .chips li { background: var(--paper); }
 
 /* ---------- Pricing ---------- */
-.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--g); align-items: stretch; }
-.plan { --fg: #fff; --fg2: #a9b4bc; background: var(--ink); color: #fff; padding: clamp(24px, 2.6vw, 40px); display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 18px; border-radius: var(--r); transition: transform .35s var(--ease); }
+.plan-group + .plan-group { margin-top: clamp(56px, 7vw, 96px); }
+.plan-group-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; padding-bottom: 20px; margin-bottom: 28px; border-bottom: 2px solid var(--ink); }
+.plan-group-head h3 { font-family: var(--display); font-weight: 400; font-size: clamp(2.25rem, 1.6rem + 2vw, 3.5rem); line-height: 1; }
+.plan-group-head p { font-size: var(--lead); max-width: 36ch; }
+/* subgrid keeps tag, name, price, ticks and button aligned across the three cards */
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(4, auto) 1fr auto auto; column-gap: var(--g); }
+.plan { --fg: #fff; --fg2: #a9b4bc; background: var(--ink); color: #fff; padding: clamp(24px, 2.6vw, 40px); display: grid; grid-row: span 7; grid-template-rows: subgrid; row-gap: 18px; border-radius: var(--r); transition: transform .35s var(--ease); }
 .plan:hover { transform: translateY(-6px); }
-.plan.best { box-shadow: inset 0 0 0 2px #fff; }
+.plan.best { box-shadow: inset 0 0 0 2px #fff, 0 30px 60px -20px rgba(5, 15, 22, .55); }
+.plan .pitch { font-size: 16px; color: var(--fg2); }
+.plan-more summary { list-style: none; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; font-weight: 600; color: #fff; }
+.plan-more summary::-webkit-details-marker { display: none; }
+.plan-more summary::after { content: ""; width: 9px; height: 9px; margin-top: -5px; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg); transition: transform .3s var(--ease); }
+.plan-more[open] summary::after { transform: rotate(-135deg); margin-top: 4px; }
+.plan-more summary:hover { color: var(--or); }
+.plan-more .l, .plan-more[open] .m { display: none; }
+.plan-more[open] .l { display: inline; }
+.plan-more > div { display: grid; gap: 14px; margin-top: 14px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, .14); }
+.plan-more h5 { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--or); }
+.plan-more p { font-size: 16px; color: #d5dce1; }
+.plan-more .ideal { color: var(--fg2); }
+.plan-more .ideal b { color: #fff; font-weight: 600; }
 .plan-tag { justify-self: start; background: var(--or); color: var(--ink); font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 5px 10px; border-radius: 8px; }
 .plan-tag.ghost { background: transparent; padding: 5px 0; color: var(--fg2); }
-.plan h3 { font-family: var(--display); font-weight: 400; font-size: 2.1rem; line-height: 1; }
+.plan h4 { font-family: var(--display); font-weight: 400; font-size: 2.1rem; line-height: 1; }
 .plan .price { font-family: var(--display); font-size: clamp(3.5rem, 2.6rem + 2.4vw, 4.75rem); line-height: .9; color: var(--or); }
 .plan .price small { font-family: var(--sans); font-size: var(--small); color: var(--fg2); margin-right: 6px; }
 .plan .price span { font-size: .45em; }
@@ -376,7 +394,8 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .score, .faq-grid > div:first-child { position: static; }
   .svc-row:nth-of-type(even) .svc-copy { order: 0; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
-  .plans { grid-template-columns: 1fr; max-width: 560px; }
+  .plans { grid-template-columns: 1fr; grid-template-rows: none; row-gap: var(--g); max-width: 560px; }
+  .plan { grid-row: auto; grid-template-rows: none; }
   .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .case-frame { display: none; }
   .case-list { display: grid; gap: 28px; }
