@@ -13,8 +13,11 @@
     done: s => `Analysis complete: ${s} out of 100.`,
     verdict: s => s >= 85 ? 'A good starting point. A few tweaks could put you ahead of the competition.' : s >= 60 ? 'There is work to do: these issues are costing you visits.' : 'Your site is losing customers on Google. It can be fixed.',
     fix: 'To fix', improve: 'To improve', passed: n => `${n} checks passed`,
-    mailSubject: (h, s) => `SEO analysis of ${h}: ${s}/100`,
-    mailBody: (u, s, bad) => `Hello Destaca,\n\nI ran the free analysis on my site (${u}) and scored ${s}/100.\n\nIssues to fix:\n${bad || '- None'}\n\nI would like help to improve it.\n`
+    fixTopics: ['Improve my website', 'Show up on Google (SEO)'], fixPlan: 'Site upgrade (290 €)',
+    fixSummary: (u, s, bad) => `I ran the free analysis on ${u} and scored ${s}/100. I'd like help fixing:\n${bad || '- (no issues listed)'}`,
+    sending: 'Sending…', subject: n => `Quote request: ${n}`,
+    sendFail: 'We could not send your request. Please try again or ',
+    mailLink: 'email us directly', opened: 'We opened your email app with everything filled in. Just press send.'
   } : {
     steps: ['A abrir o site…', 'A ler o título e a descrição…', 'A verificar a versão para telemóvel…', 'A procurar o sitemap e o robots.txt…', 'A medir a velocidade…'],
     empty: 'Escreve o endereço do teu site, por exemplo o-teu-site.pt.',
@@ -24,8 +27,11 @@
     done: s => `Análise concluída: ${s} em 100.`,
     verdict: s => s >= 85 ? 'Bom ponto de partida. Há afinações que te podem pôr à frente da concorrência.' : s >= 60 ? 'Há trabalho a fazer: estes pontos estão a custar-te visitas.' : 'O teu site está a perder clientes no Google. Dá para resolver.',
     fix: 'A corrigir', improve: 'A melhorar', passed: n => `${n} verificações passaram`,
-    mailSubject: (h, s) => `Análise SEO de ${h}: ${s}/100`,
-    mailBody: (u, s, bad) => `Olá Destaca,\n\nFiz a análise grátis ao meu site (${u}) e tive ${s}/100.\n\nPontos a corrigir:\n${bad || '- Nenhum'}\n\nGostava de ajuda para melhorar.\n`
+    fixTopics: ['Melhorar o meu site', 'Aparecer no Google (SEO)'], fixPlan: 'Melhoramento (290 €)',
+    fixSummary: (u, s, bad) => `Fiz a análise grátis a ${u} e tive ${s}/100. Gostava de ajuda para corrigir:\n${bad || '- (sem pontos listados)'}`,
+    sending: 'A enviar…', subject: n => `Pedido de orçamento: ${n}`,
+    sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ',
+    mailLink: 'envia-nos um email', opened: 'Abrimos o teu email com tudo preenchido. Só tens de carregar em enviar.'
   };
   root.classList.add('js');
 
@@ -142,6 +148,7 @@
     const ok = checks.filter(c => c.status === 'ok');
     group(T.passed(ok.length), ok, false);
   };
+  let lastCheck = null;
   checker.addEventListener('submit', async e => {
     e.preventDefault();
     const url = checker.url.value.trim();
@@ -166,8 +173,7 @@
       const count = t => { const k = clamp((t - t0) / 1200); num.textContent = Math.round(data.score * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(count); };
       requestAnimationFrame(count);
       const bad = data.checks.filter(c => c.status !== 'ok').map(c => `- ${c.label}: ${c.detail}`).join('\n');
-      const host = new URL(data.url).hostname;
-      $('#r-mail').href = `mailto:contacto@destaca.site?subject=${encodeURIComponent(T.mailSubject(host, data.score))}&body=${encodeURIComponent(T.mailBody(data.url, data.score, bad))}`;
+      lastCheck = { url: data.url, score: data.score, bad };
       status.textContent = T.done(data.score);
       $$('[data-reveal]', result).forEach(x => x.classList.add('in'));
       go(result);
@@ -190,4 +196,46 @@
     const sideBySide = () => getComputedStyle(row).gridTemplateColumns.split(' ').length > 1; // stacked on phones: open one at a time
     all.forEach((d) => d.addEventListener('toggle', () => sideBySide() && all.forEach((o) => { if (o.open !== d.open) o.open = d.open; })));
   });
+
+  // Quote request: plan buttons and "fix this" prefill the form; it sends straight to our inbox
+  const form = $('#pedido-form'), done = $('#pedido-done'), fstatus = $('#pedido-status'), fbtn = $('button[type="submit"]', form);
+  const prefill = ({ topics = [], plan, site, summary }) => {
+    $$('[name="topicos"]', form).forEach(c => { if (topics.includes(c.value)) c.checked = true; });
+    if (plan) form.plano.value = plan;
+    if (site) form.site.value = site;
+    if (summary && !form.resumo.value.trim()) form.resumo.value = summary;
+  };
+  d.addEventListener('click', e => {
+    const a = e.target.closest('[data-plan]');
+    if (a) prefill({ topics: [a.dataset.topic], plan: a.dataset.plan });
+    if (e.target.closest('#r-mail') && lastCheck) prefill({ topics: T.fixTopics, plan: T.fixPlan, site: lastCheck.url, summary: T.fixSummary(lastCheck.url, lastCheck.score, lastCheck.bad) });
+  });
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (form.botcheck.checked) return;
+    const f = new FormData(form);
+    const topics = f.getAll('topicos').join(', ') || '-';
+    const fields = { Nome: f.get('nome'), Empresa: f.get('empresa') || '-', Email: f.get('email'), Telefone: f.get('telefone') || '-', Site: f.get('site') || '-', 'Tópicos': topics, Plano: f.get('plano'), Resumo: f.get('resumo'), 'Língua': en ? 'EN' : 'PT' };
+    const subject = T.subject(fields.Empresa !== '-' ? `${fields.Nome} (${fields.Empresa})` : fields.Nome);
+    const mailto = `mailto:contacto@destaca.site?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join('\n'))}`;
+    fstatus.classList.remove('err');
+    // ponytail: no access key yet -> hand off to the visitor's mail app, already filled in
+    if (!form.dataset.key) { location.href = mailto; fstatus.textContent = T.opened; return; }
+    fbtn.setAttribute('aria-busy', 'true'); fstatus.textContent = T.sending;
+    try {
+      const r = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ access_key: form.dataset.key, subject, from_name: 'destaca.site', replyto: fields.Email, ...fields })
+      });
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok || !out.success) throw new Error();
+      form.hidden = true; done.hidden = false; done.focus();
+      go(done.closest('section'));
+    } catch {
+      fstatus.textContent = T.sendFail;
+      const a = el('a', null, T.mailLink); a.href = mailto;
+      fstatus.append(a, '.'); fstatus.classList.add('err');
+    } finally { fbtn.removeAttribute('aria-busy'); }
+  });
+  $('#pedido-again').addEventListener('click', () => { form.reset(); fstatus.textContent = ''; done.hidden = true; form.hidden = false; form.resumo.focus(); });
 })();

@@ -36,7 +36,7 @@
 
 <link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site-4.css">
+<link rel="stylesheet" href="/assets/css/site-5.css">
 
 <script type="application/ld+json">
 {
@@ -110,7 +110,7 @@
       <a href="#perguntas">Perguntas</a>
       <a href="#contacto">Contacto</a>
       <a class="lang" href="/en/" hreflang="en" lang="en" title="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="lang-long">English</span><span class="lang-short">EN</span></a>
-      <a class="btn" href="#contacto">Pedir orçamento</a>
+      <a class="btn" href="#pedido">Pedir orçamento</a>
       <button class="nav-menu" type="button" data-open-menu aria-haspopup="dialog" aria-controls="menu">Menu</button>
     </nav>
   </div>
@@ -169,7 +169,7 @@
         <p class="score-url" id="r-url"></p>
         <h2 class="score-verdict" id="resultado-h"></h2>
         <div class="score-actions">
-          <a class="btn" id="r-mail" href="mailto:contacto@destaca.site">Quero corrigir isto</a>
+          <a class="btn" id="r-mail" href="#pedido">Quero corrigir isto</a>
           <a class="btn btn-ghost" href="#inicio">Analisar outro</a>
         </div>
       </div>
@@ -380,7 +380,7 @@
           <p class="price">290<span> €</span></p>
           <p class="pitch">Para quem já tem site, mas ele não aparece no Google nem convence quem o visita.</p>
           <ul class="ticks"><li>Correção dos erros da nossa análise</li><li>Títulos e descrições para o Google</li><li>Mais rápido e pronto para telemóvel</li><li>Ligação segura (HTTPS)</li><li>Ligação ao Google Search Console</li><li>Relatório antes e depois</li></ul>
-          <a class="btn" href="mailto:contacto@destaca.site?subject=Pedido%20de%20or%C3%A7amento%3A%20melhoramento%20do%20site">Pedir orçamento</a>
+          <a class="btn" href="#pedido" data-plan="Melhoramento (290 €)" data-topic="Melhorar o meu site">Pedir orçamento</a>
           <details class="plan-more">
             <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
             <div>
@@ -397,7 +397,7 @@
           <p class="price">490<span> €</span></p>
           <p class="pitch">Tudo o que um cliente precisa de saber sobre ti, numa página rápida e bonita.</p>
           <ul class="ticks"><li>Design à medida numa página</li><li>Textos escritos por nós</li><li>Versão para telemóvel</li><li>Botões para ligar, WhatsApp e mapa</li><li>SEO de base e Google Business Profile</li><li>Domínio e alojamento no 1.º ano</li></ul>
-          <a class="btn" href="mailto:contacto@destaca.site?subject=Pedido%20de%20or%C3%A7amento%3A%20p%C3%A1gina%20de%20apresenta%C3%A7%C3%A3o">Pedir orçamento</a>
+          <a class="btn" href="#pedido" data-plan="Página de apresentação (490 €)" data-topic="Site novo">Pedir orçamento</a>
           <details class="plan-more">
             <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
             <div>
@@ -414,7 +414,7 @@
           <p class="price"><small>desde</small>1090<span> €</span></p>
           <p class="pitch">Um site completo, com uma página para cada serviço, para quem quer vender mais online.</p>
           <ul class="ticks"><li>Até seis páginas</li><li>Blogue para artigos</li><li>Várias línguas</li><li>SEO on-page completo</li><li>Formulários e integrações</li><li>Domínio e alojamento no 1.º ano</li></ul>
-          <a class="btn" href="mailto:contacto@destaca.site?subject=Pedido%20de%20or%C3%A7amento%3A%20p%C3%A1gina%20profissional">Pedir orçamento</a>
+          <a class="btn" href="#pedido" data-plan="Página profissional (desde 1090 €)" data-topic="Site novo">Pedir orçamento</a>
           <details class="plan-more">
             <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
             <div>
@@ -440,7 +440,7 @@
           <p class="price">90<span> €/mês</span></p>
           <p class="pitch">O essencial para não ficares para trás no Google da tua zona.</p>
           <ul class="ticks"><li>Google Business Profile otimizado</li><li>Duas publicações por mês no perfil</li><li>Monitorização técnica do site</li><li>Atualizações e cópias de segurança</li><li>Relatório mensal simples</li><li>Sem fidelização</li></ul>
-          <a class="btn" href="mailto:contacto@destaca.site?subject=Pedido%20de%20or%C3%A7amento%3A%20SEO%20mensal%20iniciante">Pedir orçamento</a>
+          <a class="btn" href="#pedido" data-plan="SEO Mensal Iniciante (90 €/mês)" data-topic="Aparecer no Google (SEO)">Pedir orçamento</a>
           <details class="plan-more">
             <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
             <div>
@@ -457,7 +457,7 @@
           <p class="price">190<span> €/mês</span></p>
           <p class="pitch">SEO local completo para subires de posição todos os meses.</p>
           <ul class="ticks"><li>Tudo do plano Iniciante</li><li>Auditoria inicial completa</li><li>SEO local e Google Business Profile</li><li>Dois artigos por mês, blogue incluído</li><li>Otimização contínua das páginas</li><li>Relatório mensal com posições</li></ul>
-          <a class="btn" href="mailto:contacto@destaca.site?subject=Pedido%20de%20or%C3%A7amento%3A%20SEO%20mensal">Pedir orçamento</a>
+          <a class="btn" href="#pedido" data-plan="SEO Mensal (190 €/mês)" data-topic="Aparecer no Google (SEO)">Pedir orçamento</a>
           <details class="plan-more">
             <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
             <div>
@@ -474,7 +474,7 @@
           <p class="price">290<span> €/mês</span></p>
           <p class="pitch">Para seres a primeira escolha no Google, na tua zona ou em todo o país.</p>
           <ul class="ticks"><li>Tudo do plano SEO Mensal</li><li>Quatro artigos por mês</li><li>Análise da concorrência</li><li>Presença em diretórios e sites locais</li><li>Otimização para pesquisas com IA</li><li>Reunião mensal de resultados</li></ul>
-          <a class="btn" href="mailto:contacto@destaca.site?subject=Pedido%20de%20or%C3%A7amento%3A%20SEO%20mensal%20profissional">Pedir orçamento</a>
+          <a class="btn" href="#pedido" data-plan="SEO Mensal Profissional (290 €/mês)" data-topic="Aparecer no Google (SEO)">Pedir orçamento</a>
           <details class="plan-more">
             <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
             <div>
@@ -488,6 +488,67 @@
       </div>
     </div>
     <p class="plans-note">Preços sem IVA. A proposta final confirma o âmbito e o prazo.</p>
+  </section>
+
+  <section class="f-ink sec wrap" id="pedido" data-title="Pedido" aria-labelledby="pedido-h">
+    <div class="lead-grid">
+      <div class="lead-copy">
+        <p class="eyebrow" data-reveal>Pedido de orçamento</p>
+        <h2 class="display h2" id="pedido-h" data-reveal>Diz-nos o que precisas. <span class="acc">Nós tratamos do resto.</span></h2>
+        <p class="lead soft" data-reveal>Sem abrir o teu email nem escrever tudo à mão. Escolhe os temas, resume o problema e envia.</p>
+        <ol class="lead-steps" data-reveal>
+          <li><b>Escolhe o que precisas</b><span>Site novo, melhorar o atual, Google ou um plano.</span></li>
+          <li><b>Resume em poucas palavras</b><span>Duas ou três linhas chegam.</span></li>
+          <li><b>Respondemos em 24 horas úteis</b><span>Com um diagnóstico e uma proposta, sem compromisso.</span></li>
+        </ol>
+      </div>
+      <div class="lead-card" data-reveal>
+        <form class="lead-form" id="pedido-form" data-key="">
+          <fieldset class="topics">
+            <legend>O que precisas?</legend>
+            <label><input type="checkbox" name="topicos" value="Site novo"><span>Site novo</span></label>
+            <label><input type="checkbox" name="topicos" value="Melhorar o meu site"><span>Melhorar o meu site</span></label>
+            <label><input type="checkbox" name="topicos" value="Aparecer no Google (SEO)"><span>Aparecer no Google</span></label>
+            <label><input type="checkbox" name="topicos" value="Google Business Profile"><span>Google Maps</span></label>
+            <label><input type="checkbox" name="topicos" value="Manutenção do site"><span>Manutenção</span></label>
+            <label><input type="checkbox" name="topicos" value="Outro"><span>Outro</span></label>
+          </fieldset>
+          <label class="field">Plano que te interessa
+            <select name="plano">
+              <option value="Ainda não sei">Ainda não sei</option>
+              <option>Melhoramento (290 €)</option>
+              <option>Página de apresentação (490 €)</option>
+              <option>Página profissional (desde 1090 €)</option>
+              <option>SEO Mensal Iniciante (90 €/mês)</option>
+              <option>SEO Mensal (190 €/mês)</option>
+              <option>SEO Mensal Profissional (290 €/mês)</option>
+            </select>
+          </label>
+          <label class="field">Resume o problema
+            <textarea name="resumo" rows="4" maxlength="2000" required placeholder="Ex.: Tenho uma oficina em Braga e não apareço quando procuram mecânico na zona."></textarea>
+          </label>
+          <div class="pair">
+            <label class="field">Nome<input name="nome" autocomplete="name" maxlength="100" required></label>
+            <label class="field">Empresa <small>(opcional)</small><input name="empresa" autocomplete="organization" maxlength="120"></label>
+          </div>
+          <div class="pair">
+            <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
+            <label class="field">Telefone <small>(opcional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
+          </div>
+          <label class="field">Site atual <small>(opcional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="o-teu-site.pt"></label>
+          <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="consent"><input type="checkbox" name="consentimento" required><span>Aceito que a Destaca use estes dados apenas para responder a este pedido. <a href="/legal.html#privacidade">Política de privacidade</a>.</span></label>
+          <button class="btn" type="submit">Enviar pedido <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+          <p class="lead-status" id="pedido-status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="lead-done" id="pedido-done" tabindex="-1" hidden>
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
+          <h3>Obrigado pelo teu pedido!</h3>
+          <p>Já recebemos tudo. Vamos analisar o que nos contaste e entraremos em contacto o mais breve possível, normalmente em 24 horas úteis.</p>
+          <button class="btn btn-ghost" type="button" id="pedido-again">Enviar outro pedido</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- FAQ -->
@@ -520,7 +581,7 @@
         </div>
         <p class="lead soft" data-reveal>Respondemos em 24 horas úteis, por email, numa chamada ou por mensagem no Instagram. Portugal, e reuniões online para todo o mundo.</p>
         <div class="contact-actions" data-reveal>
-          <a class="btn" href="mailto:contacto@destaca.site?subject=Pedido%20de%20or%C3%A7amento&amp;body=Ol%C3%A1%20Destaca%2C%0A%0AO%20meu%20neg%C3%B3cio%3A%20%0AO%20meu%20site%20(se%20tiver)%3A%20%0AO%20que%20preciso%3A%20%0A">Pedir orçamento <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+          <a class="btn" href="#pedido">Pedir orçamento <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
           <a class="btn btn-ghost" href="#inicio">Fazer a análise grátis</a>
         </div>
       </div>
@@ -566,10 +627,10 @@
 <dialog class="menu" id="menu" aria-label="Secções da página">
   <div class="menu-top"><span>destaca.site · <a href="/en/" hreflang="en">English</a></span><form method="dialog"><button>Fechar</button></form></div>
   <ol id="menu-list"></ol>
-  <a class="btn" href="#contacto">Pedir orçamento</a>
+  <a class="btn" href="#pedido">Pedir orçamento</a>
 </dialog>
 
 <script src="/assets/js/lenis.min.js" defer></script>
-<script src="/assets/js/main-3.js" defer></script>
+<script src="/assets/js/main-4.js" defer></script>
 </body>
 </html>
