@@ -360,22 +360,51 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .lead-done .btn-ghost { --fg: var(--ink); --line: rgba(5, 15, 22, .2); }
 
 /* ---------- Free consultation pop-up ---------- */
-.consult { width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: clamp(28px, 4vw, 44px); border: 0; border-radius: var(--r); background: #fff; color: var(--ink); box-shadow: 0 40px 100px -20px rgba(0, 0, 0, .55); overflow: auto; overscroll-behavior: contain; }
-.consult::backdrop { background: rgba(5, 15, 22, .6); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
-.consult[open] { animation: pop .45s var(--ease); }
-@keyframes pop { from { opacity: 0; transform: translateY(24px) scale(.97); } }
-.consult-x { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; background: var(--paper); font-size: 16px; cursor: pointer; transition: background-color .2s; }
-.consult-x:hover { background: #e3e7ea; }
-.consult-step { display: grid; gap: 16px; }
+.consult { width: min(920px, calc(100% - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 0; outline: 1px solid rgba(255, 255, 255, .14); border-radius: calc(var(--r) + 4px); background: #fff; color: var(--ink); box-shadow: 0 50px 120px -30px rgba(0, 0, 0, .7); overflow: auto; overscroll-behavior: contain; }
+.consult[open] { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); animation: pop .5s var(--ease); }
+.consult::backdrop { background: rgba(5, 15, 22, .65); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+@keyframes pop { from { opacity: 0; transform: translateY(28px) scale(.97); } }
+.consult-x { position: absolute; z-index: 1; top: 14px; right: 14px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--paper); font-size: 15px; cursor: pointer; transition: background-color .2s, transform .3s var(--ease); }
+.consult-x:hover { background: #e3e7ea; transform: rotate(90deg); }
+/* dark side: the offer, always visible */
+.consult-side { position: relative; display: grid; align-content: start; gap: 22px; padding: clamp(28px, 4vw, 48px); background: var(--ink); color: #fff; overflow: hidden; }
+.consult-side::after { content: ""; position: absolute; right: -90px; bottom: -90px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 122, 31, .35), transparent 70%); pointer-events: none; }
+.consult-badge { justify-self: start; padding: 6px 12px; border-radius: 999px; background: var(--or); color: var(--ink); font-size: 13px; font-weight: 700; }
+.consult-side h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2.1rem, 1.6rem + 1.8vw, 3rem); line-height: 1; }
+.consult-gets { display: grid; gap: 16px; }
+.consult-gets li { display: grid; grid-template-columns: 26px 1fr; column-gap: 12px; }
+.consult-gets li::before { content: "✓"; grid-row: span 2; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 122, 31, .18); color: var(--or); font-size: 14px; font-weight: 700; }
+.consult-gets b { font-weight: 600; }
+.consult-gets span { font-size: 15px; color: #a9b4bc; }
+.consult-proof { margin-top: 6px; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, .12); font-size: 14px; color: #a9b4bc; }
+/* light side: the steps */
+.consult-main { display: grid; align-content: center; padding: clamp(28px, 4vw, 44px); padding-top: 64px; }
+.consult-step { display: grid; gap: 18px; }
 .consult-step[hidden], .consult-form[hidden] { display: none; }
-.consult-badge { justify-self: start; padding: 5px 12px; border-radius: 999px; background: var(--or); font-size: 13px; font-weight: 700; }
-.consult h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 1.5rem + 1.8vw, 2.75rem); line-height: 1.02; padding-right: 36px; }
-.consult-step > p:not(.consult-badge) { font-size: 1.0625rem; color: #4a5560; }
-.consult-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
-.consult-actions .btn { flex: 1 1 180px; }
+.consult-kicker { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #d9590a; }
+.consult-lead { font-family: var(--display); font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem); line-height: 1.12; }
+.consult-actions { display: grid; gap: 10px; margin-top: 6px; }
+.consult-actions .btn { width: 100%; min-height: 56px; }
 .consult .btn-ghost { --fg: var(--ink); --line: rgba(5, 15, 22, .2); }
+.consult-fine { font-size: 14px; color: #5f6a73; text-align: center; }
 .consult-form { gap: 16px; }
-.consult-form h2 { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem); }
+.consult-form h2 { font-family: var(--display); font-weight: 400; font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem); line-height: 1.05; }
+.consult .lead-done { padding-block: 24px; }
+@media (max-width: 760px) {
+  /* phones: a bottom sheet; the offer panel gives way once the visitor says yes */
+  .consult { width: 100%; max-width: none; max-height: 92dvh; margin: auto 0 0; border-radius: 22px 22px 0 0; }
+  .consult[open] { grid-template-columns: 1fr; animation: sheet .45s var(--ease); }
+  @keyframes sheet { from { transform: translateY(100%); } }
+  .consult-side { gap: 16px; padding: 28px 22px 24px; }
+  .consult-side h2 { font-size: 2rem; padding-right: 40px; }
+  .consult-gets span, .consult-proof { display: none; }
+  .consult-gets { gap: 10px; }
+  .consult-main { padding: 22px; }
+  .consult:has([data-step="ask"][hidden]) .consult-side { display: none; }
+  .consult:has([data-step="ask"][hidden]) .consult-main { padding-top: 64px; }
+  .consult-x { background: rgba(255, 255, 255, .12); color: #fff; }
+  .consult:has([data-step="ask"][hidden]) .consult-x { background: var(--paper); color: var(--ink); }
+}
 @media (prefers-reduced-motion: reduce) { .consult[open] { animation: none; } }
 
 /* ---------- FAQ ---------- */

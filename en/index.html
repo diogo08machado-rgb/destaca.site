@@ -36,7 +36,7 @@
 
 <link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site-6.css">
+<link rel="stylesheet" href="/assets/css/site-7.css">
 
 <script type="application/ld+json">
 {
@@ -585,44 +585,58 @@
 </dialog>
 <dialog class="consult" id="consult" aria-labelledby="consult-h">
   <button class="consult-x" type="button" data-close aria-label="Close">✕</button>
-  <div class="consult-step" data-step="ask">
+  <aside class="consult-side">
     <p class="consult-badge">Free · no obligation</p>
     <h2 id="consult-h">Would you like a free consultation for your business?</h2>
-    <p>We look at your site and your presence on Google and tell you what's holding back new customers. We reply within 12 hours.</p>
-    <div class="consult-actions">
-      <button class="btn" type="button" data-step-to="form">Yes, please</button>
-      <button class="btn btn-ghost" type="button" data-close>Not now</button>
+    <ul class="consult-gets">
+      <li><b>A review of your site and Google presence</b><span>We see what customers see when they look for you.</span></li>
+      <li><b>The 3 improvements that matter most</b><span>In order, explained without jargon.</span></li>
+      <li><b>A reply within 12 hours</b><span>By email or phone, whichever you prefer.</span></li>
+    </ul>
+    <p class="consult-proof">We've worked with NK Suspension, Inforportáteis, Fernando Pereira Construções, Baton Rouge and Ding Dong.</p>
+  </aside>
+  <div class="consult-main">
+    <div class="consult-step" data-step="ask">
+      <p class="consult-kicker">Takes less than a minute</p>
+      <p class="consult-lead">Tell us your business name and what you want to improve. We handle the rest.</p>
+      <div class="consult-actions">
+        <button class="btn" type="button" data-step-to="form">Yes, I want it <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+        <button class="btn btn-ghost" type="button" data-close>Not now</button>
+      </div>
+      <p class="consult-fine">Free and no obligation. Your details are only used to reply to you.</p>
     </div>
-  </div>
-  <form class="lead-form consult-form" id="consult-form" data-step="form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8" hidden>
-    <h2>Tell us about your business</h2>
-    <div class="pair">
-      <label class="field">Business name<input name="empresa" autocomplete="organization" maxlength="120" required></label>
-      <label class="field">City<input name="cidade" autocomplete="address-level2" maxlength="80"></label>
+    <form class="lead-form consult-form" id="consult-form" data-step="form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8" hidden>
+      <h2>Tell us about your business</h2>
+      <div class="pair">
+        <label class="field">Business name<input name="empresa" autocomplete="organization" maxlength="120" required></label>
+        <label class="field">City<input name="cidade" autocomplete="address-level2" maxlength="80"></label>
+      </div>
+      <label class="field">What you do and what you want to improve
+        <textarea name="resumo" rows="3" maxlength="2000" required placeholder="E.g. We're a dental clinic and want more bookings from Google."></textarea>
+      </label>
+      <div class="pair">
+        <label class="field">Your name<input name="nome" autocomplete="name" maxlength="100" required></label>
+        <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
+      </div>
+      <div class="pair">
+        <label class="field">Current website <small>(optional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="your-site.com"></label>
+        <label class="field">Phone <small>(optional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
+      </div>
+      <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="consent"><input type="checkbox" name="consentimento" required><span>I agree that Destaca may use this data only to reply to this request. <a href="/legal.html#privacidade">Privacy policy (PT)</a>.</span></label>
+      <button class="btn" type="submit">Get my free consultation</button>
+      <p class="lead-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="lead-done" data-step="done" tabindex="-1" hidden>
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
+      <h3>Thank you! Request received.</h3>
+      <p>We'll look at your business and get back to you within 12 hours.</p>
+      <button class="btn btn-ghost" type="button" data-close>Close</button>
     </div>
-    <label class="field">What you do and what you want to improve
-      <textarea name="resumo" rows="3" maxlength="2000" required placeholder="E.g. We're a dental clinic and want more bookings from Google."></textarea>
-    </label>
-    <label class="field">Current website <small>(optional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="your-site.com"></label>
-    <div class="pair">
-      <label class="field">Your name<input name="nome" autocomplete="name" maxlength="100" required></label>
-      <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
-    </div>
-    <label class="field">Phone <small>(optional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
-    <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <label class="consent"><input type="checkbox" name="consentimento" required><span>I agree that Destaca may use this data only to reply to this request. <a href="/legal.html#privacidade">Privacy policy (PT)</a>.</span></label>
-    <button class="btn" type="submit">Get my free consultation</button>
-    <p class="lead-status" role="status" aria-live="polite"></p>
-  </form>
-  <div class="lead-done" data-step="done" tabindex="-1" hidden>
-    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
-    <h3>Thank you! Request received.</h3>
-    <p>We'll look at your business and get back to you within 12 hours.</p>
-    <button class="btn btn-ghost" type="button" data-close>Close</button>
   </div>
 </dialog>
 
 <script src="/assets/js/lenis.min.js" defer></script>
-<script src="/assets/js/main-5.js" defer></script>
+<script src="/assets/js/main-6.js" defer></script>
 </body>
 </html>
