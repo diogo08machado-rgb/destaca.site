@@ -36,7 +36,7 @@
 
 <link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site-5.css">
+<link rel="stylesheet" href="/assets/css/site-6.css">
 
 <script type="application/ld+json">
 {
@@ -629,8 +629,46 @@
   <ol id="menu-list"></ol>
   <a class="btn" href="#pedido">Pedir orçamento</a>
 </dialog>
+<dialog class="consult" id="consult" aria-labelledby="consult-h">
+  <button class="consult-x" type="button" data-close aria-label="Fechar">✕</button>
+  <div class="consult-step" data-step="ask">
+    <p class="consult-badge">Grátis · sem compromisso</p>
+    <h2 id="consult-h">Queres uma consultoria gratuita ao teu negócio?</h2>
+    <p>Olhamos para o teu site e para a tua presença no Google e dizemos-te o que está a travar novos clientes. Respondemos em até 12 horas.</p>
+    <div class="consult-actions">
+      <button class="btn" type="button" data-step-to="form">Sim, quero</button>
+      <button class="btn btn-ghost" type="button" data-close>Agora não</button>
+    </div>
+  </div>
+  <form class="lead-form consult-form" id="consult-form" data-step="form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8" hidden>
+    <h2>Fala-nos do teu negócio</h2>
+    <div class="pair">
+      <label class="field">Nome do negócio<input name="empresa" autocomplete="organization" maxlength="120" required></label>
+      <label class="field">Cidade<input name="cidade" autocomplete="address-level2" maxlength="80"></label>
+    </div>
+    <label class="field">O que fazes e o que queres melhorar
+      <textarea name="resumo" rows="3" maxlength="2000" required placeholder="Ex.: Somos uma clínica dentária e queremos mais marcações vindas do Google."></textarea>
+    </label>
+    <label class="field">Site atual <small>(opcional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="o-teu-site.pt"></label>
+    <div class="pair">
+      <label class="field">O teu nome<input name="nome" autocomplete="name" maxlength="100" required></label>
+      <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
+    </div>
+    <label class="field">Telefone <small>(opcional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
+    <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label class="consent"><input type="checkbox" name="consentimento" required><span>Aceito que a Destaca use estes dados apenas para responder a este pedido. <a href="/legal.html#privacidade">Política de privacidade</a>.</span></label>
+    <button class="btn" type="submit">Pedir consultoria grátis</button>
+    <p class="lead-status" role="status" aria-live="polite"></p>
+  </form>
+  <div class="lead-done" data-step="done" tabindex="-1" hidden>
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
+    <h3>Obrigado! Pedido recebido.</h3>
+    <p>Vamos olhar para o teu negócio e entramos em contacto em até 12 horas.</p>
+    <button class="btn btn-ghost" type="button" data-close>Fechar</button>
+  </div>
+</dialog>
 
 <script src="/assets/js/lenis.min.js" defer></script>
-<script src="/assets/js/main-4.js" defer></script>
+<script src="/assets/js/main-5.js" defer></script>
 </body>
 </html>

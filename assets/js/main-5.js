@@ -17,7 +17,8 @@
     fixSummary: (u, s, bad) => `I ran the free analysis on ${u} and scored ${s}/100. I'd like help fixing:\n${bad || '- (no issues listed)'}`,
     sending: 'Sending…', subject: n => `Quote request: ${n}`,
     sendFail: 'We could not send your request. Please try again or ',
-    mailLink: 'email us directly', opened: 'We opened your email app with everything filled in. Just press send.'
+    mailLink: 'email us directly',
+    consultKind: 'Free consultation', consultSubject: b => `Free consultation: ${b}`
   } : {
     steps: ['A abrir o site…', 'A ler o título e a descrição…', 'A verificar a versão para telemóvel…', 'A procurar o sitemap e o robots.txt…', 'A medir a velocidade…'],
     empty: 'Escreve o endereço do teu site, por exemplo o-teu-site.pt.',
@@ -31,7 +32,8 @@
     fixSummary: (u, s, bad) => `Fiz a análise grátis a ${u} e tive ${s}/100. Gostava de ajuda para corrigir:\n${bad || '- (sem pontos listados)'}`,
     sending: 'A enviar…', subject: n => `Pedido de orçamento: ${n}`,
     sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ',
-    mailLink: 'envia-nos um email', opened: 'Abrimos o teu email com tudo preenchido. Só tens de carregar em enviar.'
+    mailLink: 'envia-nos um email',
+    consultKind: 'Consultoria gratuita', consultSubject: n => `Consultoria gratuita: ${n}`
   };
   root.classList.add('js');
 
@@ -198,7 +200,7 @@
   });
 
   // Quote request: plan buttons and "fix this" prefill the form; it sends straight to our inbox
-  const form = $('#pedido-form'), done = $('#pedido-done'), fstatus = $('#pedido-status'), fbtn = $('button[type="submit"]', form);
+  const form = $('#pedido-form'), done = $('#pedido-done'), fstatus = $('#pedido-status');
   const prefill = ({ topics = [], plan, site, summary }) => {
     $$('[name="topicos"]', form).forEach(c => { if (topics.includes(c.value)) c.checked = true; });
     if (plan) form.plano.value = plan;
@@ -210,32 +212,55 @@
     if (a) prefill({ topics: [a.dataset.topic], plan: a.dataset.plan });
     if (e.target.closest('#r-mail') && lastCheck) prefill({ topics: T.fixTopics, plan: T.fixPlan, site: lastCheck.url, summary: T.fixSummary(lastCheck.url, lastCheck.score, lastCheck.bad) });
   });
-  form.addEventListener('submit', async e => {
+  // Both forms post to Web3Forms, which emails contacto@destaca.site; on failure we offer a filled-in mailto
+  const wire = (fm, build, onDone) => fm.addEventListener('submit', async e => {
     e.preventDefault();
-    if (form.botcheck.checked) return;
-    const f = new FormData(form);
-    const topics = f.getAll('topicos').join(', ') || '-';
-    const fields = { Nome: f.get('nome'), Empresa: f.get('empresa') || '-', Email: f.get('email'), Telefone: f.get('telefone') || '-', Site: f.get('site') || '-', 'Tópicos': topics, Plano: f.get('plano'), Resumo: f.get('resumo'), 'Língua': en ? 'EN' : 'PT' };
-    const subject = T.subject(fields.Empresa !== '-' ? `${fields.Nome} (${fields.Empresa})` : fields.Nome);
+    if (fm.botcheck.checked) return;
+    const { subject, fields } = build(new FormData(fm));
+    const st = $('.lead-status', fm), sb = $('button[type="submit"]', fm);
     const mailto = `mailto:contacto@destaca.site?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join('\n'))}`;
-    fstatus.classList.remove('err');
-    // ponytail: no access key yet -> hand off to the visitor's mail app, already filled in
-    if (!form.dataset.key) { location.href = mailto; fstatus.textContent = T.opened; return; }
-    fbtn.setAttribute('aria-busy', 'true'); fstatus.textContent = T.sending;
+    st.classList.remove('err'); st.textContent = T.sending; sb.setAttribute('aria-busy', 'true');
     try {
       const r = await fetch('https://api.web3forms.com/submit', {
         method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ access_key: form.dataset.key, subject, from_name: 'destaca.site', replyto: fields.Email, ...fields })
+        body: JSON.stringify({ access_key: fm.dataset.key, subject, from_name: 'destaca.site', replyto: fields.Email, ...fields })
       });
       const out = await r.json().catch(() => ({}));
       if (!r.ok || !out.success) throw new Error();
-      form.hidden = true; done.hidden = false; done.focus();
-      go(done.closest('section'));
+      st.textContent = '';
+      onDone();
     } catch {
-      fstatus.textContent = T.sendFail;
+      st.textContent = T.sendFail;
       const a = el('a', null, T.mailLink); a.href = mailto;
-      fstatus.append(a, '.'); fstatus.classList.add('err');
-    } finally { fbtn.removeAttribute('aria-busy'); }
+      st.append(a, '.'); st.classList.add('err');
+    } finally { sb.removeAttribute('aria-busy'); }
   });
+  const lang = en ? 'EN' : 'PT';
+  wire(form, f => {
+    const fields = { Nome: f.get('nome'), Empresa: f.get('empresa') || '-', Email: f.get('email'), Telefone: f.get('telefone') || '-', Site: f.get('site') || '-', 'Tópicos': f.getAll('topicos').join(', ') || '-', Plano: f.get('plano'), Resumo: f.get('resumo'), 'Língua': lang };
+    return { fields, subject: T.subject(fields.Empresa !== '-' ? `${fields.Nome} (${fields.Empresa})` : fields.Nome) };
+  }, () => { form.hidden = true; done.hidden = false; done.focus(); go(done.closest('section')); remember('sent'); });
   $('#pedido-again').addEventListener('click', () => { form.reset(); fstatus.textContent = ''; done.hidden = true; form.hidden = false; form.resumo.focus(); });
+
+  // Free consultation pop-up: once, after 20 s on the page, never over another dialog or a half-filled form
+  const consult = $('#consult'), cform = $('#consult-form');
+  const KEY = 'destaca-consult';
+  const remember = v => { try { localStorage.setItem(KEY, JSON.stringify({ v, t: Date.now() })); } catch {} };
+  const seen = () => { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && (s.v === 'sent' || Date.now() - s.t < 7 * 864e5); } catch { return false; } };
+  const step = name => { $$('[data-step]', consult).forEach(s => { s.hidden = s.dataset.step !== name; }); const f = $(`[data-step="${name}"]`, consult); ($('input, textarea', f) || f).focus(); };
+  setTimeout(() => {
+    const busy = d.querySelector('dialog[open]') || form.contains(d.activeElement) || !form.hidden && form.resumo.value;
+    if (seen() || busy || d.hidden) return;
+    consult.showModal(); lenis?.stop(); remember('shown');
+  }, 20000);
+  consult.addEventListener('close', () => lenis?.start());
+  consult.addEventListener('click', e => {
+    if (e.target.closest('[data-close]')) consult.close();
+    const to = e.target.closest('[data-step-to]');
+    if (to) step(to.dataset.stepTo);
+  });
+  wire(cform, f => {
+    const fields = { Pedido: T.consultKind, Empresa: f.get('empresa'), Cidade: f.get('cidade') || '-', Site: f.get('site') || '-', Nome: f.get('nome'), Email: f.get('email'), Telefone: f.get('telefone') || '-', Resumo: f.get('resumo'), 'Língua': lang };
+    return { fields, subject: T.consultSubject(fields.Empresa) };
+  }, () => { step('done'); remember('sent'); });
 })();

@@ -359,6 +359,25 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .lead-done p { max-width: 40ch; color: #4a5560; font-size: 1.0625rem; }
 .lead-done .btn-ghost { --fg: var(--ink); --line: rgba(5, 15, 22, .2); }
 
+/* ---------- Free consultation pop-up ---------- */
+.consult { width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: clamp(28px, 4vw, 44px); border: 0; border-radius: var(--r); background: #fff; color: var(--ink); box-shadow: 0 40px 100px -20px rgba(0, 0, 0, .55); overflow: auto; overscroll-behavior: contain; }
+.consult::backdrop { background: rgba(5, 15, 22, .6); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.consult[open] { animation: pop .45s var(--ease); }
+@keyframes pop { from { opacity: 0; transform: translateY(24px) scale(.97); } }
+.consult-x { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; background: var(--paper); font-size: 16px; cursor: pointer; transition: background-color .2s; }
+.consult-x:hover { background: #e3e7ea; }
+.consult-step { display: grid; gap: 16px; }
+.consult-step[hidden], .consult-form[hidden] { display: none; }
+.consult-badge { justify-self: start; padding: 5px 12px; border-radius: 999px; background: var(--or); font-size: 13px; font-weight: 700; }
+.consult h2 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 1.5rem + 1.8vw, 2.75rem); line-height: 1.02; padding-right: 36px; }
+.consult-step > p:not(.consult-badge) { font-size: 1.0625rem; color: #4a5560; }
+.consult-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.consult-actions .btn { flex: 1 1 180px; }
+.consult .btn-ghost { --fg: var(--ink); --line: rgba(5, 15, 22, .2); }
+.consult-form { gap: 16px; }
+.consult-form h2 { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem); }
+@media (prefers-reduced-motion: reduce) { .consult[open] { animation: none; } }
+
 /* ---------- FAQ ---------- */
 .faq-grid { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(32px, 5vw, 96px); align-items: start; }
 .faq-grid > div:first-child { position: sticky; top: calc(var(--header) + 40px); display: grid; gap: 20px; }
