@@ -12,8 +12,9 @@
 
 Sites:
 - Melhoramento: 290 €. Para quem já tem site: correção dos problemas de SEO, títulos e descrições, velocidade, telemóvel, HTTPS, Google Search Console e relatório antes e depois.
-- Página de apresentação: 490 €, preço fechado (melhor valor). Design à medida numa página, textos, versão para telemóvel, botões para ligar, WhatsApp e mapa, SEO de base, Google Business Profile, domínio e alojamento no primeiro ano.
+- Página de apresentação: 490 €, preço fechado (melhor valor). Design à medida numa página, textos, versão para telemóvel, botões para ligar, WhatsApp e mapa, SEO de base, Google Business Profile e alojamento no primeiro ano.
 - Página profissional: desde 1090 €. Até seis páginas, blogue, várias línguas, SEO on-page completo, formulários e integrações.
+Nos três planos de sites, o domínio é pago à parte, anualmente.
 
 SEO mensal (sem fidelização):
 - SEO Mensal Iniciante: 90 €/mês. Google Business Profile otimizado, duas publicações por mês, monitorização técnica, atualizações e relatório mensal.
