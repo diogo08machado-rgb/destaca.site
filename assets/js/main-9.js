@@ -244,7 +244,7 @@
   }, () => { form.hidden = true; done.hidden = false; done.focus(); go(done.closest('section')); remember('sent'); track('pedido_orcamento'); });
   $('#pedido-again').addEventListener('click', () => { form.reset(); fstatus.textContent = ''; done.hidden = true; form.hidden = false; form.resumo.focus(); });
 
-  // Free consultation pop-up: once, after 1 minute on the page, never over another dialog or a half-filled form
+  // Free consultation pop-up: once, after 20 seconds on the page, never over another dialog or a half-filled form
   const consult = $('#consult'), cform = $('#consult-form');
   const KEY = 'destaca-consult';
   const remember = v => { try { localStorage.setItem(KEY, JSON.stringify({ v, t: Date.now() })); } catch {} };
@@ -256,7 +256,7 @@
     const busy = d.querySelector('dialog[open]') || form.contains(d.activeElement) || !form.hidden && form.resumo.value;
     if (seen() || busy || d.hidden) return;
     consult.showModal(); lenis?.stop(); remember('shown');
-  }, 60000);
+  }, 20000);
   consult.addEventListener('close', () => lenis?.start());
   consult.addEventListener('click', e => {
     // A tap on the dimmed area outside the box closes it too
