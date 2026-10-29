@@ -37,9 +37,9 @@
   };
   root.classList.add('js');
 
-  // Smooth scrolling (off when the visitor asks for less motion)
+  // Smooth scrolling for mouse and trackpad only; phones keep their own native scroll
   let lenis = null;
-  if (!reduce && window.Lenis) {
+  if (!reduce && window.Lenis && matchMedia('(pointer: fine)').matches) {
     lenis = new Lenis({ lerp: 0.1 });
     const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
@@ -47,7 +47,7 @@
   const header = $('.site-header');
   const go = el => {
     if (lenis) lenis.scrollTo(el, { duration: 1.2, offset: el.id === 'inicio' ? -9999 : -header.offsetHeight + 8 });
-    else el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    else scrollTo({ top: el.id === 'inicio' ? 0 : el.getBoundingClientRect().top + scrollY - header.offsetHeight + 8, behavior: reduce ? 'auto' : 'smooth' });
   };
 
   // Menu dialog doubles as the full section index
@@ -62,7 +62,8 @@
     const t = $(a.getAttribute('href'));
     if (!t) return;
     e.preventDefault();
-    if (menu.open) menu.close();
+    // The close event fires later, so restart scrolling before moving or the jump is ignored
+    if (menu.open) { menu.close(); lenis?.start(); }
     go(t);
     if (t.id === 'inicio') { $('#url').focus({ preventScroll: true }); return; }
     t.setAttribute('tabindex', '-1');
@@ -248,7 +249,9 @@
   const KEY = 'destaca-consult';
   const remember = v => { try { localStorage.setItem(KEY, JSON.stringify({ v, t: Date.now() })); } catch {} };
   const seen = () => { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && (s.v === 'sent' || Date.now() - s.t < 7 * 864e5); } catch { return false; } };
-  const step = name => { $$('[data-step]', consult).forEach(s => { s.hidden = s.dataset.step !== name; }); const f = $(`[data-step="${name}"]`, consult); ($('input, textarea', f) || f).focus(); };
+  const step = name => { $$('[data-step]', consult).forEach(s => { s.hidden = s.dataset.step !== name; }); const f = $(`[data-step="${name}"]`, consult); f.tabIndex = -1;
+    // On phones, focusing a field would throw the keyboard over the sheet before the visitor has read it
+    ((matchMedia('(pointer: fine)').matches && $('input, textarea', f)) || f).focus({ preventScroll: true }); consult.scrollTop = 0; };
   setTimeout(() => {
     const busy = d.querySelector('dialog[open]') || form.contains(d.activeElement) || !form.hidden && form.resumo.value;
     if (seen() || busy || d.hidden) return;
@@ -256,7 +259,8 @@
   }, 60000);
   consult.addEventListener('close', () => lenis?.start());
   consult.addEventListener('click', e => {
-    if (e.target.closest('[data-close]')) consult.close();
+    // A tap on the dimmed area outside the box closes it too
+    if (e.target === consult || e.target.closest('[data-close]')) consult.close();
     const to = e.target.closest('[data-step-to]');
     if (to) step(to.dataset.stepTo);
   });
