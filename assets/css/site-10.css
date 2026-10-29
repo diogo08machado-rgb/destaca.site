@@ -574,3 +574,12 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
   .float-card { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
   .menu[open] { animation-duration: .25s; }
 }
+
+/* ---------- Orange glow on dark backgrounds (same light as the consultation pop-up) ---------- */
+#porque  { background: radial-gradient(min(900px, 120vw) circle at 100% 100%, rgba(255, 122, 31, .2), transparent 62%), var(--ink); }
+#casos   { background: radial-gradient(min(900px, 120vw) circle at 0% 0%, rgba(255, 122, 31, .18), transparent 62%), var(--ink); }
+#pedido  { background: radial-gradient(min(900px, 120vw) circle at 100% 100%, rgba(255, 122, 31, .2), transparent 62%), var(--ink); }
+#contacto { background: radial-gradient(min(800px, 120vw) circle at 0% 0%, rgba(255, 122, 31, .18), transparent 62%), var(--ink); }
+.result  { background: radial-gradient(min(800px, 120vw) circle at 100% 100%, rgba(255, 122, 31, .18), transparent 62%), var(--ink-2); }
+.footer  { background: radial-gradient(min(900px, 120vw) circle at 100% 100%, rgba(255, 122, 31, .22), transparent 62%), var(--ink); }
+.plan, .menu, .cookie-bar { background: radial-gradient(260px circle at 100% 100%, rgba(255, 122, 31, .3), transparent 70%), var(--ink); }
