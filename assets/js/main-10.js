@@ -257,6 +257,8 @@
     if (seen() || busy || d.hidden) return;
     consult.showModal(); lenis?.stop(); remember('shown');
   }, 20000);
+  // Links from the newsletter (destaca.site/#consultoria) open the form straight away
+  if (location.hash === '#consultoria') { consult.showModal(); lenis?.stop(); step('form'); remember('shown'); }
   consult.addEventListener('close', () => lenis?.start());
   consult.addEventListener('click', e => {
     // A tap on the dimmed area outside the box closes it too
