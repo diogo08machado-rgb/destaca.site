@@ -103,7 +103,7 @@ button { background: none; border: 0; padding: 0; cursor: pointer; text-align: i
 .hero { background: linear-gradient(160deg, #0a1d2b 0%, var(--ink) 60%, #03090d 100%); }
 .hero::before, .hero::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
 .hero::before { width: 70vw; height: 70vw; right: -20vw; top: -10vw; background: radial-gradient(closest-side, rgba(255, 122, 31, .16), transparent 70%); }
-/* glow follows the mouse (--mx/--my set in main-11.js) and gets more orange on hover */
+/* glow follows the mouse (--mx/--my set in main-12.js) and gets more orange on hover */
 .hero::after { inset: 0; background: radial-gradient(520px circle at var(--mx, 75%) var(--my, 35%), rgba(255, 122, 31, .3), transparent 65%); opacity: 0; transition: opacity .5s var(--ease); }
 @media (hover: hover) { .hero:hover::after { opacity: 1; } }
 .hero h1 { font-size: var(--h1); margin-bottom: 26px; }

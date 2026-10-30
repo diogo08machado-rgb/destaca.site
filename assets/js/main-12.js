@@ -200,6 +200,18 @@
   // links like destaca.site/?analisar=example.pt run the check straight away
   const pre = new URLSearchParams(location.search).get('analisar');
   if (pre) { checker.url.value = pre.slice(0, 200); checker.requestSubmit(); }
+  // Someone opened the analysis link from one of our emails: tell contacto@ once per company and browser.
+  // Only the company's site address is sent, nothing about the visitor.
+  if (pre && !/destaca\.site/.test(document.referrer)) {
+    const seenKey = 'destaca-opened-' + pre;
+    let seen = false;
+    try { seen = !!localStorage.getItem(seenKey); localStorage.setItem(seenKey, '1'); } catch {}
+    if (!seen) fetch('https://api.web3forms.com/submit', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ access_key: $('#pedido-form').dataset.key, subject: `Abriram a análise: ${pre.slice(0, 100)}`, from_name: 'destaca.site',
+        Site: pre.slice(0, 200), Origem: new URLSearchParams(location.search).get('utm_source') || 'link direto', Hora: new Date().toLocaleString('pt-PT', { timeZone: 'Europe/Lisbon' }) })
+    }).catch(() => {});
+  }
 
   // "Ver mais" opens the whole row, so the three plans stay side by side for comparison
   document.querySelectorAll('.plans').forEach((row) => {
