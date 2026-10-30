@@ -37,7 +37,7 @@
 
 <link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site-12.css">
+<link rel="stylesheet" href="/assets/css/site-13.css">
 
 <script type="application/ld+json">
 {
@@ -630,6 +630,26 @@
   <ol id="menu-list"></ol>
   <a class="btn" href="#pedido">Pedir orçamento</a>
 </dialog>
+<aside class="news" id="news" aria-labelledby="news-h" hidden>
+  <button class="news-x" type="button" data-news-close aria-label="Fechar">✕</button>
+  <form class="news-form" id="news-form" novalidate>
+    <p class="news-kicker">Newsletter Destaca</p>
+    <h2 id="news-h">Dicas para aparecer mais no Google</h2>
+    <p class="news-lead">Uma vez por mês: ideias práticas para o teu site trazer mais clientes, e ofertas só para quem está na lista.</p>
+    <div class="news-fields">
+      <label class="sr-only" for="news-nome">O teu nome</label><input id="news-nome" name="nome" autocomplete="given-name" maxlength="60" placeholder="O teu nome">
+      <label class="sr-only" for="news-email">Email</label><input id="news-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="O teu email" required>
+    </div>
+    <label class="news-consent"><input type="checkbox" name="consent" required><span>Quero receber a newsletter da Destaca por email. Posso cancelar quando quiser. <a href="/legal.html#privacidade">Política de privacidade</a>.</span></label>
+    <input class="sr-only" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn" type="submit">Quero receber</button>
+    <p class="news-status" id="news-status" role="status" aria-live="polite"></p>
+  </form>
+  <div class="news-done" id="news-done" tabindex="-1" hidden>
+    <h2>Estás na lista!</h2>
+    <p class="news-lead">Obrigado. Vais receber a próxima newsletter no teu email.</p>
+  </div>
+</aside>
 <div class="cookie-bar" id="cookie-bar" role="region" aria-label="Cookies" hidden>
   <p><b>Cookies de estatística</b> Usamos o Google Analytics para perceber como o site é usado e melhorá-lo. Só o ativamos se aceitares. <a href="/legal.html#cookies">Saber mais</a></p>
   <div class="cookie-actions"><button class="btn" type="button" data-cookies="yes">Aceitar</button><button class="btn btn-ghost" type="button" data-cookies="no">Recusar</button></div>
@@ -688,6 +708,6 @@
 </dialog>
 
 <script src="/assets/js/lenis.min.js" defer></script>
-<script src="/assets/js/main-12.js" defer></script>
+<script src="/assets/js/main-13.js" defer></script>
 </body>
 </html>

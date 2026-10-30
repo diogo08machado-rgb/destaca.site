@@ -37,7 +37,7 @@
 
 <link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site-12.css">
+<link rel="stylesheet" href="/assets/css/site-13.css">
 
 <script type="application/ld+json">
 {
@@ -584,6 +584,26 @@
   <ol id="menu-list"></ol>
   <a class="btn" href="#pedido">Get a quote</a>
 </dialog>
+<aside class="news" id="news" aria-labelledby="news-h" hidden>
+  <button class="news-x" type="button" data-news-close aria-label="Close">✕</button>
+  <form class="news-form" id="news-form" novalidate>
+    <p class="news-kicker">Destaca newsletter</p>
+    <h2 id="news-h">Tips to show up more on Google</h2>
+    <p class="news-lead">Once a month: practical ideas to make your website bring in more customers, plus offers only for subscribers.</p>
+    <div class="news-fields">
+      <label class="sr-only" for="news-nome">Your name</label><input id="news-nome" name="nome" autocomplete="given-name" maxlength="60" placeholder="Your name">
+      <label class="sr-only" for="news-email">Email</label><input id="news-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="Your email" required>
+    </div>
+    <label class="news-consent"><input type="checkbox" name="consent" required><span>I want to receive the Destaca newsletter by email. I can unsubscribe at any time. <a href="/legal.html#privacidade">Privacy policy</a>.</span></label>
+    <input class="sr-only" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn" type="submit">Subscribe</button>
+    <p class="news-status" id="news-status" role="status" aria-live="polite"></p>
+  </form>
+  <div class="news-done" id="news-done" tabindex="-1" hidden>
+    <h2>You're on the list!</h2>
+    <p class="news-lead">Thank you. You'll get the next newsletter in your inbox.</p>
+  </div>
+</aside>
 <div class="cookie-bar" id="cookie-bar" role="region" aria-label="Cookies" hidden>
   <p><b>Analytics cookies</b> We use Google Analytics to understand how the site is used and improve it. It only runs if you accept. <a href="/legal.html#cookies" hreflang="pt-PT">Learn more (PT)</a></p>
   <div class="cookie-actions"><button class="btn" type="button" data-cookies="yes">Accept</button><button class="btn btn-ghost" type="button" data-cookies="no">Decline</button></div>
@@ -642,6 +662,6 @@
 </dialog>
 
 <script src="/assets/js/lenis.min.js" defer></script>
-<script src="/assets/js/main-12.js" defer></script>
+<script src="/assets/js/main-13.js" defer></script>
 </body>
 </html>

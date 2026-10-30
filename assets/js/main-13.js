@@ -15,6 +15,7 @@
     fix: 'To fix', improve: 'To improve', passed: n => `${n} checks passed`,
     fixTopics: ['Improve my website', 'Show up on Google (SEO)'], fixPlan: 'Site upgrade (290 €)',
     fixSummary: (u, s, bad) => `I ran the free analysis on ${u} and scored ${s}/100. I'd like help fixing:\n${bad || '- (no issues listed)'}`,
+    newsEmail: 'Please type a valid email.', newsConsent: 'Tick the box to confirm you want the newsletter.', newsFail: 'We could not sign you up. Please try again.',
     sending: 'Sending…', subject: n => `Quote request: ${n}`,
     sendFail: 'We could not send your request. Please try again or ',
     mailLink: 'email us directly',
@@ -30,6 +31,7 @@
     fix: 'A corrigir', improve: 'A melhorar', passed: n => `${n} verificações passaram`,
     fixTopics: ['Melhorar o meu site', 'Aparecer no Google (SEO)'], fixPlan: 'Melhoramento (290 €)',
     fixSummary: (u, s, bad) => `Fiz a análise grátis a ${u} e tive ${s}/100. Gostava de ajuda para corrigir:\n${bad || '- (sem pontos listados)'}`,
+    newsEmail: 'Escreve um email válido.', newsConsent: 'Marca a caixa para confirmar que queres receber a newsletter.', newsFail: 'Não conseguimos inscrever-te. Tenta outra vez.',
     sending: 'A enviar…', subject: n => `Pedido de orçamento: ${n}`,
     sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ',
     mailLink: 'envia-nos um email',
@@ -290,6 +292,37 @@
     const fields = { Pedido: T.consultKind, Empresa: f.get('empresa'), Cidade: f.get('cidade') || '-', Site: f.get('site') || '-', Nome: f.get('nome'), Email: f.get('email'), Telefone: f.get('telefone') || '-', Resumo: f.get('resumo'), 'Língua': lang };
     return { fields, subject: T.consultSubject(fields.Empresa) };
   }, () => { step('done'); remember('sent'); track('consultoria_gratuita'); });
+
+  // Newsletter pop-up: a corner card (not a modal), after 35 s once the visitor has read half the page (or after 60 s),
+  // never over a dialog or the cookie bar, and at most once every 14 days. Sign-ups go to E-goi via /api/newsletter.
+  const news = $('#news'), nform = $('#news-form'), nstatus = $('#news-status'), NK = 'destaca-news';
+  const nseen = () => { try { const s = JSON.parse(localStorage.getItem(NK)); return s && (s.v === 'sub' || Date.now() - s.t < 14 * 864e5); } catch { return false; } };
+  const nmark = v => { try { localStorage.setItem(NK, JSON.stringify({ v, t: Date.now() })); } catch {} };
+  if (news && !nseen()) {
+    const t0 = Date.now();
+    const tick = setInterval(() => {
+      const secs = (Date.now() - t0) / 1000, depth = (scrollY + innerHeight) / root.scrollHeight;
+      if (secs < 35 || (depth < .5 && secs < 60)) return;
+      if (d.querySelector('dialog[open]') || !bar.hidden || d.hidden) return;
+      clearInterval(tick); news.hidden = false; nmark('shown');
+    }, 3000);
+  }
+  news?.addEventListener('click', e => { if (e.target.closest('[data-news-close]')) news.hidden = true; });
+  nform?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = new FormData(nform), sb = $('button[type="submit"]', nform);
+    nstatus.classList.remove('err');
+    if (!nform.email.checkValidity() || !f.get('email')) { nstatus.classList.add('err'); nstatus.textContent = T.newsEmail; nform.email.focus(); return; }
+    if (!nform.consent.checked) { nstatus.classList.add('err'); nstatus.textContent = T.newsConsent; return; }
+    sb.setAttribute('aria-busy', 'true'); nstatus.textContent = T.sending;
+    try {
+      const r = await fetch('/api/newsletter', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: f.get('email'), nome: f.get('nome'), website: f.get('website'), consent: true, lang: en ? 'en' : 'pt' }) });
+      if (!r.ok) throw new Error();
+      nform.hidden = true; $('#news-done').hidden = false; $('#news-done').focus(); nmark('sub'); track('newsletter');
+    } catch { nstatus.classList.add('err'); nstatus.textContent = T.newsFail; }
+    finally { sb.removeAttribute('aria-busy'); }
+  });
 
   // Analytics: Google Tag Manager loads only after the visitor accepts (RGPD); the choice can be changed in the footer
   const bar = $('#cookie-bar'), CK = 'destaca-cookies';
