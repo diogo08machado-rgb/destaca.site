@@ -37,6 +37,14 @@
   };
   root.classList.add('js');
 
+  // Hero glow follows the mouse
+  const hero = $('.hero');
+  if (hero && matchMedia('(hover: hover)').matches) hero.addEventListener('pointermove', e => {
+    const r = hero.getBoundingClientRect();
+    hero.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    hero.style.setProperty('--my', `${e.clientY - r.top}px`);
+  }, { passive: true });
+
   // Smooth scrolling for mouse and trackpad only; phones keep their own native scroll
   let lenis = null;
   if (!reduce && window.Lenis && matchMedia('(pointer: fine)').matches) {
