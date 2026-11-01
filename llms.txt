@@ -1,6 +1,6 @@
 # destaca.site
 
-> Destaca (destaca.site) é uma agência portuguesa de criação de sites e SEO. Faz páginas de apresentação rápidas e trabalho de SEO local e técnico para pequenas e médias empresas em Portugal, e também para empresas de outros países. Slogan: "destaca.site destaca o teu site!"
+> Destaca (destaca.site) é uma agência portuguesa de criação de sites e SEO. Faz páginas de apresentação rápidas e trabalho de SEO local e técnico para pequenas e médias empresas em Portugal e noutros países europeus. Não trabalha com empresas fora da Europa. Slogan: "destaca.site destaca o teu site!"
 
 - Fundadores: Diogo Machado e Afonso Fernandes, com mais de 4 anos em desenvolvimento web e marketing digital.
 - Base: Portugal. Trabalha em português, inglês e espanhol, com reuniões online.
