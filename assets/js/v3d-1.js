@@ -33,6 +33,27 @@
   }), { rootMargin: '0px 0px -8% 0px' });
   $$('.rv').forEach(el => io.observe(el));
 
+  // Numbers count up the first time they come into view
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    cio.unobserve(e.target);
+    if (reduce) return;
+    const to = +e.target.dataset.to, t0 = performance.now();
+    const step = t => { const k = clamp((t - t0) / 1400); e.target.textContent = Math.round(to * (1 - Math.pow(1 - k, 4))); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }), { threshold: .6 });
+  $$('[data-to]').forEach(n => { if (!reduce) n.textContent = '0'; cio.observe(n); });
+
+  // Primary buttons lean towards the cursor
+  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) $$('main .btn, .site-nav .nav-cta').forEach(b => {
+    b.classList.add('mag');
+    b.addEventListener('pointermove', e => {
+      const r = b.getBoundingClientRect();
+      b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .22}px,${(e.clientY - r.top - r.height / 2) * .3}px)`;
+    });
+    b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+  });
+
   // Manifesto: the words light up as the visitor reads down
   const words = $('#words');
   words.innerHTML = words.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
@@ -373,9 +394,18 @@ void main(){
   } else cv.remove();
   const live = !!U.R;
 
-  // ponytail: fixed render scale per device class; add adaptive resolution if weak laptops drop frames
-  const size = () => { if (!live) return; const k = Math.min(devicePixelRatio, 1.5) * (narrow() ? .55 : .85); cv.width = innerWidth * k; cv.height = innerHeight * k; gl.viewport(0, 0, cv.width, cv.height); };
-  size(); addEventListener('resize', size);
+  // Render scale adapts to the machine: drops when frames run slow, climbs back when there is headroom
+  const top = () => narrow() ? .55 : .85;
+  let q = top(), ema = 16, nFrames = 0, lastT = 0;
+  const size = () => { if (!live) return; const k = Math.min(devicePixelRatio, 1.5) * q; cv.width = innerWidth * k; cv.height = innerHeight * k; gl.viewport(0, 0, cv.width, cv.height); };
+  size(); addEventListener('resize', () => { q = Math.min(q, top()); size(); });
+  const adapt = now => {
+    if (lastT) ema += (Math.min(now - lastT, 100) - ema) * .1;
+    lastT = now;
+    if (++nFrames % 45) return;
+    if (ema > 24 && q > .35) { q = Math.max(.35, q - .1); size(); }
+    else if (ema < 15 && q < top()) { q = Math.min(top(), q + .05); size(); }
+  };
 
   let kick = 1.2, mr = -.5, mnx = 0, mny = 0, spin = 0, lastY = scrollY, first = true;
   d.addEventListener('pointerdown', e => { if (!e.target.closest('a,button,input,select,textarea,summary,label,dialog')) kick = 1; });
@@ -387,7 +417,8 @@ void main(){
     for (let i = 0; i < 5; i++) st[i] += (target[i] - st[i]) * (i === 3 ? .045 : .06);
     cx += (px - cx) * .22; cy += (py - cy) * .22;
     cur.style.transform = `translate(${cx}px,${cy}px)`;
-    if (!live || d.hidden) return;
+    if (!live || d.hidden) { lastT = 0; return; }
+    adapt(now);
     speed *= .92;
     spin += (scrollY - lastY) * .0015; lastY = scrollY;
     const active = now - lastMove < 1800 && !narrow();

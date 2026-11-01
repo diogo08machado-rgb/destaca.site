@@ -20,7 +20,8 @@ main>section{position:relative;padding:clamp(100px,14vw,200px) var(--pad)}
 .h2{font-size:clamp(40px,5.6vw,92px);line-height:.95;letter-spacing:-.05em;font-weight:700}
 .lead{color:var(--soft);font-size:clamp(17px,1.4vw,20px);max-width:46ch}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;height:54px;padding:0 28px;border:0;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:600;cursor:pointer;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .2s,color .2s;white-space:nowrap}
-.btn:hover{background:var(--hot);color:#000}.btn:active{transform:scale(.96)}
+.btn:hover{background:var(--hot);color:#000}
+.btn.mag{transition:transform .5s cubic-bezier(.2,.8,.2,1),background .2s,color .2s}.btn:active{transform:scale(.96)}
 .btn[aria-busy=true]{opacity:.6;pointer-events:none}
 .btn-ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:var(--bg)}
@@ -117,7 +118,9 @@ main>section{position:relative;padding:clamp(100px,14vw,200px) var(--pad)}
 .svc:hover .svc-body,.svc.open .svc-body,.svc:focus-within .svc-body{grid-template-rows:1fr}
 
 /* cases: pinned horizontal */
-main>section.cases{padding:0}
+main>section.cases{padding:0;background:var(--ink);color:var(--bg);border-radius:36px;margin:0 clamp(0px,1vw,12px)}
+.cases .label,.cases .counter,.case small{color:#8a867f}
+.cases .case figure{box-shadow:0 40px 90px -30px #000}
 .cases .pin{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:40px}
 .cases .top{display:flex;justify-content:space-between;align-items:end;padding:0 var(--pad);gap:20px}
 .track{display:flex;gap:28px;padding:0 var(--pad);width:max-content;list-style:none;will-change:transform}
@@ -224,6 +227,8 @@ details.q p{color:var(--soft);padding-bottom:26px;max-width:60ch}
 .foot ul{list-style:none;display:grid;gap:8px;font-size:15px}
 .foot a:hover,.link-btn:hover{color:var(--hot)}
 .link-btn{background:none;border:0;cursor:pointer;padding:0;text-align:left}
+.wordmark{font-weight:800;font-size:15.2vw;line-height:.8;letter-spacing:-.07em;margin:80px 0 0 -.04em;white-space:nowrap;color:var(--bg)}
+.wordmark b{color:var(--hot)}
 .base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:64px;padding-top:22px;border-top:1px solid #ffffff1f;font-size:13px;color:#8a867f}
 
 /* newsletter card */
@@ -285,6 +290,7 @@ details.q p{color:var(--soft);padding-bottom:26px;max-width:60ch}
   .cases .pin{position:static;height:auto;padding:100px 0}
   .track{width:auto;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:12px}
   .case{width:82vw;scroll-snap-align:start}
+  .counter{display:none}
   .numbers>.num{grid-column:1/-1!important;padding-top:0!important}
   .steps{grid-template-columns:1fr 1fr;row-gap:40px}
   .price{grid-template-columns:1fr auto;gap:12px 20px;padding:24px 4px}
