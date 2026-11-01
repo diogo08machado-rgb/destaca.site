@@ -4,7 +4,24 @@
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const narrow = () => innerWidth < 860;
-  const T = {
+  const en = root.lang.startsWith('en'), lang = en ? 'en' : 'pt';
+  const T = en ? {
+    steps: ['Opening the site…', 'Reading the title and description…', 'Checking the mobile version…', 'Looking for the sitemap and robots.txt…', 'Measuring speed…'],
+    empty: 'Type your website address, for example your-site.com.',
+    fail: 'We could not analyse this site. Please try again.',
+    offline: 'No internet connection. Please try again.',
+    busy: 'Analysing…', idle: 'Free analysis',
+    done: s => `Analysis complete: ${s} out of 100.`,
+    verdict: s => s >= 85 ? 'A good starting point. A few tweaks could put you ahead of the competition.' : s >= 60 ? 'There is work to do: these issues are costing you visits.' : 'Your site is losing customers on Google. It can be fixed.',
+    fix: 'To fix', improve: 'To improve', passed: n => `${n} checks passed`,
+    fixTopics: ['Improve my website', 'Show up on Google (SEO)'], fixPlan: 'Site upgrade (290 €)',
+    fixSummary: (u, s, bad) => `I ran the free analysis on ${u} and scored ${s}/100. I'd like help fixing:\n${bad || '- (no issues listed)'}`,
+    newsEmail: 'Please type a valid email.', newsConsent: 'Tick the box to confirm you want the newsletter.', newsFail: 'We could not sign you up. Please try again.',
+    sending: 'Sending…', subject: n => `Quote request: ${n}`,
+    sendFail: 'We could not send your request. Please try again or ',
+    mailLink: 'email us directly',
+    consultKind: 'Free consultation', consultSubject: b => `Free consultation: ${b}`
+  } : {
     steps: ['A abrir o site…', 'A ler o título e a descrição…', 'A verificar a versão para telemóvel…', 'A procurar o sitemap e o robots.txt…', 'A medir a velocidade…'],
     empty: 'Escreve o endereço do teu site, por exemplo o-teu-site.pt.',
     fail: 'Não conseguimos analisar este site. Tenta outra vez.',
@@ -114,7 +131,7 @@
     let si = 0; status.textContent = T.steps[0];
     const tick = setInterval(() => { si = Math.min(si + 1, T.steps.length - 1); status.textContent = T.steps[si]; }, 1200);
     try {
-      const r = await fetch('/api/analisar?lang=pt&url=' + encodeURIComponent(url));
+      const r = await fetch(`/api/analisar?lang=${lang}&url=` + encodeURIComponent(url));
       const data = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(data.error || T.fail);
       result.hidden = false;
@@ -194,7 +211,7 @@
     } finally { sb.removeAttribute('aria-busy'); }
   });
   wire(form, f => {
-    const fields = { Nome: f.get('nome'), Empresa: f.get('empresa') || '-', Email: f.get('email'), Telefone: f.get('telefone') || '-', Site: f.get('site') || '-', 'Tópicos': f.getAll('topicos').join(', ') || '-', Plano: f.get('plano'), Resumo: f.get('resumo'), 'Língua': 'PT' };
+    const fields = { Nome: f.get('nome'), Empresa: f.get('empresa') || '-', Email: f.get('email'), Telefone: f.get('telefone') || '-', Site: f.get('site') || '-', 'Tópicos': f.getAll('topicos').join(', ') || '-', Plano: f.get('plano'), Resumo: f.get('resumo'), 'Língua': lang.toUpperCase() };
     return { fields, subject: T.subject(fields.Empresa !== '-' ? `${fields.Nome} (${fields.Empresa})` : fields.Nome) };
   }, () => { form.hidden = true; done.hidden = false; done.focus(); remember('sent'); trackEvent('pedido_orcamento'); });
   $('#pedido-again').addEventListener('click', () => { form.reset(); fstatus.textContent = ''; done.hidden = true; form.hidden = false; form.resumo.focus(); });
@@ -223,7 +240,7 @@
     if (to) step(to.dataset.stepTo);
   });
   wire(cform, f => {
-    const fields = { Pedido: T.consultKind, Empresa: f.get('empresa'), Cidade: f.get('cidade') || '-', Site: f.get('site') || '-', Nome: f.get('nome'), Email: f.get('email'), Telefone: f.get('telefone') || '-', Resumo: f.get('resumo'), 'Língua': 'PT' };
+    const fields = { Pedido: T.consultKind, Empresa: f.get('empresa'), Cidade: f.get('cidade') || '-', Site: f.get('site') || '-', Nome: f.get('nome'), Email: f.get('email'), Telefone: f.get('telefone') || '-', Resumo: f.get('resumo'), 'Língua': lang.toUpperCase() };
     return { fields, subject: T.consultSubject(fields.Empresa) };
   }, () => { step('done'); remember('sent'); trackEvent('consultoria_gratuita'); });
 
@@ -252,7 +269,7 @@
     sb.setAttribute('aria-busy', 'true'); nstatus.textContent = T.sending;
     try {
       const r = await fetch('/api/newsletter', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: f.get('email'), nome: f.get('nome'), website: f.get('website'), consent: true, lang: 'pt' }) });
+        body: JSON.stringify({ email: f.get('email'), nome: f.get('nome'), website: f.get('website'), consent: true, lang }) });
       if (!r.ok) throw new Error();
       nform.hidden = true; $('#news-done').hidden = false; $('#news-done').focus(); nmark('sub'); trackEvent('newsletter');
     } catch { nstatus.classList.add('err'); nstatus.textContent = T.newsFail; }

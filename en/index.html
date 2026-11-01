@@ -11,7 +11,7 @@
 <link rel="alternate" hreflang="pt-PT" href="https://destaca.site/">
 <link rel="alternate" hreflang="en" href="https://destaca.site/en/">
 <link rel="alternate" hreflang="x-default" href="https://destaca.site/">
-<meta name="theme-color" content="#050f16">
+<meta name="theme-color" content="#e8e6e1">
 <meta name="msvalidate.01" content="11F1F6C409C1E9C87E2E484657A8FA66">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48">
@@ -35,15 +35,15 @@
 <meta name="twitter:description" content="Free SEO analysis, presentation websites and SEO for businesses. Made in Portugal, for businesses in Portugal and Europe.">
 <meta name="twitter:image" content="https://destaca.site/og.png">
 
-<link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site-13.css">
+<link rel="stylesheet" href="/assets/css/v3d-1.css">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "WebPage", "@id": "https://destaca.site/en/#page", "url": "https://destaca.site/en/", "name": "destaca.site", "isPartOf": { "@id": "https://destaca.site/#site" }, "about": { "@id": "https://destaca.site/#empresa" }, "inLanguage": "en" },
+    { "@type": "WebPage", "@id": "https://destaca.site/en/#page", "url": "https://destaca.site/en/", "name": "destaca.site", "isPartOf": { "@id": "https://destaca.site/#site" }, "about": { "@id": "https://destaca.site/#empresa" }, "inLanguage": "en", "dateModified": "2026-11-01" },
     {
       "@type": "FAQPage",
       "@id": "https://destaca.site/en/#faq",
@@ -54,7 +54,9 @@
         { "@type": "Question", "name": "Do I own the domain and the website?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The domain is registered in your name and you have access to everything. If you ever want to switch agency, we hand over the files at no cost." } },
         { "@type": "Question", "name": "Do I have to pay a monthly fee?", "acceptedAnswer": { "@type": "Answer", "text": "No. The first year of hosting is included and, after that, renewal is yearly. The domain is paid separately, also each year. Monthly SEO is optional and has no lock-in." } },
         { "@type": "Question", "name": "Is the free analysis really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Type your website address and see the result instantly, with no sign-up. We do not store the addresses you analyse." } },
-        { "@type": "Question", "name": "Do you work with companies outside Portugal?", "acceptedAnswer": { "@type": "Answer", "text": "Only within Europe. We work with businesses in Portugal and other European countries, in English, Portuguese and Spanish, with online meetings. We do not build websites for businesses outside Europe." } }
+        { "@type": "Question", "name": "Do you work with companies outside Portugal?", "acceptedAnswer": { "@type": "Answer", "text": "Only within Europe. We work with businesses in Portugal and other European countries, in English, Portuguese and Spanish, with online meetings. We do not build websites for businesses outside Europe." } },
+        { "@type": "Question", "name": "How much does a website for my business cost?", "acceptedAnswer": { "@type": "Answer", "text": "A presentation website costs 490 € (fixed price, excluding VAT), with custom design, copy, a mobile version, basic SEO and hosting for year one. If you already have a site, the Site upgrade costs 290 €. A site with several pages, a blog and several languages costs from 1090 €. The domain is paid separately, each year." } },
+        { "@type": "Question", "name": "Do you do SEO for ChatGPT and other AI search?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We write clear answers to your customers' questions, add structured data and keep your business details consistent everywhere, so ChatGPT, Gemini, Perplexity and Google's AI answers can understand and cite your business. It is included in the Monthly SEO for Professionals plan." } }
       ]
     }
   ]
@@ -63,572 +65,288 @@
 </head>
 <body>
 <a class="skip" href="#conteudo">Skip to content</a>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="cur" id="cur" aria-hidden="true"><span>View</span></div>
 
-<header class="site-header">
-  <div class="bar">
-    <a class="logo" href="#inicio" aria-label="destaca.site, home">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#ff7a1f"/><circle cx="27" cy="39" r="11" fill="none" stroke="#050f16" stroke-width="7"/><rect x="34.5" y="11" width="7" height="39" fill="#050f16"/><rect x="47" y="43" width="7" height="7" fill="#050f16"/></svg>
-      <span>destaca.site</span>
-    </a>
-    <nav class="site-nav" aria-label="Main">
-      <a href="#servicos">Services</a>
-      <a href="#casos">Work</a>
-      <a href="#precos">Pricing</a>
-      <a href="#perguntas">FAQ</a>
-      <a href="#contacto">Contact</a>
-      <a class="lang" href="/" hreflang="pt-PT" lang="pt-PT" title="Mudar para português"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="lang-long">Português</span><span class="lang-short">PT</span></a>
-      <a class="btn" href="#pedido">Get a quote</a>
-      <button class="nav-menu" type="button" data-open-menu aria-haspopup="dialog" aria-controls="menu">Menu</button>
-    </nav>
-  </div>
-</header>
+<nav class="site-nav" aria-label="Main">
+  <a class="logo" href="#inicio" aria-label="destaca.site, home">Destaca.</a>
+  <ul>
+    <li><a href="#servicos">Services</a></li><li><a href="#casos">Work</a></li><li><a href="#precos">Pricing</a></li><li><a href="#perguntas">FAQ</a></li>
+    <li><a href="/" hreflang="pt-PT" lang="pt-PT">PT</a></li>
+    <li><a class="nav-cta" href="#pedido">Get a quote</a></li>
+  </ul>
+</nav>
 
 <main id="conteudo">
-
-  <section class="hero f-ink wrap" id="inicio" data-title="Home">
-    <div>
-      <p class="eyebrow">Websites and SEO for businesses, made in Portugal</p>
-      <h1 class="display">Stand out <span class="acc">on Google.</span></h1>
-      <p class="lead hero-lead">We build fast presentation websites and do SEO for businesses in Portugal and across Europe. Start with a free analysis of your site.</p>
-      <form class="checker" id="checker" action="#contacto" novalidate>
-        <label for="url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="sr-only">Your website address</span>
-          <input id="url" name="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="your-site.com" required></label>
-        <button class="btn" type="submit">Free analysis <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+<section class="hero" id="inicio" data-3d="0,.32,.95,0,1">
+  <p class="intro z">Websites and SEO for businesses, <span class="em">made in Portugal.</span></p>
+  <h1 class="giant"><span class="sr-only">Stand out on Google: websites and SEO for businesses in Portugal and across Europe</span><span aria-hidden="true">D</span><span aria-hidden="true">e</span><span aria-hidden="true">s</span><span aria-hidden="true">t</span><span aria-hidden="true">a</span><span aria-hidden="true">c</span><span aria-hidden="true">a</span><span aria-hidden="true"><b>.</b></span></h1>
+  <div class="row z">
+    <p>We build fast presentation websites and do SEO for businesses in Portugal and across Europe. Start with a free analysis of your site.</p>
+    <div class="checkbox">
+      <form class="checker" id="checker" action="#pedido" novalidate>
+        <label class="sr-only" for="url">Your website address</label>
+        <input id="url" name="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="your-site.com" required>
+        <button class="btn" type="submit">Free analysis</button>
       </form>
       <p class="checker-status" id="checker-status" role="status" aria-live="polite"></p>
-      <ul class="trust"><li>Free</li><li>No sign-up</li><li>19 checks in seconds</li></ul>
+      <ul class="trust"><li>Free</li><li>No sign-up</li><li>19 checks</li></ul>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <div class="dash" data-ui>
-        <div class="dash-bar"><i></i><i></i><i></i><span>destaca.site · SEO analysis</span></div>
-        <div class="scan"></div>
-        <div class="dash-body">
-          <div class="dash-score">
-            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#eef0f1" stroke-width="10"/><circle class="fg" cx="60" cy="60" r="50" fill="none" stroke="#ff7a1f" stroke-width="10" stroke-linecap="round" transform="rotate(-90 60 60)"/></svg>
-            <div><b>92</b><span>SEO score</span></div>
-            <p>your-site.com</p>
-          </div>
-          <ul class="dash-checks">
-            <li>Title and description</li>
-            <li>Mobile ready</li>
-            <li>Structured data</li>
-            <li>Sitemap and robots.txt</li>
-            <li class="warn">Response time: 920 ms</li>
-          </ul>
-          <div class="dash-chart">
-            <p><span>Visits from Google</span><b>+38%</b></p>
-            <svg viewBox="0 0 300 80" preserveAspectRatio="none"><path class="area" d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12 L300 80 L0 80 Z" fill="#fff1e6"/><path class="line" d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12" fill="none" stroke="#ff7a1f" stroke-width="2.5"/></svg>
-          </div>
-        </div>
-      </div>
-      <div class="float-card fc-1"><span>local search</span><b>1st place</b><em>up 6 positions</em></div>
-      <div class="float-card fc-2"><i></i><span>New quote request</span><small>2 minutes ago</small></div>
-    </div>
-  </section>
+  </div>
+  <span class="scrollcue z" aria-hidden="true">Scroll down</span>
+</section>
 
-  <section class="result f-ink sec wrap" id="resultado" aria-labelledby="resultado-h" hidden>
-    <div class="result-grid">
-      <div class="score">
-        <p class="eyebrow">Your analysis</p>
-        <div class="ring"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52"/></svg><b><span><span id="r-score">0</span><small>/100</small></span></b></div>
-        <p class="score-url" id="r-url"></p>
-        <h2 class="score-verdict" id="resultado-h"></h2>
-        <div class="score-actions">
-          <a class="btn" id="r-mail" href="#pedido">Help me fix this</a>
-          <a class="btn btn-ghost" href="#inicio">Analyse another</a>
-        </div>
+<section class="result" id="resultado" aria-labelledby="resultado-h" data-3d="1.9,.9,.38,1,1.4" hidden>
+  <div class="result-grid z">
+    <div class="score">
+      <span class="label">Your analysis</span>
+      <div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52"/></svg><b><span><span id="r-score">0</span><small>/100</small></span></b></div>
+      <p class="score-url" id="r-url"></p>
+      <h2 class="score-verdict" id="resultado-h"></h2>
+      <div class="score-actions">
+        <a class="btn" id="r-mail" href="#pedido">Help me fix this</a>
+        <a class="btn btn-ghost" href="#inicio">Analyse another</a>
       </div>
-      <div class="checks" id="r-checks"></div>
     </div>
-  </section>
+    <div class="checks" id="r-checks"></div>
+  </div>
+</section>
 
-  <section class="clients f-paper wrap" id="clientes" data-title="Clients" aria-labelledby="clientes-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Clients</p>
-      <h2 class="display h2" id="clientes-h" data-reveal>Businesses that <span class="acc">trust us.</span></h2>
+<div class="marquee" aria-hidden="true"><div>
+  <span>Presentation websites <i>✳</i></span><span>Local SEO <i>✳</i></span><span>Google Business Profile <i>✳</i></span><span>Monthly reports <i>✳</i></span>
+  <span>Presentation websites <i>✳</i></span><span>Local SEO <i>✳</i></span><span>Google Business Profile <i>✳</i></span><span>Monthly reports <i>✳</i></span>
+</div></div>
+
+<section class="manifesto" id="porque" aria-labelledby="porque-h" data-3d="1.35,.05,.62,1,1.2">
+  <h2 class="label z" id="porque-h">Why</h2>
+  <p class="big z" id="words">If you don't show up on Google, you don't get chosen. To stand out is to step out of the background.</p>
+  <p class="lead z rv">When someone searches for what you sell, they choose from the first results. If you are not there, the decision is made without you. We build clear, fast, well-written websites that Google understands and people trust.</p>
+  <ul class="logos z" aria-label="Clients">
+    <li><a href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/nk-suspension.webp" alt="NK Suspension" width="415" height="170" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/clientes/inforportateis.webp" alt="Inforportáteis" width="306" height="80" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/fernando-pereira.webp" alt="Fernando Pereira, Construction" width="227" height="53" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img src="/assets/clientes/baton-rouge-2.webp" alt="Baton Rouge, beauty centre, Braga" width="170" height="54" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/clientes/cafetaria-ding-dong.webp" alt="Ding Dong pastry shop" width="566" height="555" loading="lazy" decoding="async"></a></li>
+  </ul>
+</section>
+
+<section id="servicos" class="services" aria-labelledby="servicos-h" data-3d="-1.55,-.1,.7,2,1">
+  <div class="z"><span class="label">Services</span><h2 class="h2 rv" id="servicos-h">Everything your site needs <span class="em">to be found.</span></h2></div>
+  <div class="svc-list z">
+    <div class="svc open" data-shape="0" tabindex="0">
+      <div class="svc-head"><h3>Websites</h3><span class="tag">from 490 €</span></div>
+      <div class="svc-body"><div><p>A page that explains your business in seconds and gets people to call, book or ask for a quote. Designed for your brand, never the same template as the shop next door.</p><ul><li>Custom design</li><li>Copy written by us</li><li>Built mobile-first</li><li>Call, WhatsApp and quotes</li><li>Domain in your name</li></ul></div></div>
     </div>
-    <ul class="logos">
-      <li data-reveal><a href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/nk-suspension.webp" alt="NK Suspension" width="415" height="170" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/clientes/inforportateis.webp" alt="Inforportáteis" width="306" height="80" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/fernando-pereira.webp" alt="Fernando Pereira, Construção Civil" width="227" height="53" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img class="native" src="/assets/clientes/baton-rouge-2.webp" alt="Baton Rouge, Estética, Braga" width="170" height="54" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/clientes/cafetaria-ding-dong.webp" alt="Pastelaria Ding Dong" width="566" height="555" loading="lazy" decoding="async"></a></li>
+    <div class="svc" data-shape="1" tabindex="0">
+      <div class="svc-head"><h3>Local SEO</h3><span class="tag">from 90 €/mo</span></div>
+      <div class="svc-body"><div><p>So you show up on the map and in "near me" searches, and so Google can read, index and trust your site.</p><ul><li>Google Business Profile</li><li>The words customers use</li><li>Structured data</li><li>Articles that answer questions</li></ul></div></div>
+    </div>
+    <div class="svc" data-shape="2" tabindex="0">
+      <div class="svc-head"><h3>Maintenance</h3><span class="tag">monthly report</span></div>
+      <div class="svc-body"><div><p>Your site does not stand still. We handle updates, security and changes, and every month we explain what changed in plain language.</p><ul><li>SSL and daily backups</li><li>Prices, photos and hours</li><li>Visits, enquiries and rankings</li><li>Support from the people who built it</li></ul></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="casos" class="cases" aria-labelledby="casos-h" data-3d="1.9,.95,.38,1,1.4">
+  <div class="pin">
+    <div class="top z"><div><span class="label" style="margin-bottom:14px">Real work</span><h2 class="h2" id="casos-h">Websites we built <span class="em">that are live.</span></h2></div><span class="counter" id="count" aria-hidden="true">01 / 05</span></div>
+    <ul class="track z" id="track">
+      <li><a class="case" href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><figure><img src="/assets/casos/nk-suspension.webp" alt="NK Suspension website, built by Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>NK Suspension</b><small>Motorcycle suspension workshop</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><figure><img src="/assets/casos/fernando-pereira-2.webp" alt="Fernando Pereira Construction website, built by Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Fernando Pereira</b><small>Construction, Póvoa de Varzim</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://inforportateis.com/" target="_blank" rel="noopener"><figure><img src="/assets/casos/inforportateis.webp" alt="Inforportáteis website, built by Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Inforportáteis</b><small>Computer shop and repairs, Vila Nova de Famalicão</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://batonrougeestetica.com/" target="_blank" rel="noopener"><figure><img src="/assets/casos/baton-rouge.webp" alt="Baton Rouge beauty centre website, built by Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Baton Rouge</b><small>Beauty centre, Braga</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://pastelariadingdong.com/" target="_blank" rel="noopener"><figure><img src="/assets/casos/ding-dong.webp" alt="Ding Dong pastry shop website, built by Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Ding Dong</b><small>Pastry shop, Braga</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
     </ul>
-  </section>
+  </div>
+</section>
 
-  <section class="f-ink sec wrap" id="porque" data-title="Why" aria-labelledby="porque-h">
-    <div class="why-grid">
-      <div>
-        <p class="eyebrow" data-reveal>Why</p>
-        <h2 class="display h2" id="porque-h" data-reveal>If you don't show up, <span class="acc">you don't get chosen.</span></h2>
-        <div class="why-text" data-reveal>
-          <p class="lead">When someone searches for what you sell, they choose from the first results. If you are not there, the decision is made without you.</p>
-          <p>To stand out is to step out of the background, like the only orange awning on a facade of identical windows. That is what we do: clear, fast, well-written websites that Google understands and people trust.</p>
-          <p>We are a Portuguese studio. We work first for Portuguese businesses, and in English or Spanish for businesses elsewhere in Europe, with online meetings. We do not take projects outside Europe.</p>
-        </div>
-        <ul class="stats">
-          <li data-reveal><b>4+</b><span>years in web development and digital marketing</span></li>
-          <li data-reveal><b>490 €</b><span>fixed price for a presentation website</span></li>
-          <li data-reveal><b>2–3</b><span>weeks until your site is online</span></li>
-          <li data-reveal><b>0 €</b><span>for the analysis and first review</span></li>
-        </ul>
-      </div>
-      <figure class="why-pic" data-reveal>
-        <img src="/assets/img/fachada.webp" alt="White building facade with dozens of identical windows, where a single orange awning stands out" width="1200" height="1500" loading="lazy" decoding="async">
-        <figcaption>Photo: Roman Kraft, Unsplash.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="f-paper sec wrap" id="servicos" data-title="Services" aria-labelledby="servicos-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Services</p>
-      <h2 class="display h2" id="servicos-h" data-reveal>Everything your site needs <span class="acc">to be found.</span></h2>
-    </div>
-
-    <article class="svc-row">
-      <div class="svc-copy">
-        <h3 class="display h3" data-reveal>Presentation websites</h3>
-        <p data-reveal>A page that explains your business in seconds and gets people to call, book or ask for a quote. Designed for your brand, never the same template as the shop next door.</p>
-        <ul class="ticks" data-reveal>
-          <li>Custom design and copy written by us</li>
-          <li>Built mobile-first</li>
-          <li>Call, WhatsApp and quote request buttons</li>
-          <li>Domain in your name, hosting in Europe</li>
-        </ul>
-        <ul class="chips" data-reveal><li>English</li><li>Portuguese</li><li>Spanish</li><li>Accessible</li></ul>
-        <a class="link" href="#casos" data-reveal>See our work</a>
-      </div>
-      <figure class="browser" data-reveal>
-        <div class="browser-bar"><i></i><i></i><i></i><span>fernandopereiraconstrucoes.pt</span></div>
-        <img src="/assets/casos/fernando-pereira-2.webp" alt="Home page of the Fernando Pereira construction company website, built by Destaca" width="1200" height="600" loading="lazy" decoding="async">
-      </figure>
-    </article>
-
-    <article class="svc-row">
-      <div class="svc-copy">
-        <h3 class="display h3" data-reveal>Local and technical SEO</h3>
-        <p data-reveal>So you show up on the map and in "near me" searches, and so Google can read, index and trust your site.</p>
-        <ul class="ticks" data-reveal>
-          <li>Google Business Profile set up or optimised</li>
-          <li>Research into the words your customers use</li>
-          <li>Structured data, speed and indexing</li>
-          <li>Content and articles that answer real questions</li>
-        </ul>
-        <a class="link" href="#inicio" data-reveal>Run the free analysis</a>
-      </div>
-      <div class="browser" data-ui data-reveal aria-hidden="true">
-        <div class="browser-bar"><i></i><i></i><i></i><span>search: restaurant near me</span></div>
-        <div class="local">
-          <svg viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice"><rect width="300" height="360" fill="#ece8e1"/><path d="M-10 250 C 60 220, 120 260, 310 190" stroke="#bcd6e6" stroke-width="26" fill="none"/><path d="M40 -10 L 90 370 M 180 -10 L 150 370 M -10 90 L 310 120 M -10 300 L 310 280" stroke="#fff" stroke-width="9"/><path d="M230 -10 L 270 370" stroke="#fff" stroke-width="5"/><circle cx="160" cy="110" r="14" fill="#ff7a1f" stroke="#050f16" stroke-width="3"/><circle cx="95" cy="170" r="9" fill="#9aa4ab"/><circle cx="235" cy="215" r="9" fill="#9aa4ab"/></svg>
-          <ol><li class="top"><b>Your business</b>Restaurant, open until 11 pm<br>City centre</li><li><b>Competitor</b>Restaurant</li><li><b>Another competitor</b>Restaurant</li></ol>
-        </div>
-        <p class="mock-note">Illustrative example.</p>
-      </div>
-    </article>
-
-    <article class="svc-row">
-      <div class="svc-copy">
-        <h3 class="display h3" data-reveal>Maintenance and reports</h3>
-        <p data-reveal>Your site does not stand still. We handle updates, security and changes, and every month we explain what changed in plain language.</p>
-        <ul class="ticks" data-reveal>
-          <li>Updates, SSL and daily backups</li>
-          <li>New prices, photos or hours, done by us</li>
-          <li>Monthly report on visits, enquiries and rankings</li>
-          <li>Support from the people who built your site</li>
-        </ul>
-        <a class="link" href="#precos" data-reveal>See the monthly plan</a>
-      </div>
-      <div class="browser" data-ui data-reveal aria-hidden="true">
-        <div class="browser-bar"><i></i><i></i><i></i><span>monthly report</span></div>
-        <div class="report">
-          <div class="rep-head"><b>October report</b><span>your-site.com</span></div>
-          <div class="kpis"><div><span>Visits</span><b>1240</b><em>+18%</em></div><div><span>Enquiries</span><b>37</b><em>+9</em></div><div><span>Average position</span><b>2.1</b><em>was 4.2</em></div></div>
-          <svg viewBox="0 0 400 80" preserveAspectRatio="none"><polyline points="0,70 50,64 100,66 150,52 200,48 250,36 300,30 350,20 400,10" fill="none" stroke="#ff7a1f" stroke-width="3"/></svg>
-          <table><thead><tr><th>Search</th><th>Before</th><th>Now</th></tr></thead><tbody><tr><td>restaurant braga</td><td>7</td><td>3</td></tr><tr><td>tapas braga</td><td>4</td><td>1</td></tr></tbody></table>
-          <p class="mock-note">Illustrative example.</p>
-        </div>
-      </div>
-    </article>
-  </section>
-
-  <section class="f-ink sec wrap" id="casos" data-title="Work" aria-labelledby="casos-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Real work</p>
-      <h2 class="display h2" id="casos-h" data-reveal>Websites we built <span class="acc">that are live.</span></h2>
-      <p class="soft" data-reveal>Hover over each name to preview the site. Click to open it.</p>
-    </div>
-    <div class="cases">
-      <ul class="case-list">
-        <li data-reveal><a class="case on" href="https://www.nksuspension.pt/" data-url="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/casos/nk-suspension.webp" alt="NK Suspension website" width="1200" height="600" loading="lazy" decoding="async"><span class="n">NK Suspension</span><span class="m">Motorcycle suspension workshop</span><span class="go">Visit ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://inforportateis.com/" data-url="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/casos/inforportateis.webp" alt="Inforportáteis website" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Inforportáteis</span><span class="m">Computer shop and repairs, Vila Nova de Famalicão</span><span class="go">Visit ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://fernandopereiraconstrucoes.pt/" data-url="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/casos/fernando-pereira-2.webp" alt="Fernando Pereira construction website" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Fernando Pereira</span><span class="m">Construction, Póvoa de Varzim</span><span class="go">Visit ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://batonrougeestetica.com/" data-url="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img src="/assets/casos/baton-rouge.webp" alt="Baton Rouge beauty centre website" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Baton Rouge</span><span class="m">Beauty centre, Braga</span><span class="go">Visit ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://pastelariadingdong.com/" data-url="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/casos/ding-dong.webp" alt="Pastelaria Ding Dong website" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Ding Dong</span><span class="m">Pastry shop, Braga</span><span class="go">Visit ↗</span></a></li>
-      </ul>
-      <figure class="case-frame" aria-hidden="true">
-        <div class="browser">
-          <div class="browser-bar"><i></i><i></i><i></i><span>client website</span></div>
-          <div class="shots">
-            <img class="on" src="/assets/casos/nk-suspension.webp" alt="NK Suspension website home page, built by Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/inforportateis.webp" alt="Inforportáteis website home page, built by Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/fernando-pereira-2.webp" alt="Fernando Pereira construction website home page, built by Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/baton-rouge.webp" alt="Baton Rouge beauty centre website home page, built by Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/ding-dong.webp" alt="Pastelaria Ding Dong website home page, built by Destaca" width="1200" height="600" loading="lazy" decoding="async">
-          </div>
-        </div>
-        <figcaption>Visit: <a href="https://www.nksuspension.pt/" target="_blank" rel="noopener">nksuspension.pt</a></figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="f-or sec wrap" id="processo" data-title="Process" aria-labelledby="processo-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>How we work</p>
-      <h2 class="display h2" id="processo-h" data-reveal>From first call to Google <span class="acc">in four steps.</span></h2>
-    </div>
+<section id="processo" aria-labelledby="processo-h" data-3d="1.75,-.75,.5,0,1">
+  <div class="numbers z">
+    <div class="num rv"><strong>4+</strong><span>years in web development and digital marketing</span></div>
+    <div class="num rv"><strong>490<i>€</i></strong><span>fixed price for a presentation website</span></div>
+    <div class="num rv"><strong>2–3</strong><span>weeks until your site is online</span></div>
+    <div class="num rv"><strong>0<i>€</i></strong><span>for the analysis and first review</span></div>
+  </div>
+  <div class="z" style="margin-top:clamp(100px,14vw,200px)">
+    <span class="label">How we work</span>
+    <h2 class="h2 rv" id="processo-h">From first call to Google <span class="em">in four steps.</span></h2>
     <ol class="steps">
-      <li data-reveal><h3>We listen</h3><p>A 30-minute call and a free review of what you already have online.</p></li>
-      <li data-reveal><h3>We design the site</h3><p>A fixed-price proposal. You see the design before we write any code.</p></li>
-      <li data-reveal><h3>We launch and index</h3><p>Domain, hosting, Search Console and Google Business Profile handled by us.</p></li>
-      <li data-reveal><h3>We stay with you</h3><p>A plain-language monthly report and changes whenever your business changes.</p></li>
+      <li class="step rv"><b>Step 1</b><h3>We listen</h3><p>A 30-minute call and a free review of what you already have online.</p></li>
+      <li class="step rv"><b>Step 2</b><h3>We design the site</h3><p>A fixed-price proposal. You see the design before we write any code.</p></li>
+      <li class="step rv"><b>Step 3</b><h3>We launch and index</h3><p>Domain, hosting, Search Console and Google Business Profile handled by us.</p></li>
+      <li class="step rv"><b>Step 4</b><h3>We stay with you</h3><p>A plain-language monthly report and changes whenever your business changes.</p></li>
     </ol>
-  </section>
+  </div>
+</section>
 
-  <section class="f-paper sec wrap" id="equipa" data-title="Team" aria-labelledby="equipa-h">
-    <div class="team-grid">
-      <div>
-        <p class="eyebrow" data-reveal>Team</p>
-        <h2 class="display h2" id="equipa-h" data-reveal>Two friends, <span class="acc">four years of web.</span></h2>
-        <p class="lead" data-reveal style="color:var(--fg)">We have spent the last four years building websites and campaigns for businesses with no time for it.</p>
-        <p data-reveal>We brought web development and digital marketing into one team so your site is not just good-looking: it is fast, clear and found by the people looking for you. You always talk to one of us.</p>
-      </div>
-      <div class="people">
-        <article class="person" data-reveal>
-          <span class="mono" aria-hidden="true">DM</span>
-          <h3>Diogo Machado</h3>
-          <p>Co-founder and CEO. Web development, technical SEO, speed and hosting.</p>
-          <ul class="chips"><li>Development</li><li>Technical SEO</li><li>Performance</li></ul>
-        </article>
-        <article class="person" data-reveal>
-          <span class="mono" aria-hidden="true">AF</span>
-          <h3>Afonso Fernandes</h3>
-          <p>Co-founder and CEO. Digital marketing, local SEO, content and Google Business Profile.</p>
-          <ul class="chips"><li>Marketing</li><li>Local SEO</li><li>Content</li></ul>
-        </article>
-      </div>
+<section id="precos" aria-labelledby="precos-h" data-3d="1.9,.85,.4,2,1.3">
+  <div class="z">
+    <div class="ptop"><div><span class="label">Pricing</span><h2 class="h2 rv" id="precos-h">Fixed prices. <span class="em">No surprises.</span></h2></div>
+      <div class="switch" role="group" aria-label="Plan type"><button type="button" aria-pressed="true" data-p="sites">Websites</button><button type="button" aria-pressed="false" data-p="seo">Monthly SEO</button></div></div>
+    <div class="prices" id="sites">
+      <a class="price" href="#pedido" data-plan="Site upgrade (290 €)" data-topic="Improve my website"><h3><small>You have a site</small>Site upgrade</h3><p>We fix every issue our check finds: titles and descriptions, speed, mobile and HTTPS. Google Search Console set up and a before-and-after report.</p><div class="val">290 €</div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="Presentation website (490 €)" data-topic="New website"><h3><small>Best value</small>Presentation website</h3><p>Custom one-page design, copy written by us, mobile version, call, WhatsApp and map buttons, basic SEO, Google Business Profile and hosting for year one.</p><div class="val">490 €</div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="Professional website (from 1090 €)" data-topic="New website"><h3><small>To grow</small>Professional website</h3><p>Up to six pages, a blog, several languages, full on-page SEO, forms and integrations, and hosting for year one.</p><div class="val"><small>from </small>1090 €</div><span class="arr" aria-hidden="true">→</span></a>
     </div>
-  </section>
+    <div class="prices" id="seo" hidden>
+      <a class="price" href="#pedido" data-plan="Monthly SEO for Beginners (90 €/mo)" data-topic="Show up on Google (SEO)"><h3><small>To start</small>Monthly SEO for Beginners</h3><p>Optimised Google Business Profile, two profile posts a month, technical monitoring, updates, backups and a simple monthly report.</p><div class="val">90 €<small>/mo</small></div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="Monthly SEO (190 €/mo)" data-topic="Show up on Google (SEO)"><h3><small>Best value</small>Monthly SEO</h3><p>Everything in Beginners, a full initial audit, local SEO, two articles a month, ongoing optimisation and a monthly report with rankings.</p><div class="val">190 €<small>/mo</small></div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="Monthly SEO for Professionals (290 €/mo)" data-topic="Show up on Google (SEO)"><h3><small>To lead</small>Monthly SEO for Professionals</h3><p>Everything in Monthly SEO, four articles a month, competitor analysis, local directories, optimisation for AI search and a monthly meeting.</p><div class="val">290 €<small>/mo</small></div><span class="arr" aria-hidden="true">→</span></a>
+    </div>
+    <p class="vat">Prices exclude VAT. Domain paid separately, each year. Monthly SEO has no lock-in. The final proposal confirms scope and timing.</p>
+  </div>
+</section>
 
-  <section class="f-or sec wrap" id="precos" data-title="Pricing" aria-labelledby="precos-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Pricing</p>
-      <h2 class="display h2" id="precos-h" data-reveal>Fixed prices. <span class="acc">No surprises.</span></h2>
+<section id="equipa" aria-labelledby="equipa-h" data-3d="-1.7,.7,.4,1,1">
+  <div class="z">
+    <span class="label">Team</span>
+    <h2 class="h2 rv" id="equipa-h">Two friends, <span class="em">four years of web.</span></h2>
+    <div class="team">
+      <div class="person rv"><h3>Diogo Machado</h3><p>Co-founder and CEO. Web development, technical SEO, speed and hosting.</p></div>
+      <div class="person rv"><h3>Afonso Fernandes</h3><p>Co-founder and CEO. Digital marketing, local SEO, content and Google Business Profile.</p></div>
     </div>
+  </div>
+</section>
 
-    <div class="plan-group">
-      <div class="plan-group-head" data-reveal>
-        <h3>Websites</h3>
-        <p>Improve the site you already have, or build one from scratch.</p>
+<section id="pedido" class="quote" aria-labelledby="pedido-h" data-3d="1.25,.15,.6,1,1.3">
+  <div class="z">
+    <span class="label">Request a quote</span>
+    <h2 class="h2 rv" id="pedido-h">Tell us what you need. <span class="em">We handle the rest.</span></h2>
+    <p class="lead rv">Pick the topics, sum up the problem and send. No need to open your email.</p>
+    <ol class="qsteps rv">
+      <li><div><b>Pick what you need</b><span>A new site, a better one, Google or a plan.</span></div></li>
+      <li><div><b>Sum it up in a few words</b><span>Two or three lines are enough.</span></div></li>
+      <li><div><b>We reply within one working day</b><span>With a diagnosis and a no-obligation proposal.</span></div></li>
+    </ol>
+  </div>
+  <div class="lead-card z">
+    <form class="lead-form" id="pedido-form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8">
+      <fieldset class="topics">
+        <legend>What do you need?</legend>
+        <label><input type="checkbox" name="topicos" value="New website"><span>New website</span></label>
+        <label><input type="checkbox" name="topicos" value="Improve my website"><span>Improve my website</span></label>
+        <label><input type="checkbox" name="topicos" value="Show up on Google (SEO)"><span>Show up on Google</span></label>
+        <label><input type="checkbox" name="topicos" value="Google Business Profile"><span>Google Maps</span></label>
+        <label><input type="checkbox" name="topicos" value="Website maintenance"><span>Maintenance</span></label>
+        <label><input type="checkbox" name="topicos" value="Other"><span>Other</span></label>
+      </fieldset>
+      <label class="field">Plan you're interested in
+        <select name="plano">
+          <option value="Not sure yet">Not sure yet</option>
+          <option>Site upgrade (290 €)</option>
+          <option>Presentation website (490 €)</option>
+          <option>Professional website (from 1090 €)</option>
+          <option>Monthly SEO for Beginners (90 €/mo)</option>
+          <option>Monthly SEO (190 €/mo)</option>
+          <option>Monthly SEO for Professionals (290 €/mo)</option>
+        </select>
+      </label>
+      <label class="field">Sum up the problem
+        <textarea name="resumo" rows="4" maxlength="2000" required placeholder="E.g. I run a dental clinic in Lyon and we don't show up when people search for a dentist nearby."></textarea>
+      </label>
+      <div class="pair">
+        <label class="field">Name<input name="nome" autocomplete="name" maxlength="100" required></label>
+        <label class="field">Company <small>(optional)</small><input name="empresa" autocomplete="organization" maxlength="120"></label>
       </div>
-      <div class="plans">
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">You have a site</span>
-          <h4>Site upgrade</h4>
-          <p class="price">290<span> €</span><em class="price-note">+ domain, paid separately each year</em></p>
-          <p class="pitch">For businesses whose site doesn't show up on Google or doesn't win over visitors.</p>
-          <ul class="ticks"><li>Fixes for every issue our check finds</li><li>Titles and descriptions for Google</li><li>Faster and mobile-ready</li><li>Secure connection (HTTPS)</li><li>Google Search Console set up</li><li>Before-and-after report</li></ul>
-          <a class="btn" href="#pedido" data-plan="Site upgrade (290 €)" data-topic="Improve my website">Request a quote</a>
-          <details class="plan-more">
-            <summary><span class="m">See more</span><span class="l">See less</span></summary>
-            <div>
-              <h5>What changes for your business</h5>
-              <p>You keep the site you already paid for. We fix what stops Google from showing it and what makes visitors leave, without starting over.</p>
-              <ul class="ticks"><li>More visits from Google without paying for a new site</li><li>Chrome stops showing «Not secure» to your customers</li><li>Pages that load fast on phones, where most searches happen</li><li>See your score before and after in our free tool</li></ul>
-              <p class="ideal"><b>Best for</b> businesses with an old or rushed site that want results without a rebuild.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan best" data-reveal>
-          <span class="plan-tag">Best value</span>
-          <h4>Presentation website</h4>
-          <p class="price">490<span> €</span><em class="price-note">+ domain, paid separately each year</em></p>
-          <p class="pitch">Everything a customer needs to know about you, on one fast, good-looking page.</p>
-          <ul class="ticks"><li>Custom one-page design</li><li>Copy written by us</li><li>Mobile version</li><li>Call, WhatsApp and map buttons</li><li>Basic SEO and Google Business Profile</li><li>Hosting for year one</li></ul>
-          <a class="btn" href="#pedido" data-plan="Presentation website (490 €)" data-topic="New website">Request a quote</a>
-          <details class="plan-more">
-            <summary><span class="m">See more</span><span class="l">See less</span></summary>
-            <div>
-              <h5>What changes for your business</h5>
-              <p>You get your own address that shows up on Google when people search for your service nearby. Anyone who finds you sees straight away what you do, where you are and how to reach you.</p>
-              <ul class="ticks"><li>No longer relying only on Facebook or Instagram</li><li>More trust: your own site shows a serious business</li><li>Customers call or message you with one tap</li><li>You show up in local searches and on Google Maps</li><li>Fixed price: you know the cost up front</li></ul>
-              <p class="ideal"><b>Best for</b> restaurants, garages, clinics, salons and any local business.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">To grow</span>
-          <h4>Professional website</h4>
-          <p class="price"><small>from</small>1090<span> €</span><em class="price-note">+ domain, paid separately each year</em></p>
-          <p class="pitch">A full site with a page for each service, for businesses that want to sell more online.</p>
-          <ul class="ticks"><li>Up to six pages</li><li>Blog for articles</li><li>Several languages</li><li>Full on-page SEO</li><li>Forms and integrations</li><li>Hosting for year one</li></ul>
-          <a class="btn" href="#pedido" data-plan="Professional website (from 1090 €)" data-topic="New website">Request a quote</a>
-          <details class="plan-more">
-            <summary><span class="m">See more</span><span class="l">See less</span></summary>
-            <div>
-              <h5>What changes for your business</h5>
-              <p>Every service gets its own page, and every page can rank on Google for different searches. With a blog and several languages, you reach more customers, including those from abroad.</p>
-              <ul class="ticks"><li>You show up for more searches: one page per service</li><li>Quote requests through a form, at any hour</li><li>A version in another language for foreign customers</li><li>Ready for monthly SEO and articles</li></ul>
-              <p class="ideal"><b>Best for</b> companies with several services: builders, clinics, accommodation and professional services.</p>
-            </div>
-          </details>
-        </article>
+      <div class="pair">
+        <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
+        <label class="field">Phone <small>(optional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
       </div>
+      <label class="field">Current website <small>(optional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="your-site.com"></label>
+      <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="consent"><input type="checkbox" name="consentimento" required><span>I agree that Destaca may use this data only to reply to this request. <a href="/legal.html#privacidade" hreflang="pt-PT">Privacy policy (PT)</a>.</span></label>
+      <button class="btn" type="submit">Send request</button>
+      <p class="lead-status" id="pedido-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="lead-done" id="pedido-done" tabindex="-1" hidden>
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
+      <h3>Thank you for your request!</h3>
+      <p>We've got everything. We'll look at what you told us and get back to you as soon as possible, usually within one working day.</p>
+      <button class="btn btn-ghost" type="button" id="pedido-again">Send another request</button>
     </div>
+  </div>
+</section>
 
-    <div class="plan-group">
-      <div class="plan-group-head" data-reveal>
-        <h3>Monthly SEO</h3>
-        <p>Climb on Google month after month. No lock-in.</p>
-      </div>
-      <div class="plans">
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">To start</span>
-          <h4>Monthly SEO for Beginners</h4>
-          <p class="price">90<span> €/mo</span></p>
-          <p class="pitch">The essentials so you don't fall behind on Google in your area.</p>
-          <ul class="ticks"><li>Optimised Google Business Profile</li><li>Two profile posts a month</li><li>Technical monitoring of your site</li><li>Updates and backups</li><li>Simple monthly report</li><li>No lock-in</li></ul>
-          <a class="btn" href="#pedido" data-plan="Monthly SEO for Beginners (90 €/mo)" data-topic="Show up on Google (SEO)">Request a quote</a>
-          <details class="plan-more">
-            <summary><span class="m">See more</span><span class="l">See less</span></summary>
-            <div>
-              <h5>What changes for your business</h5>
-              <p>We keep your Google profile active and complete, which matters most when someone searches «near me». Your site is watched and kept up to date, so you don't have to.</p>
-              <ul class="ticks"><li>You show up on Google Maps with accurate details</li><li>Active profiles appear more often in local searches</li><li>Site problems caught before they cost you customers</li><li>Low cost to start, cancel any time</li></ul>
-              <p class="ideal"><b>Best for</b> local businesses taking their first step into SEO.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan best" data-reveal>
-          <span class="plan-tag">Best value</span>
-          <h4>Monthly SEO</h4>
-          <p class="price">190<span> €/mo</span></p>
-          <p class="pitch">Complete local SEO to climb higher every month.</p>
-          <ul class="ticks"><li>Everything in Beginners</li><li>Full initial audit</li><li>Local SEO and Google Business Profile</li><li>Two articles a month, blog included</li><li>Ongoing page optimisation</li><li>Monthly report with rankings</li></ul>
-          <a class="btn" href="#pedido" data-plan="Monthly SEO (190 €/mo)" data-topic="Show up on Google (SEO)">Request a quote</a>
-          <details class="plan-more">
-            <summary><span class="m">See more</span><span class="l">See less</span></summary>
-            <div>
-              <h5>What changes for your business</h5>
-              <p>Every month we improve your site and publish new content that answers your customers' questions. Each article is one more way in from Google.</p>
-              <ul class="ticks"><li>More searches where your business appears</li><li>You climb past local competitors</li><li>The report shows the searches where you're rising</li><li>No lock-in: you stay because it works</li></ul>
-              <p class="ideal"><b>Best for</b> businesses that already have a site and want more customers from Google.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">To lead</span>
-          <h4>Monthly SEO for Professionals</h4>
-          <p class="price">290<span> €/mo</span></p>
-          <p class="pitch">To be the first choice on Google, in your area or nationwide.</p>
-          <ul class="ticks"><li>Everything in Monthly SEO</li><li>Four articles a month</li><li>Competitor analysis</li><li>Listings in directories and local sites</li><li>Optimisation for AI search</li><li>Monthly results meeting</li></ul>
-          <a class="btn" href="#pedido" data-plan="Monthly SEO for Professionals (290 €/mo)" data-topic="Show up on Google (SEO)">Request a quote</a>
-          <details class="plan-more">
-            <summary><span class="m">See more</span><span class="l">See less</span></summary>
-            <div>
-              <h5>What changes for your business</h5>
-              <p>We run your site like a campaign: we study who ranks above you, create content for the searches that bring customers, and grow mentions of your business on other sites.</p>
-              <ul class="ticks"><li>More visibility across several cities or nationwide</li><li>You also show up in ChatGPT and Google's AI answers</li><li>Data-led decisions, explained in a monthly meeting</li><li>The highest-return investment in the medium term</li></ul>
-              <p class="ideal"><b>Best for</b> companies in competitive markets or selling nationwide.</p>
-            </div>
-          </details>
-        </article>
-      </div>
-    </div>
-    <p class="plans-note">Prices exclude VAT. The final proposal confirms scope and timing.</p>
-  </section>
+<section class="faq" id="perguntas" aria-labelledby="perguntas-h" data-3d="1.7,.5,.45,1,1">
+  <div class="z"><span class="label">FAQ</span><h2 class="h2 rv" id="perguntas-h">Questions <span class="em">people ask us.</span></h2><p class="lead rv" style="margin-top:24px">Can't find yours? Write to <a href="mailto:contacto@destaca.site">contacto@destaca.site</a>.</p></div>
+  <div class="z">
+    <details class="q"><summary>How much does a website for my business cost?</summary><p>A presentation website costs 490 € (fixed price, excluding VAT), with custom design, copy, a mobile version, basic SEO and hosting for year one. If you already have a site, the Site upgrade costs 290 €. A site with several pages, a blog and several languages costs from 1090 €. The domain is paid separately, each year.</p></details>
+    <details class="q"><summary>How long until my site is online?</summary><p>A presentation website is ready two to three weeks after we receive your photos and business details. We write the copy.</p></details>
+    <details class="q"><summary>How long until I show up on Google?</summary><p>The page is indexed within days. Climbing the rankings usually takes three to six months, depending on competition. Anyone promising first place in a week is selling something else.</p></details>
+    <details class="q"><summary>Do I own the domain and the website?</summary><p>Yes. The domain is registered in your name and you have access to everything. If you ever want to switch agency, we hand over the files at no cost.</p></details>
+    <details class="q"><summary>Do I have to pay a monthly fee?</summary><p>No. The first year of hosting is included and, after that, renewal is yearly. The domain is paid separately, also each year. Monthly SEO is optional and has no lock-in.</p></details>
+    <details class="q"><summary>Is the free analysis really free?</summary><p>Yes. Type your website address and see the result instantly, with no sign-up. We do not store the addresses you analyse.</p></details>
+    <details class="q"><summary>Do you work with companies outside Portugal?</summary><p>Only within Europe. We work with businesses in Portugal and other European countries, in English, Portuguese and Spanish, with online meetings. We do not build websites for businesses outside Europe.</p></details>
+    <details class="q"><summary>Do you do SEO for ChatGPT and other AI search?</summary><p>Yes. We write clear answers to your customers' questions, add structured data and keep your business details consistent everywhere, so ChatGPT, Gemini, Perplexity and Google's AI answers can understand and cite your business. It is included in the Monthly SEO for Professionals plan.</p></details>
+  </div>
+</section>
 
-  <section class="f-ink sec wrap" id="pedido" data-title="Quote" aria-labelledby="pedido-h">
-    <div class="lead-grid">
-      <div class="lead-copy">
-        <p class="eyebrow" data-reveal>Request a quote</p>
-        <h2 class="display h2" id="pedido-h" data-reveal>Tell us what you need. <span class="acc">We handle the rest.</span></h2>
-        <p class="lead soft" data-reveal>No need to open your email and type it all out. Pick the topics, sum up the problem and send.</p>
-        <ol class="lead-steps" data-reveal>
-          <li><b>Pick what you need</b><span>A new site, a better one, Google or a plan.</span></li>
-          <li><b>Sum it up in a few words</b><span>Two or three lines are enough.</span></li>
-          <li><b>We reply within one working day</b><span>With a diagnosis and a no-obligation proposal.</span></li>
-        </ol>
-      </div>
-      <div class="lead-card" data-reveal>
-        <form class="lead-form" id="pedido-form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8">
-          <fieldset class="topics">
-            <legend>What do you need?</legend>
-            <label><input type="checkbox" name="topicos" value="New website"><span>New website</span></label>
-            <label><input type="checkbox" name="topicos" value="Improve my website"><span>Improve my website</span></label>
-            <label><input type="checkbox" name="topicos" value="Show up on Google (SEO)"><span>Show up on Google</span></label>
-            <label><input type="checkbox" name="topicos" value="Google Business Profile"><span>Google Maps</span></label>
-            <label><input type="checkbox" name="topicos" value="Website maintenance"><span>Maintenance</span></label>
-            <label><input type="checkbox" name="topicos" value="Other"><span>Other</span></label>
-          </fieldset>
-          <label class="field">Plan you're interested in
-            <select name="plano">
-              <option value="Not sure yet">Not sure yet</option>
-              <option>Site upgrade (290 €)</option>
-              <option>Presentation website (490 €)</option>
-              <option>Professional website (from 1090 €)</option>
-              <option>Monthly SEO for Beginners (90 €/mo)</option>
-              <option>Monthly SEO (190 €/mo)</option>
-              <option>Monthly SEO for Professionals (290 €/mo)</option>
-            </select>
-          </label>
-          <label class="field">Sum up the problem
-            <textarea name="resumo" rows="4" maxlength="2000" required placeholder="E.g. I run a garage in Lisbon and don't show up when people search for a mechanic nearby."></textarea>
-          </label>
-          <div class="pair">
-            <label class="field">Name<input name="nome" autocomplete="name" maxlength="100" required></label>
-            <label class="field">Company <small>(optional)</small><input name="empresa" autocomplete="organization" maxlength="120"></label>
-          </div>
-          <div class="pair">
-            <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
-            <label class="field">Phone <small>(optional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
-          </div>
-          <label class="field">Current website <small>(optional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="your-site.com"></label>
-          <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <label class="consent"><input type="checkbox" name="consentimento" required><span>I agree that Destaca may use this data only to reply to this request. <a href="/legal.html#privacidade">Privacy policy (PT)</a>.</span></label>
-          <button class="btn" type="submit">Send request <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
-          <p class="lead-status" id="pedido-status" role="status" aria-live="polite"></p>
-        </form>
-        <div class="lead-done" id="pedido-done" tabindex="-1" hidden>
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
-          <h3>Thank you for your request!</h3>
-          <p>We've got everything. We'll look at what you told us and get back to you as soon as possible, usually within one working day.</p>
-          <button class="btn btn-ghost" type="button" id="pedido-again">Send another request</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="faq f-paper sec wrap" id="perguntas" data-title="FAQ" aria-labelledby="perguntas-h">
-    <div class="faq-grid">
-      <div>
-        <p class="eyebrow" data-reveal>FAQ</p>
-        <h2 class="display h2" id="perguntas-h" data-reveal>Questions <span class="acc">people ask us.</span></h2>
-        <p class="soft" data-reveal>Can't find yours? Write to <a href="mailto:contacto@destaca.site">contacto@destaca.site</a>.</p>
-      </div>
-      <div>
-        <details data-reveal><summary>How long until my site is online?</summary><p>A presentation website is ready two to three weeks after we receive your photos and business details. We write the copy.</p></details>
-        <details data-reveal><summary>How long until I show up on Google?</summary><p>The page is indexed within days. Climbing the rankings usually takes three to six months, depending on competition. Anyone promising first place in a week is selling something else.</p></details>
-        <details data-reveal><summary>Do I own the domain and the website?</summary><p>Yes. The domain is registered in your name and you have access to everything. If you ever want to switch agency, we hand over the files at no cost.</p></details>
-        <details data-reveal><summary>Do I have to pay a monthly fee?</summary><p>No. The first year of hosting is included and, after that, renewal is yearly. The domain is paid separately, also each year. Monthly SEO is optional and has no lock-in.</p></details>
-        <details data-reveal><summary>Is the free analysis really free?</summary><p>Yes. Type your website address and see the result instantly, with no sign-up. We do not store the addresses you analyse.</p></details>
-        <details data-reveal><summary>Do you work with companies outside Portugal?</summary><p>Only within Europe. We work with businesses in Portugal and other European countries, in English, Portuguese and Spanish, with online meetings. We do not build websites for businesses outside Europe.</p></details>
-      </div>
-    </div>
-  </section>
-
-  <section class="contact f-ink wrap" id="contacto" data-title="Contact" aria-labelledby="contacto-h">
-    <div class="contact-grid">
-      <div class="contact-copy">
-        <div>
-          <p class="eyebrow" data-reveal>Contact</p>
-          <h2 class="display h2" id="contacto-h" data-reveal>Tell us what you do. <span class="acc">The review is free.</span></h2>
-        </div>
-        <p class="lead soft" data-reveal>We reply within one business day, by email, on a call or via Instagram. Based in Portugal, meeting online across Europe.</p>
-        <div class="contact-actions" data-reveal>
-          <a class="btn" href="#pedido">Get a quote <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-          <a class="btn btn-ghost" href="#inicio">Run the free analysis</a>
-        </div>
-      </div>
-      <div class="channels">
-        <a class="channel" data-reveal href="mailto:contacto@destaca.site">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
-          <span><b>contacto@destaca.site</b><small>Email, reply within one business day</small></span>
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 11 11 5M6 5h5v5"/></svg>
-        </a>
-        <a class="channel" data-reveal href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          <span><b>@destacasite</b><small>Instagram, work and news</small></span>
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 11 11 5M6 5h5v5"/></svg>
-        </a>
-      </div>
-    </div>
-    <p class="email-wrap" data-reveal><a class="email" data-fit href="mailto:contacto@destaca.site?subject=Free%20review"><span><span>contacto@</span><span>destaca.site</span></span></a></p>
-  </section>
+<section id="contacto" class="cta" aria-labelledby="contacto-h" data-3d="0,.55,.8,1,2.2">
+  <div class="z">
+    <h2 class="rv" id="contacto-h">Ready to make your <span class="em">business</span><br>stand out?</h2>
+    <a class="mail rv" href="mailto:contacto@destaca.site?subject=Free%20review">contacto@destaca.site</a>
+    <div class="btns rv"><a class="btn" href="#pedido">Get a quote</a><a class="btn btn-ghost" href="#inicio">Run the free analysis</a></div>
+  </div>
+</section>
 </main>
 
-<footer class="footer f-ink">
+<footer class="footer">
+  <div class="foot">
+    <div><a class="logo" href="#inicio">Destaca.</a><p>Presentation websites and SEO for businesses in Portugal and across Europe. We reply within one working day.</p></div>
+    <nav aria-label="Services"><h3>Services</h3><ul><li><a href="#servicos">Presentation websites</a></li><li><a href="#servicos">Local and technical SEO</a></li><li><a href="#servicos">Maintenance</a></li><li><a href="#inicio">Free SEO analysis</a></li></ul></nav>
+    <nav aria-label="Company"><h3>Company</h3><ul><li><a href="#casos">Real work</a></li><li><a href="#processo">Process</a></li><li><a href="#equipa">Team</a></li><li><a href="mailto:contacto@destaca.site">contacto@destaca.site</a></li><li><a href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">@destacasite</a></li><li><a href="/" hreflang="pt-PT">Português</a></li></ul></nav>
+    <nav aria-label="Legal"><h3>Legal <small>(PT)</small></h3><ul><li><a href="/legal.html#privacidade">Privacy policy</a></li><li><a href="/legal.html#cookies">Cookie policy</a></li><li><button class="link-btn" type="button" data-cookie-prefs>Cookie preferences</button></li><li><a href="/legal.html#termos">Terms and conditions</a></li><li><a href="https://www.livroreclamacoes.pt/Inicio/" target="_blank" rel="noopener">Complaints book</a></li><li><a href="/legal.html#litigios">Dispute resolution</a></li></ul></nav>
+  </div>
   <p class="wordmark" data-fit aria-hidden="true"><span><span>destaca</span><span>.site</span></span></p>
-  <div class="foot-row">
-    <div class="places">
-      <a href="mailto:contacto@destaca.site">contacto@destaca.site</a>
-      <a href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">@destacasite</a>
-      <span>destaca o teu site!</span>
-    </div>
-    <div class="foot-cols">
-      <nav aria-label="Services"><h3>Services</h3><ul><li><a href="#servicos">Presentation websites</a></li><li><a href="#servicos">Local and technical SEO</a></li><li><a href="#servicos">Maintenance</a></li><li><a href="#inicio">Free SEO analysis</a></li></ul></nav>
-      <nav aria-label="Company"><h3>Company</h3><ul><li><a href="#casos">Our work</a></li><li><a href="#processo">Process</a></li><li><a href="#equipa">Team</a></li><li><a href="/" hreflang="pt-PT">Português</a></li></ul></nav>
-      <nav aria-label="Legal"><h3>Legal (PT)</h3><ul><li><a href="/legal.html#privacidade" hreflang="pt-PT">Privacy policy</a></li><li><a href="/legal.html#cookies" hreflang="pt-PT">Cookie policy</a></li><li><button class="link-btn" type="button" data-cookie-prefs>Cookie preferences</button></li><li><a href="/legal.html#termos" hreflang="pt-PT">Terms</a></li><li><a href="https://www.livroreclamacoes.pt/Inicio/" target="_blank" rel="noopener">Complaints book</a></li></ul></nav>
-    </div>
-  </div>
-  <div class="legal">
-    <p>© 2026 Destaca, Portugal. Facade photo: Roman Kraft, Unsplash.</p>
-    <a href="#inicio">Back to top</a>
-  </div>
+  <div class="base"><span>© 2026 Destaca, Portugal</span><a href="#inicio">Back to top</a></div>
 </footer>
 
-<nav class="rail" aria-label="Section pagination"></nav>
-
-<dialog class="menu" id="menu" data-lenis-prevent aria-label="Page sections">
-  <div class="menu-top"><span>destaca.site · <a href="/" hreflang="pt-PT">Português</a></span><form method="dialog"><button>Close</button></form></div>
-  <ol id="menu-list"></ol>
-  <a class="btn" href="#pedido">Get a quote</a>
-</dialog>
 <aside class="news" id="news" aria-labelledby="news-h" hidden>
   <button class="news-x" type="button" data-news-close aria-label="Close">✕</button>
   <form class="news-form" id="news-form" novalidate>
     <p class="news-kicker">Destaca newsletter</p>
     <h2 id="news-h">Tips to show up more on Google</h2>
-    <p class="news-lead">Once a month: practical ideas to make your website bring in more customers, plus offers only for subscribers.</p>
+    <p class="news-lead">Once a month: practical ideas to bring more customers through your website, and offers only for people on the list.</p>
     <div class="news-fields">
       <label class="sr-only" for="news-nome">Your name</label><input id="news-nome" name="nome" autocomplete="given-name" maxlength="60" placeholder="Your name">
       <label class="sr-only" for="news-email">Email</label><input id="news-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="Your email" required>
     </div>
-    <label class="news-consent"><input type="checkbox" name="consent" required><span>I want to receive the Destaca newsletter by email. I can unsubscribe at any time. <a href="/legal.html#privacidade">Privacy policy</a>.</span></label>
+    <label class="news-consent"><input type="checkbox" name="consent" required><span>I want to receive the Destaca newsletter by email. I can unsubscribe any time. <a href="/legal.html#privacidade" hreflang="pt-PT">Privacy policy (PT)</a>.</span></label>
     <input class="sr-only" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button class="btn" type="submit">Subscribe</button>
+    <button class="btn" type="submit">Sign me up</button>
     <p class="news-status" id="news-status" role="status" aria-live="polite"></p>
   </form>
   <div class="news-done" id="news-done" tabindex="-1" hidden>
     <h2>You're on the list!</h2>
-    <p class="news-lead">Thank you. You'll get the next newsletter in your inbox.</p>
+    <p class="news-lead">Thank you. The next newsletter will arrive in your inbox.</p>
   </div>
 </aside>
 <div class="cookie-bar" id="cookie-bar" role="region" aria-label="Cookies" hidden>
-  <p><b>Analytics cookies</b> We use Google Analytics to understand how the site is used and improve it. It only runs if you accept. <a href="/legal.html#cookies" hreflang="pt-PT">Learn more (PT)</a></p>
+  <p><b>Statistics cookies</b> We use Google Analytics to understand how the site is used and improve it. We only turn it on if you accept. <a href="/legal.html#cookies" hreflang="pt-PT">Learn more (PT)</a></p>
   <div class="cookie-actions"><button class="btn" type="button" data-cookies="yes">Accept</button><button class="btn btn-ghost" type="button" data-cookies="no">Decline</button></div>
 </div>
-<dialog class="consult" id="consult" data-lenis-prevent aria-labelledby="consult-h">
+<dialog class="consult" id="consult" aria-labelledby="consult-h">
   <button class="consult-x" type="button" data-close aria-label="Close">✕</button>
   <aside class="consult-side">
-    <p class="consult-badge">Free · no obligation</p>
+    <p class="consult-badge">Free, no obligation</p>
     <h2 id="consult-h">Would you like a free consultation for your business?</h2>
     <ul class="consult-gets">
-      <li><b>A review of your site and Google presence</b><span>We see what customers see when they look for you.</span></li>
-      <li><b>The 3 improvements that matter most</b><span>In order, explained without jargon.</span></li>
-      <li><b>A reply within 12 hours</b><span>By email or phone, whichever you prefer.</span></li>
+      <li><b>A look at your site and Google</b><span>We see what customers see when they search for you.</span></li>
+      <li><b>The 3 changes that matter most</b><span>In order, explained without jargon.</span></li>
+      <li><b>A reply within 12 hours</b><span>By email or phone, as you prefer.</span></li>
     </ul>
-    <p class="consult-proof">We've worked with NK Suspension, Inforportáteis, Fernando Pereira Construções, Baton Rouge and Ding Dong.</p>
+    <p class="consult-proof">We have worked with NK Suspension, Inforportáteis, Fernando Pereira Construções, Baton Rouge and Ding Dong.</p>
   </aside>
   <div class="consult-main">
     <div class="consult-step" data-step="ask">
       <p class="consult-kicker">Takes less than a minute</p>
       <p class="consult-lead">Tell us your business name and what you want to improve. We handle the rest.</p>
       <div class="consult-actions">
-        <button class="btn" type="button" data-step-to="form">Yes, I want it <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+        <button class="btn" type="button" data-step-to="form">Yes, I want the consultation</button>
         <button class="btn btn-ghost" type="button" data-close>Not now</button>
       </div>
-      <p class="consult-fine">Free and no obligation. Your details are only used to reply to you.</p>
+      <p class="consult-fine">No cost and no obligation. Your details are only used to reply to you.</p>
     </div>
     <form class="lead-form consult-form" id="consult-form" data-step="form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8" hidden>
       <h2>Tell us about your business</h2>
@@ -637,7 +355,7 @@
         <label class="field">City<input name="cidade" autocomplete="address-level2" maxlength="80"></label>
       </div>
       <label class="field">What you do and what you want to improve
-        <textarea name="resumo" rows="3" maxlength="2000" required placeholder="E.g. We're a dental clinic and want more bookings from Google."></textarea>
+        <textarea name="resumo" rows="3" maxlength="2000" required placeholder="E.g. We are a dental clinic and want more bookings from Google."></textarea>
       </label>
       <div class="pair">
         <label class="field">Your name<input name="nome" autocomplete="name" maxlength="100" required></label>
@@ -648,20 +366,19 @@
         <label class="field">Phone <small>(optional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
       </div>
       <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <label class="consent"><input type="checkbox" name="consentimento" required><span>I agree that Destaca may use this data only to reply to this request. <a href="/legal.html#privacidade">Privacy policy (PT)</a>.</span></label>
-      <button class="btn" type="submit">Get my free consultation</button>
+      <label class="consent"><input type="checkbox" name="consentimento" required><span>I agree that Destaca may use this data only to reply to this request. <a href="/legal.html#privacidade" hreflang="pt-PT">Privacy policy (PT)</a>.</span></label>
+      <button class="btn" type="submit">Request free consultation</button>
       <p class="lead-status" role="status" aria-live="polite"></p>
     </form>
     <div class="lead-done" data-step="done" tabindex="-1" hidden>
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
       <h3>Thank you! Request received.</h3>
-      <p>We'll look at your business and get back to you within 12 hours.</p>
+      <p>We will look at your business and get back to you within 12 hours.</p>
       <button class="btn btn-ghost" type="button" data-close>Close</button>
     </div>
   </div>
 </dialog>
 
-<script src="/assets/js/lenis.min.js" defer></script>
-<script src="/assets/js/main-13.js" defer></script>
+<script src="/assets/js/v3d-1.js" defer></script>
 </body>
 </html>

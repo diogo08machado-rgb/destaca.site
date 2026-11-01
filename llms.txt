@@ -33,8 +33,31 @@ Restaurantes, clínicas, oficinas, advogados, ginásios, imobiliárias, alojamen
 - Baton Rouge, centro de estética em Braga: https://batonrougeestetica.com/
 - Pastelaria Ding Dong, pastelaria em Braga: https://pastelariadingdong.com/
 
+## Como trabalha
+
+1. Conversa de 30 minutos e diagnóstico grátis ao que o negócio já tem online.
+2. Proposta com preço fechado; o cliente vê o design antes de se escrever código.
+3. Lançamento: domínio, alojamento, Google Search Console e Google Business Profile tratados pela Destaca.
+4. Acompanhamento com relatório mensal em linguagem simples.
+
+## Perguntas frequentes
+
+- Quanto custa um site? Uma página de apresentação custa 490 € (preço fechado, sem IVA). O Melhoramento de um site existente custa 290 €. Um site com várias páginas custa desde 1090 €. O domínio é pago à parte, anualmente.
+- Quanto tempo demora? Uma página de apresentação fica online em 2 a 3 semanas depois de recebidas as fotografias e a informação do negócio.
+- Quanto tempo até aparecer no Google? A página é indexada em poucos dias; subir nas pesquisas leva normalmente 3 a 6 meses.
+- O domínio fica do cliente? Sim, é registado em nome do cliente, e os ficheiros são entregues sem custos se o cliente mudar de empresa.
+- Há mensalidade obrigatória? Não. O primeiro ano de alojamento está incluído; o SEO mensal é opcional e sem fidelização.
+- Trabalham fora de Portugal? Só dentro da Europa, em português, inglês e espanhol, com reuniões online. Não fazem sites para empresas fora da Europa.
+- Fazem SEO para pesquisas com IA (ChatGPT, Gemini, Perplexity)? Sim: respostas claras, dados estruturados e informação do negócio consistente. Incluído no SEO Mensal Profissional.
+
+## In English
+
+Destaca (destaca.site) is a Portuguese web design and SEO studio. It builds fast presentation websites (from 490 €, fixed price) and does local and technical SEO (from 90 €/month, no lock-in) for small and medium businesses in Portugal and other European countries. It does not work with businesses outside Europe. Free SEO analysis of any website at https://destaca.site/en/. Contact: contacto@destaca.site.
+
 ## Páginas
 
 - [Página principal](https://destaca.site/): serviços, casos reais, processo, preços, perguntas frequentes e contacto.
 - [English version](https://destaca.site/en/): the same page in English.
 - [Informação legal](https://destaca.site/legal.html): privacidade, cookies, termos, Livro de Reclamações e resolução de litígios.
+
+Última atualização: 2026-11-01
