@@ -11,7 +11,7 @@
 <link rel="alternate" hreflang="pt-PT" href="https://destaca.site/">
 <link rel="alternate" hreflang="en" href="https://destaca.site/en/">
 <link rel="alternate" hreflang="x-default" href="https://destaca.site/">
-<meta name="theme-color" content="#050f16">
+<meta name="theme-color" content="#e8e6e1">
 <meta name="msvalidate.01" content="11F1F6C409C1E9C87E2E484657A8FA66">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48">
@@ -35,9 +35,9 @@
 <meta name="twitter:description" content="Análise SEO grátis, páginas de apresentação e SEO para empresas. Feito em Portugal, para empresas de Portugal e da Europa.">
 <meta name="twitter:image" content="https://destaca.site/og.png">
 
-<link rel="preload" href="/assets/fonts/instrument-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site-13.css">
+<link rel="stylesheet" href="/assets/css/v3d-1.css">
 
 <script type="application/ld+json">
 {
@@ -97,539 +97,241 @@
 </head>
 <body>
 <a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="cur" id="cur" aria-hidden="true"><span>Ver</span></div>
 
-<header class="site-header">
-  <div class="bar">
-    <a class="logo" href="#inicio" aria-label="destaca.site, início">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#ff7a1f"/><circle cx="27" cy="39" r="11" fill="none" stroke="#050f16" stroke-width="7"/><rect x="34.5" y="11" width="7" height="39" fill="#050f16"/><rect x="47" y="43" width="7" height="7" fill="#050f16"/></svg>
-      <span>destaca.site</span>
-    </a>
-    <nav class="site-nav" aria-label="Principal">
-      <a href="#servicos">Serviços</a>
-      <a href="#casos">Casos</a>
-      <a href="#precos">Preços</a>
-      <a href="#perguntas">Perguntas</a>
-      <a href="#contacto">Contacto</a>
-      <a class="lang" href="/en/" hreflang="en" lang="en" title="Switch to English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="lang-long">English</span><span class="lang-short">EN</span></a>
-      <a class="btn" href="#pedido">Pedir orçamento</a>
-      <button class="nav-menu" type="button" data-open-menu aria-haspopup="dialog" aria-controls="menu">Menu</button>
-    </nav>
-  </div>
-</header>
+<nav class="site-nav" aria-label="Principal">
+  <a class="logo" href="#inicio" aria-label="destaca.site, início">Destaca.</a>
+  <ul>
+    <li><a href="#servicos">Serviços</a></li><li><a href="#casos">Casos</a></li><li><a href="#precos">Preços</a></li><li><a href="#perguntas">Perguntas</a></li>
+    <li><a href="/en/" hreflang="en" lang="en">EN</a></li>
+    <li><a class="nav-cta" href="#pedido">Pedir orçamento</a></li>
+  </ul>
+</nav>
 
 <main id="conteudo">
-
-  <!-- Hero: headline, the free SEO check and an analysis that plays on a loop -->
-  <section class="hero f-ink wrap" id="inicio" data-title="Início">
-    <div>
-      <p class="eyebrow">Sites e SEO para empresas, feito em Portugal</p>
-      <h1 class="display">Destaca o teu site <span class="acc">no Google.</span></h1>
-      <p class="lead hero-lead">Criamos páginas de apresentação rápidas e fazemos SEO para empresas em Portugal e na Europa. Começa por uma análise grátis ao teu site.</p>
-      <form class="checker" id="checker" action="#contacto" novalidate>
-        <label for="url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span class="sr-only">Endereço do teu site</span>
-          <input id="url" name="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="o-teu-site.pt" required></label>
-        <button class="btn" type="submit">Analisar grátis <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+<section class="hero" id="inicio" data-3d="0,.32,.95,0,1">
+  <p class="intro z">Sites e SEO para empresas, <span class="em">feito em Portugal.</span></p>
+  <h1 class="giant" aria-label="Destaca o teu site no Google"><span aria-hidden="true">D</span><span aria-hidden="true">e</span><span aria-hidden="true">s</span><span aria-hidden="true">t</span><span aria-hidden="true">a</span><span aria-hidden="true">c</span><span aria-hidden="true">a</span><span aria-hidden="true"><b>.</b></span></h1>
+  <div class="row z">
+    <p>Criamos páginas de apresentação rápidas e fazemos SEO para empresas em Portugal e na Europa. Começa por uma análise grátis ao teu site.</p>
+    <div class="checkbox">
+      <form class="checker" id="checker" action="#pedido" novalidate>
+        <label class="sr-only" for="url">Endereço do teu site</label>
+        <input id="url" name="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="o-teu-site.pt" required>
+        <button class="btn" type="submit">Analisar grátis</button>
       </form>
       <p class="checker-status" id="checker-status" role="status" aria-live="polite"></p>
-      <ul class="trust"><li>Grátis</li><li>Sem registo</li><li>19 verificações em segundos</li></ul>
+      <ul class="trust"><li>Grátis</li><li>Sem registo</li><li>19 verificações</li></ul>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <div class="dash" data-ui>
-        <div class="dash-bar"><i></i><i></i><i></i><span>destaca.site · análise SEO</span></div>
-        <div class="scan"></div>
-        <div class="dash-body">
-          <div class="dash-score">
-            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#eef0f1" stroke-width="10"/><circle class="fg" cx="60" cy="60" r="50" fill="none" stroke="#ff7a1f" stroke-width="10" stroke-linecap="round" transform="rotate(-90 60 60)"/></svg>
-            <div><b>92</b><span>Nota SEO</span></div>
-            <p>o-teu-site.pt</p>
-          </div>
-          <ul class="dash-checks">
-            <li>Título e descrição</li>
-            <li>Preparado para telemóvel</li>
-            <li>Dados estruturados</li>
-            <li>Sitemap e robots.txt</li>
-            <li class="warn">Tempo de resposta: 920 ms</li>
-          </ul>
-          <div class="dash-chart">
-            <p><span>Visitas do Google</span><b>+38%</b></p>
-            <svg viewBox="0 0 300 80" preserveAspectRatio="none"><path class="area" d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12 L300 80 L0 80 Z" fill="#fff1e6"/><path class="line" d="M0 70 L40 64 L80 66 L120 52 L160 48 L200 34 L240 30 L300 12" fill="none" stroke="#ff7a1f" stroke-width="2.5"/></svg>
-          </div>
-        </div>
-      </div>
-      <div class="float-card fc-1"><span>pesquisa local</span><b>1.º lugar</b><em>subiu 6 posições</em></div>
-      <div class="float-card fc-2"><i></i><span>Novo pedido de orçamento</span><small>há 2 minutos</small></div>
-    </div>
-  </section>
+  </div>
+  <span class="scrollcue z" aria-hidden="true">Desce para ver</span>
+</section>
 
-  <!-- Analysis result, filled by the checker -->
-  <section class="result f-ink sec wrap" id="resultado" aria-labelledby="resultado-h" hidden>
-    <div class="result-grid">
-      <div class="score">
-        <p class="eyebrow">A tua análise</p>
-        <div class="ring"><svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52"/></svg><b><span><span id="r-score">0</span><small>/100</small></span></b></div>
-        <p class="score-url" id="r-url"></p>
-        <h2 class="score-verdict" id="resultado-h"></h2>
-        <div class="score-actions">
-          <a class="btn" id="r-mail" href="#pedido">Quero corrigir isto</a>
-          <a class="btn btn-ghost" href="#inicio">Analisar outro</a>
-        </div>
+<section class="result" id="resultado" aria-labelledby="resultado-h" data-3d="1.9,.9,.38,1,1.4" hidden>
+  <div class="result-grid z">
+    <div class="score">
+      <span class="label">A tua análise</span>
+      <div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52"/></svg><b><span><span id="r-score">0</span><small>/100</small></span></b></div>
+      <p class="score-url" id="r-url"></p>
+      <h2 class="score-verdict" id="resultado-h"></h2>
+      <div class="score-actions">
+        <a class="btn" id="r-mail" href="#pedido">Quero corrigir isto</a>
+        <a class="btn btn-ghost" href="#inicio">Analisar outro</a>
       </div>
-      <div class="checks" id="r-checks"></div>
     </div>
-  </section>
+    <div class="checks" id="r-checks"></div>
+  </div>
+</section>
 
-  <!-- Clients -->
-  <section class="clients f-paper wrap" id="clientes" data-title="Clientes" aria-labelledby="clientes-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Clientes</p>
-      <h2 class="display h2" id="clientes-h" data-reveal>Empresas que <span class="acc">confiam em nós.</span></h2>
+<div class="marquee" aria-hidden="true"><div>
+  <span>Sites de apresentação <i>✳</i></span><span>SEO local <i>✳</i></span><span>Google Business Profile <i>✳</i></span><span>Relatórios mensais <i>✳</i></span>
+  <span>Sites de apresentação <i>✳</i></span><span>SEO local <i>✳</i></span><span>Google Business Profile <i>✳</i></span><span>Relatórios mensais <i>✳</i></span>
+</div></div>
+
+<section class="manifesto" id="porque" aria-labelledby="porque-h" data-3d="1.35,.05,.62,1,1.2">
+  <h2 class="label z" id="porque-h">Porquê</h2>
+  <p class="big z" id="words">Quem não aparece no Google, não é escolhido. Destacar é sair do fundo e ficar à vista.</p>
+  <p class="lead z rv">Quando alguém procura o que vendes, escolhe entre os primeiros resultados. Se não estás lá, a decisão é tomada sem ti. Fazemos páginas claras, rápidas e bem escritas, feitas para o Google entender e para as pessoas confiarem.</p>
+  <ul class="logos z" aria-label="Clientes">
+    <li><a href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/nk-suspension.webp" alt="NK Suspension" width="415" height="170" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/clientes/inforportateis.webp" alt="Inforportáteis" width="306" height="80" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/fernando-pereira.webp" alt="Fernando Pereira, Construção Civil" width="227" height="53" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img src="/assets/clientes/baton-rouge-2.webp" alt="Baton Rouge, Estética, Braga" width="170" height="54" loading="lazy" decoding="async"></a></li>
+    <li><a href="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/clientes/cafetaria-ding-dong.webp" alt="Pastelaria Ding Dong" width="566" height="555" loading="lazy" decoding="async"></a></li>
+  </ul>
+</section>
+
+<section id="servicos" class="services" aria-labelledby="servicos-h" data-3d="-1.55,-.1,.7,2,1">
+  <div class="z"><span class="label">Serviços</span><h2 class="h2 rv" id="servicos-h">Tudo para o teu site <span class="em">aparecer.</span></h2></div>
+  <div class="svc-list z">
+    <div class="svc open" data-shape="0" tabindex="0">
+      <div class="svc-head"><h3>Sites</h3><span class="tag">desde 490 €</span></div>
+      <div class="svc-body"><div><p>Uma página que explica o teu negócio em segundos e leva a pessoa a ligar, reservar ou pedir orçamento. Desenhada para a tua marca, nunca um template igual ao do vizinho.</p><ul><li>Design à medida</li><li>Textos escritos por nós</li><li>Pensada para o telemóvel</li><li>Ligar, WhatsApp e orçamento</li><li>Domínio em teu nome</li></ul></div></div>
     </div>
-    <ul class="logos">
-      <li data-reveal><a href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/nk-suspension.webp" alt="NK Suspension" width="415" height="170" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/clientes/inforportateis.webp" alt="Inforportáteis" width="306" height="80" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/clientes/fernando-pereira.webp" alt="Fernando Pereira, Construção Civil" width="227" height="53" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img class="native" src="/assets/clientes/baton-rouge-2.webp" alt="Baton Rouge, Estética, Braga" width="170" height="54" loading="lazy" decoding="async"></a></li>
-      <li data-reveal><a href="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/clientes/cafetaria-ding-dong.webp" alt="Pastelaria Ding Dong" width="566" height="555" loading="lazy" decoding="async"></a></li>
+    <div class="svc" data-shape="1" tabindex="0">
+      <div class="svc-head"><h3>SEO local</h3><span class="tag">desde 90 €/mês</span></div>
+      <div class="svc-body"><div><p>Para apareceres no mapa e nas pesquisas «perto de mim», e para o Google conseguir ler, indexar e confiar no teu site.</p><ul><li>Google Business Profile</li><li>Palavras que os clientes usam</li><li>Dados estruturados</li><li>Artigos que respondem a perguntas</li></ul></div></div>
+    </div>
+    <div class="svc" data-shape="2" tabindex="0">
+      <div class="svc-head"><h3>Manutenção</h3><span class="tag">relatório mensal</span></div>
+      <div class="svc-body"><div><p>O site não fica parado. Tratamos das atualizações, da segurança e das alterações, e todos os meses explicamos-te o que mudou em linguagem simples.</p><ul><li>SSL e cópias diárias</li><li>Preços, fotos e horários</li><li>Visitas, contactos e posições</li><li>Suporte com quem fez o site</li></ul></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="casos" class="cases" aria-labelledby="casos-h" data-3d="1.9,.95,.38,1,1.4">
+  <div class="pin">
+    <div class="top z"><div><span class="label" style="margin-bottom:14px">Casos reais</span><h2 class="h2" id="casos-h">Sites que fizemos <span class="em">e estão online.</span></h2></div><span class="counter" id="count" aria-hidden="true">01 / 05</span></div>
+    <ul class="track z" id="track">
+      <li><a class="case" href="https://www.nksuspension.pt/" target="_blank" rel="noopener"><figure><img src="/assets/casos/nk-suspension.webp" alt="Site da NK Suspension, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>NK Suspension</b><small>Oficina de suspensões de motas</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><figure><img src="/assets/casos/fernando-pereira-2.webp" alt="Site da Fernando Pereira Construção Civil, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Fernando Pereira</b><small>Construção civil, Póvoa de Varzim</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://inforportateis.com/" target="_blank" rel="noopener"><figure><img src="/assets/casos/inforportateis.webp" alt="Site da Inforportáteis, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Inforportáteis</b><small>Loja e assistência técnica, Vila Nova de Famalicão</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://batonrougeestetica.com/" target="_blank" rel="noopener"><figure><img src="/assets/casos/baton-rouge.webp" alt="Site da Baton Rouge Estética, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Baton Rouge</b><small>Centro de estética, Braga</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
+      <li><a class="case" href="https://pastelariadingdong.com/" target="_blank" rel="noopener"><figure><img src="/assets/casos/ding-dong.webp" alt="Site da Pastelaria Ding Dong, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async"></figure><figcaption><div><b>Ding Dong</b><small>Pastelaria e confeitaria, Braga</small></div><span aria-hidden="true">↗</span></figcaption></a></li>
     </ul>
-  </section>
+  </div>
+</section>
 
-  <!-- Why -->
-  <section class="f-ink sec wrap" id="porque" data-title="Porquê" aria-labelledby="porque-h">
-    <div class="why-grid">
-      <div>
-        <p class="eyebrow" data-reveal>Porquê</p>
-        <h2 class="display h2" id="porque-h" data-reveal>Quem não aparece, <span class="acc">não é escolhido.</span></h2>
-        <div class="why-text" data-reveal>
-          <p class="lead">Quando alguém procura o que vendes, escolhe entre os primeiros resultados. Se não estás lá, a decisão é tomada sem ti.</p>
-          <p>Destacar é sair do fundo e ficar à vista, como o único toldo laranja numa fachada de janelas iguais. É isso que fazemos: páginas claras, rápidas e bem escritas, feitas para o Google entender e para as pessoas confiarem.</p>
-          <p>Somos portugueses e trabalhamos primeiro para negócios portugueses, em português de Portugal. Para empresas de outros países europeus, trabalhamos em inglês ou espanhol, com reuniões online. Não aceitamos projetos fora da Europa.</p>
-        </div>
-        <ul class="stats">
-          <li data-reveal><b>4+</b><span>anos em desenvolvimento web e marketing digital</span></li>
-          <li data-reveal><b>490 €</b><span>preço fechado para uma página de apresentação</span></li>
-          <li data-reveal><b>2–3</b><span>semanas até a tua página estar online</span></li>
-          <li data-reveal><b>0 €</b><span>pela análise e pelo diagnóstico inicial</span></li>
-        </ul>
-      </div>
-      <figure class="why-pic" data-reveal>
-        <img src="/assets/img/fachada.webp" alt="Fachada branca de um prédio com dezenas de janelas iguais, onde só um toldo laranja se destaca" width="1200" height="1500" loading="lazy" decoding="async">
-        <figcaption>Fotografia: Roman Kraft, Unsplash.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- Services -->
-  <section class="f-paper sec wrap" id="servicos" data-title="Serviços" aria-labelledby="servicos-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Serviços</p>
-      <h2 class="display h2" id="servicos-h" data-reveal>Tudo para o teu site <span class="acc">aparecer.</span></h2>
-    </div>
-
-    <article class="svc-row">
-      <div class="svc-copy">
-        <h3 class="display h3" data-reveal>Páginas de apresentação</h3>
-        <p data-reveal>Uma página que explica o teu negócio em segundos e leva a pessoa a ligar, reservar ou pedir orçamento. Desenhada para a tua marca, nunca um template igual ao do vizinho.</p>
-        <ul class="ticks" data-reveal>
-          <li>Design à medida e textos escritos por nós</li>
-          <li>Pensada primeiro para o telemóvel</li>
-          <li>Botões de ligar, WhatsApp e formulários de orçamento</li>
-          <li>Domínio em teu nome e alojamento na Europa</li>
-        </ul>
-        <ul class="chips" data-reveal><li>Português</li><li>Inglês</li><li>Espanhol</li><li>Acessível</li></ul>
-        <a class="link" href="#casos" data-reveal>Ver casos reais</a>
-      </div>
-      <figure class="browser" data-reveal>
-        <div class="browser-bar"><i></i><i></i><i></i><span>fernandopereiraconstrucoes.pt</span></div>
-        <img src="/assets/casos/fernando-pereira-2.webp" alt="Página inicial do site da Fernando Pereira, Construção Civil, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async">
-      </figure>
-    </article>
-
-    <article class="svc-row">
-      <div class="svc-copy">
-        <h3 class="display h3" data-reveal>SEO local e técnico</h3>
-        <p data-reveal>Para apareceres no mapa e nas pesquisas «perto de mim», e para o Google conseguir ler, indexar e confiar no teu site.</p>
-        <ul class="ticks" data-reveal>
-          <li>Google Business Profile criado ou otimizado</li>
-          <li>Pesquisa das palavras que os teus clientes usam</li>
-          <li>Dados estruturados, velocidade e indexação</li>
-          <li>Conteúdo e artigos que respondem a perguntas reais</li>
-        </ul>
-        <a class="link" href="#inicio" data-reveal>Fazer a análise grátis</a>
-      </div>
-      <div class="browser" data-ui data-reveal aria-hidden="true">
-        <div class="browser-bar"><i></i><i></i><i></i><span>pesquisa: restaurante braga</span></div>
-        <div class="local">
-          <svg viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice"><rect width="300" height="360" fill="#ece8e1"/><path d="M-10 250 C 60 220, 120 260, 310 190" stroke="#bcd6e6" stroke-width="26" fill="none"/><path d="M40 -10 L 90 370 M 180 -10 L 150 370 M -10 90 L 310 120 M -10 300 L 310 280" stroke="#fff" stroke-width="9"/><path d="M230 -10 L 270 370" stroke="#fff" stroke-width="5"/><circle cx="160" cy="110" r="14" fill="#ff7a1f" stroke="#050f16" stroke-width="3"/><circle cx="95" cy="170" r="9" fill="#9aa4ab"/><circle cx="235" cy="215" r="9" fill="#9aa4ab"/></svg>
-          <ol><li class="top"><b>O teu negócio</b>Restaurante, aberto até às 23h<br>Centro, Braga</li><li><b>Concorrente</b>Restaurante, Braga</li><li><b>Outro concorrente</b>Restaurante, Braga</li></ol>
-        </div>
-        <p class="mock-note">Exemplo ilustrativo.</p>
-      </div>
-    </article>
-
-    <article class="svc-row">
-      <div class="svc-copy">
-        <h3 class="display h3" data-reveal>Manutenção e relatórios</h3>
-        <p data-reveal>O site não fica parado. Tratamos das atualizações, da segurança e das alterações, e todos os meses explicamos-te o que mudou em linguagem simples.</p>
-        <ul class="ticks" data-reveal>
-          <li>Atualizações, SSL e cópias de segurança diárias</li>
-          <li>Novos preços, fotos ou horários feitos por nós</li>
-          <li>Relatório mensal de visitas, contactos e posições</li>
-          <li>Suporte em português, com quem fez o teu site</li>
-        </ul>
-        <a class="link" href="#precos" data-reveal>Ver o plano mensal</a>
-      </div>
-      <div class="browser" data-ui data-reveal aria-hidden="true">
-        <div class="browser-bar"><i></i><i></i><i></i><span>relatório mensal</span></div>
-        <div class="report">
-          <div class="rep-head"><b>Relatório de outubro</b><span>o-teu-site.pt</span></div>
-          <div class="kpis"><div><span>Visitas</span><b>1240</b><em>+18%</em></div><div><span>Pedidos de contacto</span><b>37</b><em>+9</em></div><div><span>Posição média</span><b>2,1</b><em>era 4,2</em></div></div>
-          <svg viewBox="0 0 400 80" preserveAspectRatio="none"><polyline points="0,70 50,64 100,66 150,52 200,48 250,36 300,30 350,20 400,10" fill="none" stroke="#ff7a1f" stroke-width="3"/></svg>
-          <table><thead><tr><th>Pesquisa</th><th>Antes</th><th>Agora</th></tr></thead><tbody><tr><td>restaurante braga</td><td>7</td><td>3</td></tr><tr><td>petiscos braga</td><td>4</td><td>1</td></tr></tbody></table>
-          <p class="mock-note">Exemplo ilustrativo.</p>
-        </div>
-      </div>
-    </article>
-  </section>
-
-  <!-- Case studies -->
-  <section class="f-ink sec wrap" id="casos" data-title="Casos" aria-labelledby="casos-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Casos reais</p>
-      <h2 class="display h2" id="casos-h" data-reveal>Sites que fizemos <span class="acc">e estão online.</span></h2>
-      <p class="soft" data-reveal>Passa por cada nome para ver o site. Carrega para o abrir.</p>
-    </div>
-    <div class="cases">
-      <ul class="case-list">
-        <li data-reveal><a class="case on" href="https://www.nksuspension.pt/" data-url="https://www.nksuspension.pt/" target="_blank" rel="noopener"><img src="/assets/casos/nk-suspension.webp" alt="Site da NK Suspension" width="1200" height="600" loading="lazy" decoding="async"><span class="n">NK Suspension</span><span class="m">Oficina de suspensões de motas</span><span class="go">Ver site ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://inforportateis.com/" data-url="https://inforportateis.com/" target="_blank" rel="noopener"><img src="/assets/casos/inforportateis.webp" alt="Site da Inforportáteis" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Inforportáteis</span><span class="m">Loja e assistência técnica, Vila Nova de Famalicão</span><span class="go">Ver site ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://fernandopereiraconstrucoes.pt/" data-url="https://fernandopereiraconstrucoes.pt/" target="_blank" rel="noopener"><img src="/assets/casos/fernando-pereira-2.webp" alt="Site da Fernando Pereira Construção Civil" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Fernando Pereira</span><span class="m">Construção civil, Póvoa de Varzim</span><span class="go">Ver site ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://batonrougeestetica.com/" data-url="https://batonrougeestetica.com/" target="_blank" rel="noopener"><img src="/assets/casos/baton-rouge.webp" alt="Site da Baton Rouge Estética" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Baton Rouge</span><span class="m">Centro de estética, Braga</span><span class="go">Ver site ↗</span></a></li>
-        <li data-reveal><a class="case" href="https://pastelariadingdong.com/" data-url="https://pastelariadingdong.com/" target="_blank" rel="noopener"><img src="/assets/casos/ding-dong.webp" alt="Site da Pastelaria Ding Dong" width="1200" height="600" loading="lazy" decoding="async"><span class="n">Ding Dong</span><span class="m">Pastelaria e confeitaria, Braga</span><span class="go">Ver site ↗</span></a></li>
-      </ul>
-      <figure class="case-frame" aria-hidden="true">
-        <div class="browser">
-          <div class="browser-bar"><i></i><i></i><i></i><span>site do cliente</span></div>
-          <div class="shots">
-            <img class="on" src="/assets/casos/nk-suspension.webp" alt="Página inicial do site da NK Suspension, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/inforportateis.webp" alt="Página inicial do site da Inforportáteis, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/fernando-pereira-2.webp" alt="Página inicial do site da Fernando Pereira Construção Civil, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/baton-rouge.webp" alt="Página inicial do site da Baton Rouge Estética, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async">
-            <img src="/assets/casos/ding-dong.webp" alt="Página inicial do site da Pastelaria Ding Dong, feito pela Destaca" width="1200" height="600" loading="lazy" decoding="async">
-          </div>
-        </div>
-        <figcaption>Ver site: <a href="https://www.nksuspension.pt/" target="_blank" rel="noopener">nksuspension.pt</a></figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- Process -->
-  <section class="f-or sec wrap" id="processo" data-title="Processo" aria-labelledby="processo-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Como trabalhamos</p>
-      <h2 class="display h2" id="processo-h" data-reveal>Da conversa ao Google <span class="acc">em quatro passos.</span></h2>
-    </div>
+<section id="processo" aria-labelledby="processo-h" data-3d="1.75,-.75,.5,0,1">
+  <div class="numbers z">
+    <div class="num rv"><strong>4+</strong><span>anos em desenvolvimento web e marketing digital</span></div>
+    <div class="num rv"><strong>490<i>€</i></strong><span>preço fechado para uma página de apresentação</span></div>
+    <div class="num rv"><strong>2–3</strong><span>semanas até a tua página estar online</span></div>
+    <div class="num rv"><strong>0<i>€</i></strong><span>pela análise e pelo diagnóstico inicial</span></div>
+  </div>
+  <div class="z" style="margin-top:clamp(100px,14vw,200px)">
+    <span class="label">Como trabalhamos</span>
+    <h2 class="h2 rv" id="processo-h">Da conversa ao Google <span class="em">em quatro passos.</span></h2>
     <ol class="steps">
-      <li data-reveal><h3>Ouvimos o teu negócio</h3><p>Uma conversa de 30 minutos e um diagnóstico grátis ao que já tens online.</p></li>
-      <li data-reveal><h3>Desenhamos a página</h3><p>Proposta com preço fechado. Vês o design antes de escrevermos código.</p></li>
-      <li data-reveal><h3>Lançamos e indexamos</h3><p>Domínio, alojamento, Search Console e Google Business Profile tratados por nós.</p></li>
-      <li data-reveal><h3>Continuamos contigo</h3><p>Relatório mensal em linguagem simples e ajustes sempre que o negócio muda.</p></li>
+      <li class="step rv"><b>Passo 1</b><h3>Ouvimos o teu negócio</h3><p>Uma conversa de 30 minutos e um diagnóstico grátis ao que já tens online.</p></li>
+      <li class="step rv"><b>Passo 2</b><h3>Desenhamos a página</h3><p>Proposta com preço fechado. Vês o design antes de escrevermos código.</p></li>
+      <li class="step rv"><b>Passo 3</b><h3>Lançamos e indexamos</h3><p>Domínio, alojamento, Search Console e Google Business Profile tratados por nós.</p></li>
+      <li class="step rv"><b>Passo 4</b><h3>Continuamos contigo</h3><p>Relatório mensal em linguagem simples e ajustes sempre que o negócio muda.</p></li>
     </ol>
-  </section>
+  </div>
+</section>
 
-  <!-- Team -->
-  <section class="f-paper sec wrap" id="equipa" data-title="Equipa" aria-labelledby="equipa-h">
-    <div class="team-grid">
-      <div>
-        <p class="eyebrow" data-reveal>Equipa</p>
-        <h2 class="display h2" id="equipa-h" data-reveal>Dois amigos, <span class="acc">quatro anos de web.</span></h2>
-        <p class="lead" data-reveal style="color:var(--fg)">Passámos os últimos quatro anos a construir sites e campanhas para empresas sem tempo para isso.</p>
-        <p data-reveal>Juntámos o desenvolvimento web e o marketing digital na mesma equipa para que a tua página não seja só bonita: seja rápida, clara e encontrada por quem te procura. Falas sempre com um de nós.</p>
-      </div>
-      <div class="people">
-        <article class="person" id="diogo-machado" data-reveal>
-          <span class="mono" aria-hidden="true">DM</span>
-          <h3>Diogo Machado</h3>
-          <p>Cofundador e CEO. Desenvolvimento web, SEO técnico, velocidade e alojamento.</p>
-          <ul class="chips"><li>Desenvolvimento</li><li>SEO técnico</li><li>Performance</li></ul>
-        </article>
-        <article class="person" id="afonso-fernandes" data-reveal>
-          <span class="mono" aria-hidden="true">AF</span>
-          <h3>Afonso Fernandes</h3>
-          <p>Cofundador e CEO. Marketing digital, SEO local, conteúdo e Google Business Profile.</p>
-          <ul class="chips"><li>Marketing</li><li>SEO local</li><li>Conteúdo</li></ul>
-        </article>
-      </div>
+<section id="precos" aria-labelledby="precos-h" data-3d="1.9,.85,.4,2,1.3">
+  <div class="z">
+    <div class="ptop"><div><span class="label">Preços</span><h2 class="h2 rv" id="precos-h">Preço fechado. <span class="em">Sem surpresas.</span></h2></div>
+      <div class="switch" role="group" aria-label="Tipo de plano"><button type="button" aria-pressed="true" data-p="sites">Sites</button><button type="button" aria-pressed="false" data-p="seo">SEO mensal</button></div></div>
+    <div class="prices" id="sites">
+      <a class="price" href="#pedido" data-plan="Melhoramento (290 €)" data-topic="Melhorar o meu site"><h3><small>Já tens site</small>Melhoramento</h3><p>Corrigimos os erros da análise: títulos e descrições, velocidade, telemóvel e HTTPS. Ligação ao Search Console e relatório antes e depois.</p><div class="val">290 €</div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="Página de apresentação (490 €)" data-topic="Site novo"><h3><small>Melhor valor</small>Página de apresentação</h3><p>Design à medida numa página, textos escritos por nós, versão para telemóvel, botões para ligar, WhatsApp e mapa, SEO de base, Google Business Profile e alojamento no 1.º ano.</p><div class="val">490 €</div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="Página profissional (desde 1090 €)" data-topic="Site novo"><h3><small>Para crescer</small>Página profissional</h3><p>Até seis páginas, blogue, várias línguas, SEO on-page completo, formulários e integrações, e alojamento no 1.º ano.</p><div class="val"><small>desde </small>1090 €</div><span class="arr" aria-hidden="true">→</span></a>
     </div>
-  </section>
+    <div class="prices" id="seo" hidden>
+      <a class="price" href="#pedido" data-plan="SEO Mensal Iniciante (90 €/mês)" data-topic="Aparecer no Google (SEO)"><h3><small>Para começar</small>SEO Mensal Iniciante</h3><p>Google Business Profile otimizado, duas publicações por mês no perfil, monitorização técnica, atualizações, cópias de segurança e relatório mensal simples.</p><div class="val">90 €<small>/mês</small></div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="SEO Mensal (190 €/mês)" data-topic="Aparecer no Google (SEO)"><h3><small>Melhor valor</small>SEO Mensal</h3><p>Tudo do Iniciante, auditoria inicial completa, SEO local, dois artigos por mês, otimização contínua e relatório mensal com posições.</p><div class="val">190 €<small>/mês</small></div><span class="arr" aria-hidden="true">→</span></a>
+      <a class="price" href="#pedido" data-plan="SEO Mensal Profissional (290 €/mês)" data-topic="Aparecer no Google (SEO)"><h3><small>Para liderar</small>SEO Mensal Profissional</h3><p>Tudo do SEO Mensal, quatro artigos por mês, análise da concorrência, diretórios locais, otimização para pesquisas com IA e reunião mensal.</p><div class="val">290 €<small>/mês</small></div><span class="arr" aria-hidden="true">→</span></a>
+    </div>
+    <p class="vat">Preços sem IVA. Domínio pago à parte, anualmente. Planos de SEO sem fidelização. A proposta final confirma o âmbito e o prazo.</p>
+  </div>
+</section>
 
-  <!-- Pricing -->
-  <section class="f-or sec wrap" id="precos" data-title="Preços" aria-labelledby="precos-h">
-    <div class="head-block">
-      <p class="eyebrow" data-reveal>Preços</p>
-      <h2 class="display h2" id="precos-h" data-reveal>Preço fechado. <span class="acc">Sem surpresas.</span></h2>
+<section id="equipa" aria-labelledby="equipa-h" data-3d="-1.7,.7,.4,1,1">
+  <div class="z">
+    <span class="label">Equipa</span>
+    <h2 class="h2 rv" id="equipa-h">Dois amigos, <span class="em">quatro anos de web.</span></h2>
+    <div class="team">
+      <div class="person rv"><h3>Diogo Machado</h3><p>Cofundador e CEO. Desenvolvimento web, SEO técnico, velocidade e alojamento.</p></div>
+      <div class="person rv"><h3>Afonso Fernandes</h3><p>Cofundador e CEO. Marketing digital, SEO local, conteúdo e Google Business Profile.</p></div>
     </div>
+  </div>
+</section>
 
-    <div class="plan-group">
-      <div class="plan-group-head" data-reveal>
-        <h3>Sites</h3>
-        <p>Para melhorar o site que já tens ou criar um de raiz.</p>
+<section id="pedido" class="quote" aria-labelledby="pedido-h" data-3d="1.25,.15,.6,1,1.3">
+  <div class="z">
+    <span class="label">Pedido de orçamento</span>
+    <h2 class="h2 rv" id="pedido-h">Diz-nos o que precisas. <span class="em">Nós tratamos do resto.</span></h2>
+    <p class="lead rv">Escolhe os temas, resume o problema e envia. Sem abrir o teu email.</p>
+    <ol class="qsteps rv">
+      <li><div><b>Escolhe o que precisas</b><span>Site novo, melhorar o atual, Google ou um plano.</span></div></li>
+      <li><div><b>Resume em poucas palavras</b><span>Duas ou três linhas chegam.</span></div></li>
+      <li><div><b>Respondemos em 24 horas úteis</b><span>Com um diagnóstico e uma proposta, sem compromisso.</span></div></li>
+    </ol>
+  </div>
+  <div class="lead-card z">
+    <form class="lead-form" id="pedido-form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8">
+      <fieldset class="topics">
+        <legend>O que precisas?</legend>
+        <label><input type="checkbox" name="topicos" value="Site novo"><span>Site novo</span></label>
+        <label><input type="checkbox" name="topicos" value="Melhorar o meu site"><span>Melhorar o meu site</span></label>
+        <label><input type="checkbox" name="topicos" value="Aparecer no Google (SEO)"><span>Aparecer no Google</span></label>
+        <label><input type="checkbox" name="topicos" value="Google Business Profile"><span>Google Maps</span></label>
+        <label><input type="checkbox" name="topicos" value="Manutenção do site"><span>Manutenção</span></label>
+        <label><input type="checkbox" name="topicos" value="Outro"><span>Outro</span></label>
+      </fieldset>
+      <label class="field">Plano que te interessa
+        <select name="plano">
+          <option value="Ainda não sei">Ainda não sei</option>
+          <option>Melhoramento (290 €)</option>
+          <option>Página de apresentação (490 €)</option>
+          <option>Página profissional (desde 1090 €)</option>
+          <option>SEO Mensal Iniciante (90 €/mês)</option>
+          <option>SEO Mensal (190 €/mês)</option>
+          <option>SEO Mensal Profissional (290 €/mês)</option>
+        </select>
+      </label>
+      <label class="field">Resume o problema
+        <textarea name="resumo" rows="4" maxlength="2000" required placeholder="Ex.: Tenho uma oficina em Braga e não apareço quando procuram mecânico na zona."></textarea>
+      </label>
+      <div class="pair">
+        <label class="field">Nome<input name="nome" autocomplete="name" maxlength="100" required></label>
+        <label class="field">Empresa <small>(opcional)</small><input name="empresa" autocomplete="organization" maxlength="120"></label>
       </div>
-      <div class="plans">
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">Já tens site</span>
-          <h4>Melhoramento</h4>
-          <p class="price">290<span> €</span><em class="price-note">+ domínio, pago à parte anualmente</em></p>
-          <p class="pitch">Para quem já tem site, mas ele não aparece no Google nem convence quem o visita.</p>
-          <ul class="ticks"><li>Correção dos erros da nossa análise</li><li>Títulos e descrições para o Google</li><li>Mais rápido e pronto para telemóvel</li><li>Ligação segura (HTTPS)</li><li>Ligação ao Google Search Console</li><li>Relatório antes e depois</li></ul>
-          <a class="btn" href="#pedido" data-plan="Melhoramento (290 €)" data-topic="Melhorar o meu site">Pedir orçamento</a>
-          <details class="plan-more">
-            <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
-            <div>
-              <h5>O que muda no teu negócio</h5>
-              <p>Aproveitas o site que já pagaste. Corrigimos o que impede o Google de o mostrar e o que faz os visitantes saírem, sem começar do zero.</p>
-              <ul class="ticks"><li>Mais visitas vindas do Google, sem investir num site novo</li><li>O Chrome deixa de mostrar «Não seguro» aos teus clientes</li><li>Páginas que abrem depressa no telemóvel, onde está a maioria das pesquisas</li><li>Vês a nota antes e depois na nossa ferramenta</li></ul>
-              <p class="ideal"><b>Ideal para</b> negócios com um site antigo ou feito à pressa que querem resultados sem refazer tudo.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan best" data-reveal>
-          <span class="plan-tag">Melhor valor</span>
-          <h4>Página de apresentação</h4>
-          <p class="price">490<span> €</span><em class="price-note">+ domínio, pago à parte anualmente</em></p>
-          <p class="pitch">Tudo o que um cliente precisa de saber sobre ti, numa página rápida e bonita.</p>
-          <ul class="ticks"><li>Design à medida numa página</li><li>Textos escritos por nós</li><li>Versão para telemóvel</li><li>Botões para ligar, WhatsApp e mapa</li><li>SEO de base e Google Business Profile</li><li>Alojamento no 1.º ano</li></ul>
-          <a class="btn" href="#pedido" data-plan="Página de apresentação (490 €)" data-topic="Site novo">Pedir orçamento</a>
-          <details class="plan-more">
-            <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
-            <div>
-              <h5>O que muda no teu negócio</h5>
-              <p>Passas a ter um endereço teu que aparece no Google quando procuram o teu serviço na tua zona. Quem te encontra vê logo o que fazes, onde estás e como te contactar.</p>
-              <ul class="ticks"><li>Deixas de depender só do Facebook ou do Instagram</li><li>Mais confiança: um site próprio mostra que o negócio é sério</li><li>Os clientes ligam-te ou mandam mensagem com um toque</li><li>Apareces nas pesquisas locais e no Google Maps</li><li>Preço fechado: sabes à partida quanto pagas</li></ul>
-              <p class="ideal"><b>Ideal para</b> restaurantes, oficinas, clínicas, cabeleireiros e qualquer negócio local.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">Para crescer</span>
-          <h4>Página profissional</h4>
-          <p class="price"><small>desde</small>1090<span> €</span><em class="price-note">+ domínio, pago à parte anualmente</em></p>
-          <p class="pitch">Um site completo, com uma página para cada serviço, para quem quer vender mais online.</p>
-          <ul class="ticks"><li>Até seis páginas</li><li>Blogue para artigos</li><li>Várias línguas</li><li>SEO on-page completo</li><li>Formulários e integrações</li><li>Alojamento no 1.º ano</li></ul>
-          <a class="btn" href="#pedido" data-plan="Página profissional (desde 1090 €)" data-topic="Site novo">Pedir orçamento</a>
-          <details class="plan-more">
-            <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
-            <div>
-              <h5>O que muda no teu negócio</h5>
-              <p>Cada serviço tem a sua página, e cada página pode aparecer no Google para pesquisas diferentes. Com o blogue e várias línguas, chegas a mais clientes, incluindo os de fora.</p>
-              <ul class="ticks"><li>Apareces em mais pesquisas: uma página por serviço</li><li>Pedidos de orçamento por formulário, a qualquer hora</li><li>Versão noutra língua para clientes estrangeiros</li><li>Base pronta para o SEO mensal e para artigos</li></ul>
-              <p class="ideal"><b>Ideal para</b> empresas com vários serviços: construtoras, clínicas, alojamento e serviços profissionais.</p>
-            </div>
-          </details>
-        </article>
+      <div class="pair">
+        <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
+        <label class="field">Telefone <small>(opcional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
       </div>
+      <label class="field">Site atual <small>(opcional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="o-teu-site.pt"></label>
+      <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="consent"><input type="checkbox" name="consentimento" required><span>Aceito que a Destaca use estes dados apenas para responder a este pedido. <a href="/legal.html#privacidade">Política de privacidade</a>.</span></label>
+      <button class="btn" type="submit">Enviar pedido</button>
+      <p class="lead-status" id="pedido-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="lead-done" id="pedido-done" tabindex="-1" hidden>
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
+      <h3>Obrigado pelo teu pedido!</h3>
+      <p>Já recebemos tudo. Vamos analisar o que nos contaste e entraremos em contacto o mais breve possível, normalmente em 24 horas úteis.</p>
+      <button class="btn btn-ghost" type="button" id="pedido-again">Enviar outro pedido</button>
     </div>
+  </div>
+</section>
 
-    <div class="plan-group">
-      <div class="plan-group-head" data-reveal>
-        <h3>SEO mensal</h3>
-        <p>Para subires no Google mês após mês. Sem fidelização.</p>
-      </div>
-      <div class="plans">
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">Para começar</span>
-          <h4>SEO Mensal Iniciante</h4>
-          <p class="price">90<span> €/mês</span></p>
-          <p class="pitch">O essencial para não ficares para trás no Google da tua zona.</p>
-          <ul class="ticks"><li>Google Business Profile otimizado</li><li>Duas publicações por mês no perfil</li><li>Monitorização técnica do site</li><li>Atualizações e cópias de segurança</li><li>Relatório mensal simples</li><li>Sem fidelização</li></ul>
-          <a class="btn" href="#pedido" data-plan="SEO Mensal Iniciante (90 €/mês)" data-topic="Aparecer no Google (SEO)">Pedir orçamento</a>
-          <details class="plan-more">
-            <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
-            <div>
-              <h5>O que muda no teu negócio</h5>
-              <p>Mantemos a tua ficha do Google ativa e completa, que é o que mais pesa quando alguém procura «perto de mim». O site fica vigiado e atualizado, sem te preocupares com isso.</p>
-              <ul class="ticks"><li>Apareces no mapa do Google com informação sempre certa</li><li>Fichas ativas aparecem mais vezes nas pesquisas locais</li><li>Problemas no site detetados antes de perderes clientes</li><li>Custo baixo para começar, cancelas quando quiseres</li></ul>
-              <p class="ideal"><b>Ideal para</b> negócios locais que querem dar o primeiro passo no SEO.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan best" data-reveal>
-          <span class="plan-tag">Melhor valor</span>
-          <h4>SEO Mensal</h4>
-          <p class="price">190<span> €/mês</span></p>
-          <p class="pitch">SEO local completo para subires de posição todos os meses.</p>
-          <ul class="ticks"><li>Tudo do plano Iniciante</li><li>Auditoria inicial completa</li><li>SEO local e Google Business Profile</li><li>Dois artigos por mês, blogue incluído</li><li>Otimização contínua das páginas</li><li>Relatório mensal com posições</li></ul>
-          <a class="btn" href="#pedido" data-plan="SEO Mensal (190 €/mês)" data-topic="Aparecer no Google (SEO)">Pedir orçamento</a>
-          <details class="plan-more">
-            <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
-            <div>
-              <h5>O que muda no teu negócio</h5>
-              <p>Todos os meses melhoramos o site e publicamos conteúdo novo que responde às perguntas dos teus clientes. Cada artigo é mais uma porta de entrada pelo Google.</p>
-              <ul class="ticks"><li>Mais pesquisas onde o teu negócio aparece</li><li>Sobes posições face à concorrência da tua zona</li><li>Vês no relatório as pesquisas onde estás a subir</li><li>Sem fidelização: ficas porque funciona</li></ul>
-              <p class="ideal"><b>Ideal para</b> negócios que já têm site e querem mais clientes vindos do Google.</p>
-            </div>
-          </details>
-        </article>
-        <article class="plan" data-reveal>
-          <span class="plan-tag ghost">Para liderar</span>
-          <h4>SEO Mensal Profissional</h4>
-          <p class="price">290<span> €/mês</span></p>
-          <p class="pitch">Para seres a primeira escolha no Google, na tua zona ou em todo o país.</p>
-          <ul class="ticks"><li>Tudo do plano SEO Mensal</li><li>Quatro artigos por mês</li><li>Análise da concorrência</li><li>Presença em diretórios e sites locais</li><li>Otimização para pesquisas com IA</li><li>Reunião mensal de resultados</li></ul>
-          <a class="btn" href="#pedido" data-plan="SEO Mensal Profissional (290 €/mês)" data-topic="Aparecer no Google (SEO)">Pedir orçamento</a>
-          <details class="plan-more">
-            <summary><span class="m">Ver mais</span><span class="l">Ver menos</span></summary>
-            <div>
-              <h5>O que muda no teu negócio</h5>
-              <p>Trabalhamos o teu site como uma campanha: estudamos quem está à tua frente no Google, criamos conteúdo para as pesquisas que trazem clientes e aumentamos as referências ao teu negócio noutros sites.</p>
-              <ul class="ticks"><li>Mais visibilidade em várias cidades ou em todo o país</li><li>Apareces também nas respostas do ChatGPT e do Google com IA</li><li>Decisões com base em dados, explicadas numa reunião por mês</li><li>O investimento com maior retorno a médio prazo</li></ul>
-              <p class="ideal"><b>Ideal para</b> empresas em mercados com muita concorrência ou que vendem para todo o país.</p>
-            </div>
-          </details>
-        </article>
-      </div>
-    </div>
-    <p class="plans-note">Preços sem IVA. A proposta final confirma o âmbito e o prazo.</p>
-  </section>
+<section class="faq" id="perguntas" aria-labelledby="perguntas-h" data-3d="1.7,.5,.45,1,1">
+  <div class="z"><span class="label">Perguntas frequentes</span><h2 class="h2 rv" id="perguntas-h">Perguntas que <span class="em">nos fazem.</span></h2><p class="lead rv" style="margin-top:24px">Não encontras a tua? Escreve para <a href="mailto:contacto@destaca.site">contacto@destaca.site</a>.</p></div>
+  <div class="z">
+    <details class="q"><summary>Quanto tempo demora a ficar online?</summary><p>Uma página de apresentação fica pronta em duas a três semanas depois de recebermos as fotografias e a informação do negócio. Os textos escrevemos nós.</p></details>
+    <details class="q"><summary>Quanto tempo até aparecer no Google?</summary><p>A página é indexada em poucos dias. Subir nas pesquisas leva normalmente três a seis meses, conforme a concorrência da tua área. Quem promete o primeiro lugar numa semana está a vender outra coisa.</p></details>
+    <details class="q"><summary>O domínio e o site ficam meus?</summary><p>Sim. O domínio é registado em teu nome e tens acesso a tudo. Se um dia quiseres mudar de empresa, entregamos os ficheiros sem custos.</p></details>
+    <details class="q"><summary>Tenho de pagar uma mensalidade?</summary><p>Não. O primeiro ano de alojamento está incluído e, depois, a renovação é anual. O domínio é pago à parte, também anualmente. O SEO mensal é opcional e não tem fidelização.</p></details>
+    <details class="q"><summary>A análise grátis é mesmo grátis?</summary><p>Sim. Escreves o endereço do teu site e vês o resultado na hora, sem registo. Não guardamos os endereços analisados.</p></details>
+    <details class="q"><summary>Trabalham com empresas fora de Portugal?</summary><p>Só dentro da Europa. Trabalhamos com empresas de Portugal e de outros países europeus, em português, inglês e espanhol, com reuniões online. Não fazemos sites para empresas fora da Europa.</p></details>
+    <details class="q"><summary>O site cumpre o RGPD e a lei portuguesa?</summary><p>Sim. Incluímos política de privacidade, política de cookies, ligação ao Livro de Reclamações Eletrónico e a informação sobre resolução alternativa de litígios que a lei exige.</p></details>
+  </div>
+</section>
 
-  <section class="f-ink sec wrap" id="pedido" data-title="Pedido" aria-labelledby="pedido-h">
-    <div class="lead-grid">
-      <div class="lead-copy">
-        <p class="eyebrow" data-reveal>Pedido de orçamento</p>
-        <h2 class="display h2" id="pedido-h" data-reveal>Diz-nos o que precisas. <span class="acc">Nós tratamos do resto.</span></h2>
-        <p class="lead soft" data-reveal>Sem abrir o teu email nem escrever tudo à mão. Escolhe os temas, resume o problema e envia.</p>
-        <ol class="lead-steps" data-reveal>
-          <li><b>Escolhe o que precisas</b><span>Site novo, melhorar o atual, Google ou um plano.</span></li>
-          <li><b>Resume em poucas palavras</b><span>Duas ou três linhas chegam.</span></li>
-          <li><b>Respondemos em 24 horas úteis</b><span>Com um diagnóstico e uma proposta, sem compromisso.</span></li>
-        </ol>
-      </div>
-      <div class="lead-card" data-reveal>
-        <form class="lead-form" id="pedido-form" data-key="e75ed6ec-12ad-400f-89c3-3cf0e096b9d8">
-          <fieldset class="topics">
-            <legend>O que precisas?</legend>
-            <label><input type="checkbox" name="topicos" value="Site novo"><span>Site novo</span></label>
-            <label><input type="checkbox" name="topicos" value="Melhorar o meu site"><span>Melhorar o meu site</span></label>
-            <label><input type="checkbox" name="topicos" value="Aparecer no Google (SEO)"><span>Aparecer no Google</span></label>
-            <label><input type="checkbox" name="topicos" value="Google Business Profile"><span>Google Maps</span></label>
-            <label><input type="checkbox" name="topicos" value="Manutenção do site"><span>Manutenção</span></label>
-            <label><input type="checkbox" name="topicos" value="Outro"><span>Outro</span></label>
-          </fieldset>
-          <label class="field">Plano que te interessa
-            <select name="plano">
-              <option value="Ainda não sei">Ainda não sei</option>
-              <option>Melhoramento (290 €)</option>
-              <option>Página de apresentação (490 €)</option>
-              <option>Página profissional (desde 1090 €)</option>
-              <option>SEO Mensal Iniciante (90 €/mês)</option>
-              <option>SEO Mensal (190 €/mês)</option>
-              <option>SEO Mensal Profissional (290 €/mês)</option>
-            </select>
-          </label>
-          <label class="field">Resume o problema
-            <textarea name="resumo" rows="4" maxlength="2000" required placeholder="Ex.: Tenho uma oficina em Braga e não apareço quando procuram mecânico na zona."></textarea>
-          </label>
-          <div class="pair">
-            <label class="field">Nome<input name="nome" autocomplete="name" maxlength="100" required></label>
-            <label class="field">Empresa <small>(opcional)</small><input name="empresa" autocomplete="organization" maxlength="120"></label>
-          </div>
-          <div class="pair">
-            <label class="field">Email<input name="email" type="email" autocomplete="email" maxlength="160" required></label>
-            <label class="field">Telefone <small>(opcional)</small><input name="telefone" type="tel" autocomplete="tel" maxlength="30"></label>
-          </div>
-          <label class="field">Site atual <small>(opcional)</small><input name="site" inputmode="url" autocomplete="url" maxlength="200" placeholder="o-teu-site.pt"></label>
-          <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <label class="consent"><input type="checkbox" name="consentimento" required><span>Aceito que a Destaca use estes dados apenas para responder a este pedido. <a href="/legal.html#privacidade">Política de privacidade</a>.</span></label>
-          <button class="btn" type="submit">Enviar pedido <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
-          <p class="lead-status" id="pedido-status" role="status" aria-live="polite"></p>
-        </form>
-        <div class="lead-done" id="pedido-done" tabindex="-1" hidden>
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
-          <h3>Obrigado pelo teu pedido!</h3>
-          <p>Já recebemos tudo. Vamos analisar o que nos contaste e entraremos em contacto o mais breve possível, normalmente em 24 horas úteis.</p>
-          <button class="btn btn-ghost" type="button" id="pedido-again">Enviar outro pedido</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="faq f-paper sec wrap" id="perguntas" data-title="Perguntas" aria-labelledby="perguntas-h">
-    <div class="faq-grid">
-      <div>
-        <p class="eyebrow" data-reveal>Perguntas frequentes</p>
-        <h2 class="display h2" id="perguntas-h" data-reveal>Perguntas que <span class="acc">nos fazem.</span></h2>
-        <p class="soft" data-reveal>Não encontras a tua? Escreve para <a href="mailto:contacto@destaca.site">contacto@destaca.site</a>.</p>
-      </div>
-      <div>
-        <details data-reveal><summary>Quanto tempo demora a ficar online?</summary><p>Uma página de apresentação fica pronta em duas a três semanas depois de recebermos as fotografias e a informação do negócio. Os textos escrevemos nós.</p></details>
-        <details data-reveal><summary>Quanto tempo até aparecer no Google?</summary><p>A página é indexada em poucos dias. Subir nas pesquisas leva normalmente três a seis meses, conforme a concorrência da tua área. Quem promete o primeiro lugar numa semana está a vender outra coisa.</p></details>
-        <details data-reveal><summary>O domínio e o site ficam meus?</summary><p>Sim. O domínio é registado em teu nome e tens acesso a tudo. Se um dia quiseres mudar de empresa, entregamos os ficheiros sem custos.</p></details>
-        <details data-reveal><summary>Tenho de pagar uma mensalidade?</summary><p>Não. O primeiro ano de alojamento está incluído e, depois, a renovação é anual. O domínio é pago à parte, também anualmente. O SEO mensal é opcional e não tem fidelização.</p></details>
-        <details data-reveal><summary>A análise grátis é mesmo grátis?</summary><p>Sim. Escreves o endereço do teu site e vês o resultado na hora, sem registo. Não guardamos os endereços analisados.</p></details>
-        <details data-reveal><summary>Trabalham com empresas fora de Portugal?</summary><p>Só dentro da Europa. Trabalhamos com empresas de Portugal e de outros países europeus, em português, inglês e espanhol, com reuniões online. Não fazemos sites para empresas fora da Europa.</p></details>
-        <details data-reveal><summary>O site cumpre o RGPD e a lei portuguesa?</summary><p>Sim. Incluímos política de privacidade, política de cookies, ligação ao Livro de Reclamações Eletrónico e a informação sobre resolução alternativa de litígios que a lei exige.</p></details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section class="contact f-ink wrap" id="contacto" data-title="Contacto" aria-labelledby="contacto-h">
-    <div class="contact-grid">
-      <div class="contact-copy">
-        <div>
-          <p class="eyebrow" data-reveal>Contacto</p>
-          <h2 class="display h2" id="contacto-h" data-reveal>Conta-nos o que fazes. <span class="acc">O diagnóstico é grátis.</span></h2>
-        </div>
-        <p class="lead soft" data-reveal>Respondemos em 24 horas úteis, por email, numa chamada ou por mensagem no Instagram. Portugal, e reuniões online para o resto da Europa.</p>
-        <div class="contact-actions" data-reveal>
-          <a class="btn" href="#pedido">Pedir orçamento <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-          <a class="btn btn-ghost" href="#inicio">Fazer a análise grátis</a>
-        </div>
-      </div>
-      <div class="channels">
-        <a class="channel" data-reveal href="mailto:contacto@destaca.site">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
-          <span><b>contacto@destaca.site</b><small>Email, resposta em 24 horas úteis</small></span>
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 11 11 5M6 5h5v5"/></svg>
-        </a>
-        <a class="channel" data-reveal href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          <span><b>@destacasite</b><small>Instagram, trabalhos e novidades</small></span>
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 11 11 5M6 5h5v5"/></svg>
-        </a>
-      </div>
-    </div>
-    <p class="email-wrap" data-reveal><a class="email" data-fit href="mailto:contacto@destaca.site?subject=Diagn%C3%B3stico%20gr%C3%A1tis"><span><span>contacto@</span><span>destaca.site</span></span></a></p>
-  </section>
+<section id="contacto" class="cta" aria-labelledby="contacto-h" data-3d="0,.55,.8,1,2.2">
+  <div class="z">
+    <h2 class="rv" id="contacto-h">Vamos <span class="em">destacar</span><br>o teu negócio?</h2>
+    <a class="mail rv" href="mailto:contacto@destaca.site?subject=Diagn%C3%B3stico%20gr%C3%A1tis">contacto@destaca.site</a>
+    <div class="btns rv"><a class="btn" href="#pedido">Pedir orçamento</a><a class="btn btn-ghost" href="#inicio">Fazer a análise grátis</a></div>
+  </div>
+</section>
 </main>
 
-<footer class="footer f-ink">
-  <p class="wordmark" data-fit aria-hidden="true"><span><span>destaca</span><span>.site</span></span></p>
-  <div class="foot-row">
-    <div class="places">
-      <a href="mailto:contacto@destaca.site">contacto@destaca.site</a>
-      <a href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">@destacasite</a>
-      <span>destaca o teu site!</span>
-    </div>
-    <div class="foot-cols">
-      <nav aria-label="Serviços"><h3>Serviços</h3><ul><li><a href="#servicos">Páginas de apresentação</a></li><li><a href="#servicos">SEO local e técnico</a></li><li><a href="#servicos">Manutenção</a></li><li><a href="#inicio">Análise SEO grátis</a></li></ul></nav>
-      <nav aria-label="Empresa"><h3>Empresa</h3><ul><li><a href="#casos">Casos reais</a></li><li><a href="#processo">Processo</a></li><li><a href="#equipa">Equipa</a></li><li><a href="/en/" hreflang="en">English</a></li></ul></nav>
-      <nav aria-label="Legal"><h3>Legal</h3><ul><li><a href="/legal.html#privacidade">Política de privacidade</a></li><li><a href="/legal.html#cookies">Política de cookies</a></li><li><button class="link-btn" type="button" data-cookie-prefs>Preferências de cookies</button></li><li><a href="/legal.html#termos">Termos e condições</a></li><li><a href="https://www.livroreclamacoes.pt/Inicio/" target="_blank" rel="noopener">Livro de Reclamações</a></li><li><a href="/legal.html#litigios">Resolução de litígios</a></li></ul></nav>
-    </div>
+<footer class="footer">
+  <div class="foot">
+    <div><a class="logo" href="#inicio">Destaca.</a><p>Sites de apresentação e SEO para empresas em Portugal e na Europa. Respondemos em 24 horas úteis.</p></div>
+    <nav aria-label="Serviços"><h3>Serviços</h3><ul><li><a href="#servicos">Páginas de apresentação</a></li><li><a href="#servicos">SEO local e técnico</a></li><li><a href="#servicos">Manutenção</a></li><li><a href="#inicio">Análise SEO grátis</a></li></ul></nav>
+    <nav aria-label="Empresa"><h3>Empresa</h3><ul><li><a href="#casos">Casos reais</a></li><li><a href="#processo">Processo</a></li><li><a href="#equipa">Equipa</a></li><li><a href="mailto:contacto@destaca.site">contacto@destaca.site</a></li><li><a href="https://www.instagram.com/destacasite/" target="_blank" rel="noopener">@destacasite</a></li><li><a href="/en/" hreflang="en">English</a></li></ul></nav>
+    <nav aria-label="Legal"><h3>Legal</h3><ul><li><a href="/legal.html#privacidade">Política de privacidade</a></li><li><a href="/legal.html#cookies">Política de cookies</a></li><li><button class="link-btn" type="button" data-cookie-prefs>Preferências de cookies</button></li><li><a href="/legal.html#termos">Termos e condições</a></li><li><a href="https://www.livroreclamacoes.pt/Inicio/" target="_blank" rel="noopener">Livro de Reclamações</a></li><li><a href="/legal.html#litigios">Resolução de litígios</a></li></ul></nav>
   </div>
-  <div class="legal">
-    <p>© 2026 Destaca, Portugal. Fotografia da fachada: Roman Kraft, Unsplash.</p>
-    <a href="#inicio">Voltar ao topo</a>
-  </div>
+  <div class="base"><span>© 2026 Destaca, Portugal</span><a href="#inicio">Voltar ao topo</a></div>
 </footer>
 
-<nav class="rail" aria-label="Paginação das secções"></nav>
-
-<dialog class="menu" id="menu" data-lenis-prevent aria-label="Secções da página">
-  <div class="menu-top"><span>destaca.site · <a href="/en/" hreflang="en">English</a></span><form method="dialog"><button>Fechar</button></form></div>
-  <ol id="menu-list"></ol>
-  <a class="btn" href="#pedido">Pedir orçamento</a>
-</dialog>
 <aside class="news" id="news" aria-labelledby="news-h" hidden>
   <button class="news-x" type="button" data-news-close aria-label="Fechar">✕</button>
   <form class="news-form" id="news-form" novalidate>
@@ -654,10 +356,10 @@
   <p><b>Cookies de estatística</b> Usamos o Google Analytics para perceber como o site é usado e melhorá-lo. Só o ativamos se aceitares. <a href="/legal.html#cookies">Saber mais</a></p>
   <div class="cookie-actions"><button class="btn" type="button" data-cookies="yes">Aceitar</button><button class="btn btn-ghost" type="button" data-cookies="no">Recusar</button></div>
 </div>
-<dialog class="consult" id="consult" data-lenis-prevent aria-labelledby="consult-h">
+<dialog class="consult" id="consult" aria-labelledby="consult-h">
   <button class="consult-x" type="button" data-close aria-label="Fechar">✕</button>
   <aside class="consult-side">
-    <p class="consult-badge">Grátis · sem compromisso</p>
+    <p class="consult-badge">Grátis e sem compromisso</p>
     <h2 id="consult-h">Queres uma consultoria gratuita ao teu negócio?</h2>
     <ul class="consult-gets">
       <li><b>Análise do teu site e do Google</b><span>Vemos o que os clientes veem quando te procuram.</span></li>
@@ -671,7 +373,7 @@
       <p class="consult-kicker">Leva menos de 1 minuto</p>
       <p class="consult-lead">Diz-nos o nome do teu negócio e o que queres melhorar. Nós tratamos do resto.</p>
       <div class="consult-actions">
-        <button class="btn" type="button" data-step-to="form">Sim, quero a consultoria <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M2 8h11M9 4l4 4-4 4"/></svg></button>
+        <button class="btn" type="button" data-step-to="form">Sim, quero a consultoria</button>
         <button class="btn btn-ghost" type="button" data-close>Agora não</button>
       </div>
       <p class="consult-fine">Sem custos e sem compromisso. Os teus dados só servem para te responder.</p>
@@ -699,7 +401,7 @@
       <p class="lead-status" role="status" aria-live="polite"></p>
     </form>
     <div class="lead-done" data-step="done" tabindex="-1" hidden>
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="21"/><path d="M14 25l7 7 13-15"/></svg>
       <h3>Obrigado! Pedido recebido.</h3>
       <p>Vamos olhar para o teu negócio e entramos em contacto em até 12 horas.</p>
       <button class="btn btn-ghost" type="button" data-close>Fechar</button>
@@ -707,7 +409,6 @@
   </div>
 </dialog>
 
-<script src="/assets/js/lenis.min.js" defer></script>
-<script src="/assets/js/main-13.js" defer></script>
+<script src="/assets/js/v3d-1.js" defer></script>
 </body>
 </html>
