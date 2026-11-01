@@ -33,26 +33,15 @@
   }), { rootMargin: '0px 0px -8% 0px' });
   $$('.rv').forEach(el => io.observe(el));
 
-  // Numbers count up the first time they come into view
-  const cio = new IntersectionObserver(es => es.forEach(e => {
-    if (!e.isIntersecting) return;
-    cio.unobserve(e.target);
-    if (reduce) return;
-    const to = +e.target.dataset.to, t0 = performance.now();
-    const step = t => { const k = clamp((t - t0) / 1400); e.target.textContent = Math.round(to * (1 - Math.pow(1 - k, 4))); if (k < 1) requestAnimationFrame(step); };
-    requestAnimationFrame(step);
-  }), { threshold: .6 });
-  $$('[data-to]').forEach(n => { if (!reduce) n.textContent = '0'; cio.observe(n); });
-
-  // Primary buttons lean towards the cursor
-  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) $$('main .btn, .site-nav .nav-cta').forEach(b => {
-    b.classList.add('mag');
-    b.addEventListener('pointermove', e => {
-      const r = b.getBoundingClientRect();
-      b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .22}px,${(e.clientY - r.top - r.height / 2) * .3}px)`;
-    });
-    b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+  // Footer wordmark fills the width exactly, and grows a touch as the footer scrolls in
+  const fit = () => $$('[data-fit]').forEach(el => {
+    const inner = el.firstElementChild;
+    el.style.fontSize = '100px';
+    const w = inner.getBoundingClientRect().width;
+    if (w) el.style.fontSize = (100 * el.clientWidth / w * 0.995) + 'px';
   });
+  fit(); d.fonts?.ready.then(fit); addEventListener('resize', fit);
+  const foot = $('.footer');
 
   // Manifesto: the words light up as the visitor reads down
   const words = $('#words');
@@ -309,6 +298,7 @@
     if (narrow()) { target[0] *= .25; target[1] = target[1] * .4 + (best === secs[0] ? .25 : .55); target[2] *= .5; }
     if (hoverShape !== null && best.el.id === 'servicos') target[3] = hoverShape;
     cv.style.opacity = narrow() && best !== secs[0] ? .3 : 1;
+    if (!reduce) foot.style.setProperty('--fp', clamp((vh - foot.getBoundingClientRect().top) / (vh * .8)).toFixed(4));
 
     const r = words.getBoundingClientRect(), p = clamp((vh * .85 - r.top) / (r.height + vh * .3));
     ws.forEach((w, i) => w.classList.toggle('on', i / ws.length < p));
@@ -394,18 +384,9 @@ void main(){
   } else cv.remove();
   const live = !!U.R;
 
-  // Render scale adapts to the machine: drops when frames run slow, climbs back when there is headroom
-  const top = () => narrow() ? .55 : .85;
-  let q = top(), ema = 16, nFrames = 0, lastT = 0;
-  const size = () => { if (!live) return; const k = Math.min(devicePixelRatio, 1.5) * q; cv.width = innerWidth * k; cv.height = innerHeight * k; gl.viewport(0, 0, cv.width, cv.height); };
-  size(); addEventListener('resize', () => { q = Math.min(q, top()); size(); });
-  const adapt = now => {
-    if (lastT) ema += (Math.min(now - lastT, 100) - ema) * .1;
-    lastT = now;
-    if (++nFrames % 45) return;
-    if (ema > 24 && q > .35) { q = Math.max(.35, q - .1); size(); }
-    else if (ema < 15 && q < top()) { q = Math.min(top(), q + .05); size(); }
-  };
+  // ponytail: fixed render scale per device class; add adaptive resolution if weak laptops drop frames
+  const size = () => { if (!live) return; const k = Math.min(devicePixelRatio, 1.5) * (narrow() ? .55 : .85); cv.width = innerWidth * k; cv.height = innerHeight * k; gl.viewport(0, 0, cv.width, cv.height); };
+  size(); addEventListener('resize', size);
 
   let kick = 1.2, mr = -.5, mnx = 0, mny = 0, spin = 0, lastY = scrollY, first = true;
   d.addEventListener('pointerdown', e => { if (!e.target.closest('a,button,input,select,textarea,summary,label,dialog')) kick = 1; });
@@ -417,8 +398,7 @@ void main(){
     for (let i = 0; i < 5; i++) st[i] += (target[i] - st[i]) * (i === 3 ? .045 : .06);
     cx += (px - cx) * .22; cy += (py - cy) * .22;
     cur.style.transform = `translate(${cx}px,${cy}px)`;
-    if (!live || d.hidden) { lastT = 0; return; }
-    adapt(now);
+    if (!live || d.hidden) return;
     speed *= .92;
     spin += (scrollY - lastY) * .0015; lastY = scrollY;
     const active = now - lastMove < 1800 && !narrow();
