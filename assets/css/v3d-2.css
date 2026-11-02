@@ -297,7 +297,30 @@ details.q p{color:var(--soft);padding-bottom:26px;max-width:60ch}
   .wordmark>span>span{display:block}
   .consult[open]{grid-template-columns:1fr}
 }
+/* phones and small tablets: solid header, everything open (no hover), tighter rhythm */
+@media (max-width:860px){
+  .site-nav{mix-blend-mode:normal;color:var(--ink);background:#e8e6e1e0;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:12px var(--pad);border-bottom:1px solid var(--line)}
+  .nav-cta{border-color:var(--ink)!important}
+  main>section{padding:80px var(--pad)}
+  .hero{padding-top:84px!important;padding-bottom:28px!important}
+  .counter{display:none}
+  .svc{padding:26px 0}
+  .svc-body{grid-template-rows:1fr}
+  .svc h3,.svc:hover h3,.svc.open h3{transform:none;color:var(--ink)}
+  .numbers{grid-template-columns:1fr 1fr;column-gap:20px;row-gap:40px}
+  .numbers>.num{grid-column:auto!important}
+  .num strong{font-size:clamp(56px,17vw,120px)}
+  .num span{font-size:15px}
+  .steps{border-top:0;padding-top:0;margin-top:40px}
+  .step{border-top:1px solid var(--ink);padding-top:18px}
+  .step b{margin-bottom:12px}
+  .ptop{margin-bottom:28px}
+  .team{margin-top:36px;gap:28px}
+  .quote{gap:36px}
+  .cta{min-height:auto;padding-top:46vh!important}
+}
 @media (max-width:560px){
+  .logos li:last-child{grid-column:1/-1}
   .pair{grid-template-columns:1fr}
   .logos{grid-template-columns:1fr 1fr}
   .checker{flex-direction:column;align-items:stretch;border-radius:22px;padding:6px}

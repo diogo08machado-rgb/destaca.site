@@ -306,6 +306,7 @@
   const secs = $$('[data-3d]').map(el => ({ el, v: el.dataset['3d'].split(',').map(Number) }));
   const target = secs[0].v.slice(), st = target.slice();
   const cv = $('#gl');
+  let off3d = false;
   const onScroll = () => {
     const vh = innerHeight;
     // the 3D belongs to the section that covers the middle of the screen
@@ -314,7 +315,9 @@
     best.v.forEach((x, i) => target[i] = x);
     if (narrow()) { target[0] *= .25; target[1] = target[1] * .4 + (best === secs[0] ? .25 : .55); target[2] *= .5; }
     if (hoverShape !== null && best.el.id === 'servicos') target[3] = hoverShape;
-    cv.style.opacity = narrow() && best !== secs[0] ? .3 : 1;
+    // on phones the 3D only lives in the hero and the closing call; elsewhere it is not drawn at all
+    off3d = narrow() && best !== secs[0] && best.el.id !== 'contacto';
+    cv.style.opacity = off3d ? 0 : 1;
     if (!reduce) foot.style.setProperty('--fp', clamp((vh - foot.getBoundingClientRect().top) / (vh * .8)).toFixed(4));
 
     const r = words.getBoundingClientRect(), p = clamp((vh * .85 - r.top) / (r.height + vh * .3));
@@ -415,7 +418,7 @@ void main(){
     for (let i = 0; i < 5; i++) st[i] += (target[i] - st[i]) * (i === 3 ? .045 : .06);
     cx += (px - cx) * .22; cy += (py - cy) * .22;
     cur.style.transform = `translate(${cx}px,${cy}px)`;
-    if (!live || d.hidden) return;
+    if (!live || d.hidden || off3d) return;
     speed *= .92;
     spin += (scrollY - lastY) * .0015; lastY = scrollY;
     const active = now - lastMove < 1800 && !narrow();
