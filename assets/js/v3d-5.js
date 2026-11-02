@@ -331,7 +331,7 @@
   };
 
   // One liquid-chrome object, raymarched in a fragment shader, that travels through the page
-  const gl = cv.getContext('webgl', { antialias: false, premultipliedAlpha: true, alpha: true });
+  let gl = null, live = false, t0 = 0;
   const fs = `
 precision highp float;
 uniform vec2 R; uniform float T, K, SH, G, MR, SP; uniform vec3 O; uniform vec2 M, MN;
@@ -391,18 +391,30 @@ void main(){
   col=clamp(col,0.,1.);
   gl_FragColor=vec4(col*a,a);
 }`;
-  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
-  const vsh = gl && sh(gl.VERTEX_SHADER, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'), fsh = gl && sh(gl.FRAGMENT_SHADER, fs);
   const U = {};
-  if (vsh && fsh) {
+  // The 3D starts only once the page is ready and the visitor moves, scrolls or waits a moment, so it never delays loading.
+  // Machines without a graphics card (software rendering) skip it: there it would make the whole page slow.
+  const init3d = () => {
+    if (gl || narrow() || !cv.isConnected) return;
+    gl = cv.getContext('webgl', { antialias: false, premultipliedAlpha: true, alpha: true });
+    const dbg = gl && gl.getExtension('WEBGL_debug_renderer_info');
+    const ren = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+    if (!gl || /swiftshader|llvmpipe|softpipe|software|basic render/i.test(ren)) { cv.remove(); return; }
+    const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null; };
+    const vsh = sh(gl.VERTEX_SHADER, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'), fsh = sh(gl.FRAGMENT_SHADER, fs);
+    if (!vsh || !fsh) { cv.remove(); return; }
     const pr = gl.createProgram();
     gl.attachShader(pr, vsh); gl.attachShader(pr, fsh); gl.linkProgram(pr); gl.useProgram(pr);
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
     for (const n of ['R', 'T', 'K', 'SH', 'G', 'MR', 'SP', 'O', 'M', 'MN']) U[n] = gl.getUniformLocation(pr, n);
-  } else cv.remove();
-  const live = !!U.R;
+    live = true; t0 = performance.now(); size();
+  };
+  const startEvents = ['pointermove', 'scroll', 'keydown', 'touchstart', 'wheel'];
+  const kickoff = () => { startEvents.forEach(ev => removeEventListener(ev, kickoff)); init3d(); };
+  startEvents.forEach(ev => addEventListener(ev, kickoff, { passive: true, once: true }));
+  addEventListener('load', () => setTimeout(kickoff, 3500));
 
   // Sharp on retina screens, with a pixel budget so big or dense screens stay smooth.
   // ponytail: fixed budget; add frame-time based scaling if weak laptops drop frames
@@ -415,7 +427,6 @@ void main(){
 
   let kick = 1.2, mr = -.5, mnx = 0, mny = 0, spin = 0, lastY = scrollY, first = true;
   d.addEventListener('pointerdown', e => { if (!e.target.closest('a,button,input,select,textarea,summary,label,dialog')) kick = 1; });
-  const t0 = performance.now();
   (function frame(now) {
     requestAnimationFrame(frame);
     onScroll();
@@ -441,5 +452,5 @@ void main(){
     gl.uniform2f(U.MN, mnx, mny);
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-  })(t0);
+  })(performance.now());
 })();
