@@ -315,8 +315,8 @@
     best.v.forEach((x, i) => target[i] = x);
     if (narrow()) { target[0] *= .25; target[1] = target[1] * .4 + (best === secs[0] ? .25 : .55); target[2] *= .5; }
     if (hoverShape !== null && best.el.id === 'servicos') target[3] = hoverShape;
-    // on phones the 3D only lives in the hero and the closing call; elsewhere it is not drawn at all
-    off3d = narrow() && best !== secs[0] && best.el.id !== 'contacto';
+    // no 3D on phones at all: it is not drawn, so it costs no battery
+    off3d = narrow();
     cv.style.opacity = off3d ? 0 : 1;
     if (!reduce) foot.style.setProperty('--fp', clamp((vh - foot.getBoundingClientRect().top) / (vh * .8)).toFixed(4));
 

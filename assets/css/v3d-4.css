@@ -302,7 +302,9 @@ details.q p{color:var(--soft);padding-bottom:26px;max-width:60ch}
   .site-nav{mix-blend-mode:normal;color:var(--ink);background:#e8e6e1e0;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:12px var(--pad);border-bottom:1px solid var(--line)}
   .nav-cta{border-color:var(--ink)!important}
   main>section{padding:80px var(--pad)}
-  .hero{padding-top:84px!important;padding-bottom:28px!important}
+  .hero{min-height:auto;grid-template-rows:auto;padding-top:96px!important;padding-bottom:40px!important}
+  .hero .giant{margin-top:12vh}
+  #gl{display:none}
   .counter{display:none}
   .svc{padding:26px 0}
   .svc-body{grid-template-rows:1fr}
