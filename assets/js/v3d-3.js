@@ -404,8 +404,13 @@ void main(){
   } else cv.remove();
   const live = !!U.R;
 
-  // ponytail: fixed render scale per device class; add adaptive resolution if weak laptops drop frames
-  const size = () => { if (!live) return; const k = Math.min(devicePixelRatio, 1.5) * (narrow() ? .55 : .85); cv.width = innerWidth * k; cv.height = innerHeight * k; gl.viewport(0, 0, cv.width, cv.height); };
+  // Sharp on retina screens, with a pixel budget so big or dense screens stay smooth.
+  // ponytail: fixed budget; add frame-time based scaling if weak laptops drop frames
+  const size = () => {
+    if (!live) return;
+    const k = Math.min(devicePixelRatio * (narrow() ? .8 : 1), Math.sqrt((narrow() ? 1.6e6 : 2.6e6) / (innerWidth * innerHeight)));
+    cv.width = Math.round(innerWidth * k); cv.height = Math.round(innerHeight * k); gl.viewport(0, 0, cv.width, cv.height);
+  };
   size(); addEventListener('resize', size);
 
   let kick = 1.2, mr = -.5, mnx = 0, mny = 0, spin = 0, lastY = scrollY, first = true;

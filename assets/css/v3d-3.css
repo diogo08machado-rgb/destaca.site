@@ -85,7 +85,7 @@ main>section{position:relative;padding:clamp(100px,14vw,200px) var(--pad)}
 .marquee{position:relative;z-index:2;background:var(--ink);color:var(--bg);overflow:hidden;padding:22px 0;transform:rotate(-2deg) scale(1.04);margin:40px 0}
 .marquee div{display:flex;width:max-content;animation:mq 28s linear infinite}
 .marquee span{font-size:clamp(28px,4vw,56px);font-weight:700;letter-spacing:-.04em;padding:0 28px;white-space:nowrap}
-.marquee i{color:var(--hot);font-style:normal}
+.marquee i{display:inline-block;width:.62em;height:.62em;margin-left:.3em;vertical-align:-.02em;background:var(--hot);-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20stroke%3D%22%23000%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M12%202v20M3.3%207l17.4%2010M3.3%2017l17.4-10%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20stroke%3D%22%23000%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M12%202v20M3.3%207l17.4%2010M3.3%2017l17.4-10%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center/contain no-repeat}
 @keyframes mq{to{transform:translateX(-50%)}}
 
 /* clients */
