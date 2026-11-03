@@ -384,17 +384,24 @@ void main(){
   float ao=clamp(.35+.65*map(p+n*.22)/(.22*.6),0.,1.);
   vec3 lp=(p-vec3(O.xy,0.))/O.z;
   float w=wave(lp);
-  // brand duotone: logo-orange metal on top melting into black metal. Colour goes on after the lighting,
-  // so the orange is exactly the logo orange (#ff5a14); the lighting only decides light and dark.
-  float e=dot(env(r,L),vec3(1./3.))*(.85+.15*pow(1.-cs,5.))*mix(.3,1.,ao);
-  vec3 orange=mix(vec3(.3,.07,.01),logo,smoothstep(.0,.38,e));
-  orange=mix(orange,vec3(1.,.8,.68),smoothstep(1.4,2.8,e));
-  vec3 black=vec3(.035)+e*.26*vec3(.9,.92,1.);
-  black=mix(black,vec3(.85),smoothstep(1.5,2.8,e)*.8);
-  float m=smoothstep(-.35,.35,lp.y+.35*w+.15*sin(T*.6));
-  vec3 col=mix(black,orange,m);
-  col=mix(col,logo,smoothstep(.05,.0,abs(m-.5)-.01));
-  col+=vec3(1.)*pow(max(dot(r,normalize(vec3(.55,.75,.5))),0.),220.)*7.*.9;
+  // Brand duotone in real metal: logo-orange metal on top melting into black chrome.
+  // Each metal reflects the studio in its own colour (Schlick Fresnel, brighter at grazing angles),
+  // under a thin clear coat that adds crisp white reflections of the lights.
+  vec3 E=env(r,L)*mix(.3,1.,ao);
+  float fr=pow(1.-cs,5.);
+  float m=smoothstep(-.18,.18,lp.y+.35*w+.15*sin(T*.6));
+  // orange: tonemap the brightest channel only, so the hue stays exactly the logo orange
+  vec3 o=E*(logo+(1.-logo)*fr)*2.3;
+  float om=max(o.r,max(o.g,o.b));
+  o*=(1.-exp(-om*1.25))/max(om,1e-4);
+  // black chrome: dark neutral metal, regular filmic curve
+  vec3 k=E*(vec3(.16,.165,.18)+(1.-vec3(.16,.165,.18))*fr)*1.1;
+  k=(k*(2.51*k+.03))/(k*(2.43*k+.59)+.14);
+  vec3 col=mix(k,o,m);
+  // clear coat: 4 % reflection head-on, almost a mirror at the edges
+  vec3 cc=E*(.04+.96*fr)*1.2;
+  col+=(cc*(2.51*cc+.03))/(cc*(2.43*cc+.59)+.14)*(1.-col*.5);
+  col+=vec3(1.)*pow(max(dot(r,normalize(vec3(.55,.75,.5))),0.),220.)*5.;
   col+=logo*smoothstep(.85,.98,w)*.35*K*G;                                  // a tap or click flashes the waves orange
   col=clamp(col,0.,1.);
   gl_FragColor=vec4(col*a,a);
