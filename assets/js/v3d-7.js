@@ -333,7 +333,7 @@
   let gl = null, live = false, t0 = 0;
   const fs = `
 precision highp float;
-uniform vec2 R; uniform float T, K, SH, G, MR, SP; uniform vec3 O; uniform vec2 M, MN;
+uniform vec4 V; uniform float T, K, SH, G, MR, SP; uniform vec3 O; uniform vec2 M, MN;
 mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
 float smin(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}
 float wave(vec3 p){return sin(2.6*p.x+T*.9)*sin(2.1*p.y-T*.7)*sin(2.3*p.z+T*.5);}
@@ -371,7 +371,7 @@ vec3 env(vec3 r,vec3 L){
   return c;
 }
 void main(){
-  vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
+  vec2 uv=(gl_FragCoord.xy+V.zw-.5*V.xy)/V.y;
   vec3 ro=vec3(0,0,5.), rd=normalize(vec3(uv,-1.6));
   vec3 L=normalize(vec3(MN.x*1.5,MN.y+.3,1.));
   float t=0.,d,md=1e3,mt=0.;
@@ -407,7 +407,7 @@ void main(){
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-    for (const n of ['R', 'T', 'K', 'SH', 'G', 'MR', 'SP', 'O', 'M', 'MN']) U[n] = gl.getUniformLocation(pr, n);
+    for (const n of ['V', 'T', 'K', 'SH', 'G', 'MR', 'SP', 'O', 'M', 'MN']) U[n] = gl.getUniformLocation(pr, n);
     live = true; t0 = performance.now(); size();
   };
   const startEvents = ['pointermove', 'scroll', 'keydown', 'touchstart', 'wheel'];
@@ -417,14 +417,19 @@ void main(){
 
   // Sharp on retina screens, with a pixel budget so big or dense screens stay smooth.
   // ponytail: fixed budget; add frame-time based scaling if weak laptops drop frames
+  // Phones draw only a band around the object, so they can afford full screen sharpness.
+  let kk = 1;
   const size = () => {
     if (!live) return;
-    const k = Math.min(devicePixelRatio * (narrow() ? .8 : 1), Math.sqrt((narrow() ? 1.6e6 : 2.6e6) / (innerWidth * innerHeight)));
-    cv.width = Math.round(innerWidth * k); cv.height = Math.round(innerHeight * k); gl.viewport(0, 0, cv.width, cv.height);
+    const n = narrow(), h = n ? Math.round(innerHeight * .42) : innerHeight;
+    kk = n ? Math.min(devicePixelRatio, 2.5) : Math.min(devicePixelRatio, Math.sqrt(2.6e6 / (innerWidth * innerHeight)));
+    cv.style.height = n ? h + 'px' : '';
+    if (!n) cv.style.transform = '';
+    cv.width = Math.round(innerWidth * kk); cv.height = Math.round(h * kk); gl.viewport(0, 0, cv.width, cv.height);
   };
   size(); addEventListener('resize', size);
 
-  let kick = 1.2, mr = -.5, mnx = 0, mny = 0, spin = 0, lastY = scrollY, first = true;
+  let kick = 1.2, mr = -.5, mnx = 0, mny = 0, spin = 0, lastY = scrollY, first = true, lastDraw = 0;
   d.addEventListener('pointerdown', e => { if (!e.target.closest('a,button,input,select,textarea,summary,label,dialog')) kick = 1; });
   (function frame(now) {
     requestAnimationFrame(frame);
@@ -434,15 +439,22 @@ void main(){
     cx += (px - cx) * .22; cy += (py - cy) * .22;
     cur.style.transform = `translate(${cx}px,${cy}px)`;
     if (!live || d.hidden || off3d) return;
+    const n = narrow();
+    if (n && now - lastDraw < 15) return;                                       // phones: 60 fps is plenty, 120 Hz screens would double the work
+    lastDraw = now;
     speed *= .92;
     spin += (scrollY - lastY) * .0015; lastY = scrollY;
     const active = now - lastMove < 1800 && !narrow();
     mr += ((active ? .14 + speed * .22 : -.5) - mr) * .08;
-    mnx += ((px / innerWidth * 2 - 1) - mnx) * .05; mny += (-(py / innerHeight * 2 - 1) - mny) * .05;
+    // no mouse on phones: the light circles slowly on its own
+    const lx = n ? Math.sin(now / 2600) * .8 : px / innerWidth * 2 - 1, ly = n ? Math.cos(now / 3400) * .6 : -(py / innerHeight * 2 - 1);
+    mnx += (lx - mnx) * .05; mny += (ly - mny) * .05;
     if (!Number.isFinite(mnx + mny)) mnx = mny = 0;
     kick *= .95;
     const intro = reduce ? 1 : 1 - Math.pow(1 - Math.min(1, (now - t0) / 1600), 3);
-    gl.uniform2f(U.R, cv.width, cv.height);
+    let oy = 0;
+    if (n) { const top = innerHeight / 2 - st[1] / 3.125 * innerHeight - cv.height / kk / 2; cv.style.transform = `translateY(${top}px)`; oy = (innerHeight - top) * kk - cv.height; }
+    gl.uniform4f(U.V, cv.width, n ? innerHeight * kk : cv.height, 0, oy);
     gl.uniform1f(U.T, reduce ? 3 : (now - t0) / 1000);
     gl.uniform1f(U.K, kick); gl.uniform1f(U.SH, st[3]); gl.uniform1f(U.G, st[4]);
     gl.uniform1f(U.MR, mr); gl.uniform1f(U.SP, spin);
