@@ -355,6 +355,7 @@ float map(vec3 w){
 }
 vec3 nrm(vec3 p){vec2 e=vec2(.0015,0);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}
 const vec3 hot=vec3(1.,.35,.07);
+const vec3 logo=vec3(1.,.353,.078);
 // photo studio as seen in the chrome: floor, grey walls, softboxes with crisp edges
 float box(vec2 a,vec2 c,vec2 s,float soft){vec2 d=abs(a-c)-s;return 1.-smoothstep(0.,soft,max(d.x,d.y));}
 vec3 env(vec3 r,vec3 L){
@@ -380,13 +381,21 @@ void main(){
   if(a<.01){gl_FragColor=vec4(0.);return;}
   vec3 p=ro+rd*mt, n=nrm(p), r=reflect(rd,n);
   float cs=max(dot(-rd,n),0.);
-  float F=.78+.22*pow(1.-cs,5.);
   float ao=clamp(.35+.65*map(p+n*.22)/(.22*.6),0.,1.);
-  vec3 col=env(r,L)*F*vec3(.95,.97,1.)*mix(.35,1.,ao);
-  col+=vec3(1.)*pow(max(dot(r,normalize(vec3(.55,.75,.5))),0.),220.)*7.;
-  float w=wave((p-vec3(O.xy,0.))/O.z);
-  col+=hot*(smoothstep(.8,.97,w)*1.8+smoothstep(.55,.8,w)*.25)*(1.+K*2.)*G*(1.-F*.6);
-  col=(col*(2.51*col+.03))/(col*(2.43*col+.59)+.14);
+  vec3 lp=(p-vec3(O.xy,0.))/O.z;
+  float w=wave(lp);
+  // brand duotone: logo-orange metal on top melting into black metal. Colour goes on after the lighting,
+  // so the orange is exactly the logo orange (#ff5a14); the lighting only decides light and dark.
+  float e=dot(env(r,L),vec3(1./3.))*(.85+.15*pow(1.-cs,5.))*mix(.3,1.,ao);
+  vec3 orange=mix(vec3(.3,.07,.01),logo,smoothstep(.0,.38,e));
+  orange=mix(orange,vec3(1.,.8,.68),smoothstep(1.4,2.8,e));
+  vec3 black=vec3(.035)+e*.26*vec3(.9,.92,1.);
+  black=mix(black,vec3(.85),smoothstep(1.5,2.8,e)*.8);
+  float m=smoothstep(-.35,.35,lp.y+.35*w+.15*sin(T*.6));
+  vec3 col=mix(black,orange,m);
+  col=mix(col,logo,smoothstep(.05,.0,abs(m-.5)-.01));
+  col+=vec3(1.)*pow(max(dot(r,normalize(vec3(.55,.75,.5))),0.),220.)*7.*.9;
+  col+=logo*smoothstep(.85,.98,w)*.35*K*G;                                  // a tap or click flashes the waves orange
   col=clamp(col,0.,1.);
   gl_FragColor=vec4(col*a,a);
 }`;
