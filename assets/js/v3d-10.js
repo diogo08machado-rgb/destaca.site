@@ -399,9 +399,10 @@ void main(){
   k=(k*(2.51*k+.03))/(k*(2.43*k+.59)+.14);
   vec3 col=mix(k,o,m);
   // clear coat: 4 % reflection head-on, almost a mirror at the edges
-  vec3 cc=E*(.04+.96*fr)*1.2;
+  vec3 cc=E*(.04+.2*fr)*1.2;
   col+=(cc*(2.51*cc+.03))/(cc*(2.43*cc+.59)+.14)*(1.-col*.5);
   col+=vec3(1.)*pow(max(dot(r,normalize(vec3(.55,.75,.5))),0.),220.)*5.;
+  col*=1.-.9*smoothstep(.15,.85,pow(1.-cs,1.5));                            // dark edges instead of a white rim, like the rest of the black metal
   col+=logo*smoothstep(.85,.98,w)*.35*K*G;                                  // a tap or click flashes the waves orange
   col=clamp(col,0.,1.);
   gl_FragColor=vec4(col*a,a);
