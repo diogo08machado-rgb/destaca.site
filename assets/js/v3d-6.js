@@ -303,20 +303,19 @@
   $$('[data-cookie-prefs]').forEach(b => b.addEventListener('click', () => { bar.hidden = false; $('button', bar).focus(); }));
 
   // Everything that follows the scroll, once per frame
-  const secs = $$('[data-3d]').map(el => ({ el, v: el.dataset['3d'].split(',').map(Number) }));
+  const secs = $$('[data-3d]').map(el => ({ el, v: el.dataset['3d'].split(',').map(Number), m: el.dataset['3dM'] && el.dataset['3dM'].split(',').map(Number) }));
   const target = secs[0].v.slice(), st = target.slice();
   const cv = $('#gl');
   let off3d = false;
   const onScroll = () => {
     const vh = innerHeight;
     // the 3D belongs to the section that covers the middle of the screen
-    let best = secs[0];
-    for (const s of secs) { if (s.el.hidden) continue; const r = s.el.getBoundingClientRect(); if (r.top < vh * .55 && r.bottom > vh * .45) best = s; }
-    best.v.forEach((x, i) => target[i] = x);
-    if (narrow()) { target[0] *= .25; target[1] = target[1] * .4 + (best === secs[0] ? .25 : .55); target[2] *= .5; }
+    let best = secs[0], hit = false;
+    for (const s of secs) { if (s.el.hidden) continue; const r = s.el.getBoundingClientRect(); if (r.top < vh * .55 && r.bottom > vh * .45) { best = s; hit = true; } }
+    // on phones the 3D only lives in sections with a phone position (data-3d-m); elsewhere it is not drawn, so it costs no battery
+    off3d = narrow() && (!hit || !best.m);
+    if (!off3d) (narrow() ? best.m : best.v).forEach((x, i) => target[i] = x);
     if (hoverShape !== null && best.el.id === 'servicos') target[3] = hoverShape;
-    // no 3D on phones at all: it is not drawn, so it costs no battery
-    off3d = narrow();
     cv.style.opacity = off3d ? 0 : 1;
     if (!reduce) foot.style.setProperty('--fp', clamp((vh - foot.getBoundingClientRect().top) / (vh * .8)).toFixed(4));
 
@@ -395,7 +394,7 @@ void main(){
   // The 3D starts only once the page is ready and the visitor moves, scrolls or waits a moment, so it never delays loading.
   // Machines without a graphics card (software rendering) skip it: there it would make the whole page slow.
   const init3d = () => {
-    if (gl || narrow() || !cv.isConnected) return;
+    if (gl || !cv.isConnected) return;
     gl = cv.getContext('webgl', { antialias: false, premultipliedAlpha: true, alpha: true });
     const dbg = gl && gl.getExtension('WEBGL_debug_renderer_info');
     const ren = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
