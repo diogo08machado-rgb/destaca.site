@@ -2,8 +2,9 @@
   const d = document, root = d.documentElement;
   const $ = (s, c = d) => c.querySelector(s), $$ = (s, c = d) => [...c.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const en = root.lang.startsWith('en'), lang = en ? 'en' : 'pt';
-  const T = en ? {
+  const lang = ['en', 'de', 'es'].find(l => root.lang.startsWith(l)) || 'pt';
+  const T = {
+  en: {
     steps: ['Opening the site…', 'Reading the title and description…', 'Checking the mobile version…', 'Looking for the sitemap and robots.txt…', 'Measuring speed…'],
     empty: 'Type your website address, for example your-site.com.',
     fail: 'We could not analyse this site. Please try again.',
@@ -19,7 +20,8 @@
     sending: 'Sending…', subject: n => `Quote request: ${n}`,
     sendFail: 'We could not send your request. Please try again or ', mailLink: 'email us directly',
     consultKind: 'Free consultation', consultSubject: b => `Free consultation: ${b}`
-  } : {
+  },
+  pt: {
     steps: ['A abrir o site…', 'A ler o título e a descrição…', 'A verificar a versão para telemóvel…', 'A procurar o sitemap e o robots.txt…', 'A medir a velocidade…'],
     empty: 'Escreve o endereço do teu site, por exemplo o-teu-site.pt.',
     fail: 'Não conseguimos analisar este site. Tenta outra vez.',
@@ -35,7 +37,44 @@
     sending: 'A enviar…', subject: n => `Pedido de orçamento: ${n}`,
     sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ', mailLink: 'envia-nos um email',
     consultKind: 'Consultoria gratuita', consultSubject: n => `Consultoria gratuita: ${n}`
-  };
+  },
+  de: {
+    steps: ['Website wird geöffnet…', 'Titel und Beschreibung werden gelesen…', 'Mobile Version wird geprüft…', 'Sitemap und robots.txt werden gesucht…', 'Geschwindigkeit wird gemessen…'],
+    empty: 'Gib die Adresse deiner Website ein, zum Beispiel deine-seite.de.',
+    fail: 'Wir konnten diese Website nicht analysieren. Bitte versuche es erneut.',
+    offline: 'Keine Internetverbindung. Bitte versuche es erneut.',
+    busy: 'Wird analysiert…', idle: 'Jetzt analysieren',
+    done: s => `Analyse abgeschlossen: ${s} von 100.`,
+    verdict: s => s >= 85 ? 'Ein guter Ausgangspunkt. Ein paar Anpassungen können dich vor die Konkurrenz bringen.' : s >= 60 ? 'Es gibt einiges zu tun: Diese Punkte kosten dich Besucher.' : 'Deine Website verliert Kunden bei Google. Das lässt sich beheben.',
+    noTitle: 'Kein Titel: Google erfindet einen',
+    fix: 'Zu beheben', improve: 'Zu verbessern', passed: n => `${n} Prüfungen bestanden`,
+    fixTopics: ['Improve my website', 'Show up on Google (SEO)'], fixPlan: 'Site upgrade (290 €)',
+    fixSummary: (u, s, bad) => `Ich habe ${u} analysiert und ${s}/100 erreicht. Ich möchte Hilfe bei:
+${bad || '- (keine Punkte aufgeführt)'}`,
+    newsEmail: 'Bitte gib eine gültige E-Mail-Adresse ein.', newsConsent: 'Bitte bestätige mit dem Häkchen, dass du den Newsletter erhalten möchtest.', newsFail: 'Die Anmeldung hat nicht funktioniert. Bitte versuche es erneut.', newsDone: 'Du bist angemeldet. Danke!',
+    sending: 'Wird gesendet…', subject: n => `Angebotsanfrage: ${n}`,
+    sendFail: 'Die Anfrage konnte nicht gesendet werden. Bitte versuche es erneut oder ', mailLink: 'schreib uns direkt',
+    consultKind: 'Beratung', consultSubject: b => `Beratung: ${b}`
+  },
+  es: {
+    steps: ['Abriendo el sitio…', 'Leyendo el título y la descripción…', 'Comprobando la versión móvil…', 'Buscando el sitemap y el robots.txt…', 'Midiendo la velocidad…'],
+    empty: 'Escribe la dirección de tu sitio, por ejemplo tu-sitio.es.',
+    fail: 'No hemos podido analizar este sitio. Inténtalo de nuevo.',
+    offline: 'Sin conexión a internet. Inténtalo de nuevo.',
+    busy: 'Analizando…', idle: 'Analizar ahora',
+    done: s => `Análisis completado: ${s} de 100.`,
+    verdict: s => s >= 85 ? 'Un buen punto de partida. Unos ajustes pueden ponerte por delante de la competencia.' : s >= 60 ? 'Hay trabajo que hacer: estos puntos te están costando visitas.' : 'Tu sitio está perdiendo clientes en Google. Tiene solución.',
+    noTitle: 'Sin título: Google se inventa uno',
+    fix: 'Por corregir', improve: 'Por mejorar', passed: n => `${n} comprobaciones superadas`,
+    fixTopics: ['Improve my website', 'Show up on Google (SEO)'], fixPlan: 'Site upgrade (290 €)',
+    fixSummary: (u, s, bad) => `He analizado ${u} y he sacado ${s}/100. Me gustaría ayuda para corregir:
+${bad || '- (sin puntos)'}`,
+    newsEmail: 'Escribe un email válido.', newsConsent: 'Marca la casilla para confirmar que quieres recibir la newsletter.', newsFail: 'No hemos podido suscribirte. Inténtalo de nuevo.', newsDone: 'Ya estás en la lista. ¡Gracias!',
+    sending: 'Enviando…', subject: n => `Solicitud de presupuesto: ${n}`,
+    sendFail: 'No hemos podido enviar la solicitud. Inténtalo de nuevo o ', mailLink: 'escríbenos directamente',
+    consultKind: 'Consultoría', consultSubject: b => `Consultoría: ${b}`
+  }
+  }[lang];
   root.classList.add('js');
   const go = el => el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   const el = (tag, cls, text) => { const n = d.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };

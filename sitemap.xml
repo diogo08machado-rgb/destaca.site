@@ -5,6 +5,8 @@
     <lastmod>2026-11-05</lastmod>
     <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://destaca.site/de/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://destaca.site/es/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
   </url>
   <url>
@@ -12,6 +14,26 @@
     <lastmod>2026-11-05</lastmod>
     <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://destaca.site/de/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://destaca.site/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
+  </url>
+  <url>
+    <loc>https://destaca.site/de/</loc>
+    <lastmod>2026-11-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://destaca.site/de/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://destaca.site/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
+  </url>
+  <url>
+    <loc>https://destaca.site/es/</loc>
+    <lastmod>2026-11-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://destaca.site/de/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://destaca.site/es/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
   </url>
   <url><loc>https://destaca.site/criacao-de-sites/</loc><lastmod>2026-11-05</lastmod></url>

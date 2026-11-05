@@ -77,6 +77,8 @@ Destaca (destaca.site) is a Portuguese web design and SEO studio. It builds fast
 - [Guia: porque é que o meu site não aparece no Google](https://destaca.site/guias/porque-o-meu-site-nao-aparece-no-google/)
 - [Guia: WordPress, Wix ou site à medida](https://destaca.site/guias/wordpress-wix-ou-site-a-medida/)
 - [English version](https://destaca.site/en/): the same page in English.
+- [Deutsche Version](https://destaca.site/de/): the home page in German.
+- [Versión en español](https://destaca.site/es/): the home page in Spanish.
 - [Informação legal](https://destaca.site/legal.html): privacidade, cookies, termos, Livro de Reclamações e resolução de litígios.
 
 Última atualização: 2026-11-01

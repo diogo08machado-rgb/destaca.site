@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
   if (!EMAIL.test(email)) return send(400, { ok: false, error: 'email' });
   if (!process.env.EGOI_PUBLIC_KEY || !process.env.EGOI_PRIVATE_KEY) return send(500, { ok: false, error: 'config' });
 
-  const base = { status: 'active', email, language: data.lang === 'en' ? 'en' : 'pt' };
+  const base = { status: 'active', email, language: ['en', 'de', 'es'].includes(data.lang) ? data.lang : 'pt' };
   if (name) base.first_name = name;
   try {
     const r = await fetch(`https://api.egoiapp.com/lists/${LIST}/contacts`, {

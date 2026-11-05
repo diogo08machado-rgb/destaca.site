@@ -1,4 +1,4 @@
-// Free SEO check: GET /api/analisar?url=https://example.pt[&lang=en] -> JSON with a 0-100 score and per-check results.
+// Free SEO check: GET /api/analisar?url=https://example.pt[&lang=en|de|es] -> JSON with a 0-100 score and per-check results.
 const dns = require('node:dns').promises;
 const net = require('node:net');
 
@@ -6,21 +6,102 @@ const TIMEOUT_MS = 8000;
 const MAX_BYTES = 3 * 1024 * 1024;
 const UA = 'Mozilla/5.0 (compatible; DestacaBot/1.0; +https://destaca.site)';
 
-// Errors shown to the visitor, in both languages
+// Errors shown to the visitor: pt, en, de, es
 const ERR = {
-  scheme: ['Só analisamos endereços http ou https.', 'We only analyse http or https addresses.'],
-  port: ['Porta não permitida.', 'Port not allowed.'],
-  invalid: ['Este endereço não parece válido.', 'This address does not look valid.'],
-  domain: ['Não encontrámos este domínio.', 'We could not find this domain.'],
-  blocked: ['Endereço não permitido.', 'Address not allowed.'],
-  redirects: ['Demasiados redirecionamentos.', 'Too many redirects.'],
-  empty: ['Escreve o endereço do site, por exemplo o-teu-site.pt.', 'Type the website address, for example your-site.com.'],
-  html: ['Este endereço não devolve uma página HTML.', 'This address does not return an HTML page.'],
-  timeout: ['O site demorou demasiado a responder.', 'The site took too long to respond.'],
-  open: ['Não conseguimos abrir este site.', 'We could not open this site.'],
-  shield: ['Este site tem uma proteção anti-robôs que bloqueia análises automáticas. Pede-nos uma análise manual grátis em contacto@destaca.site.', 'This site has bot protection that blocks automatic checks. Ask us for a free manual review at contacto@destaca.site.'],
-  status: ['O site respondeu com um erro ({code}), por isso não há página para analisar.', 'The site answered with an error ({code}), so there is no page to analyse.'],
+  scheme: ['Só analisamos endereços http ou https.', 'We only analyse http or https addresses.', "Wir analysieren nur http- oder https-Adressen.", "Solo analizamos direcciones http o https."],
+  port: ['Porta não permitida.', 'Port not allowed.', "Port nicht erlaubt.", "Puerto no permitido."],
+  invalid: ['Este endereço não parece válido.', 'This address does not look valid.', "Diese Adresse scheint ungültig zu sein.", "Esta dirección no parece válida."],
+  domain: ['Não encontrámos este domínio.', 'We could not find this domain.', "Wir konnten diese Domain nicht finden.", "No encontramos este dominio."],
+  blocked: ['Endereço não permitido.', 'Address not allowed.', "Adresse nicht erlaubt.", "Dirección no permitida."],
+  redirects: ['Demasiados redirecionamentos.', 'Too many redirects.', "Zu viele Weiterleitungen.", "Demasiadas redirecciones."],
+  empty: ['Escreve o endereço do site, por exemplo o-teu-site.pt.', 'Type the website address, for example your-site.com.', "Gib die Adresse der Website ein, zum Beispiel deine-seite.de.", "Escribe la dirección del sitio, por ejemplo tu-sitio.es."],
+  html: ['Este endereço não devolve uma página HTML.', 'This address does not return an HTML page.', "Diese Adresse liefert keine HTML-Seite.", "Esta dirección no devuelve una página HTML."],
+  timeout: ['O site demorou demasiado a responder.', 'The site took too long to respond.', "Die Website hat zu lange gebraucht, um zu antworten.", "El sitio tardó demasiado en responder."],
+  open: ['Não conseguimos abrir este site.', 'We could not open this site.', "Wir konnten diese Website nicht öffnen.", "No pudimos abrir este sitio."],
+  shield: ['Este site tem uma proteção anti-robôs que bloqueia análises automáticas. Pede-nos uma análise manual grátis em contacto@destaca.site.', 'This site has bot protection that blocks automatic checks. Ask us for a free manual review at contacto@destaca.site.', "Diese Website hat einen Bot-Schutz, der automatische Prüfungen blockiert. Frag uns nach einer manuellen Prüfung unter contacto@destaca.site.", "Este sitio tiene una protección anti-bots que bloquea los análisis automáticos. Pídenos un análisis manual en contacto@destaca.site."],
+  status: ['O site respondeu com um erro ({code}), por isso não há página para analisar.', 'The site answered with an error ({code}), so there is no page to analyse.', "Die Website hat mit einem Fehler ({code}) geantwortet, daher gibt es keine Seite zu analysieren.", "El sitio respondió con un error ({code}), así que no hay página que analizar."],
 };
+const LANGS = ['pt', 'en', 'de', 'es'];
+
+// German and Spanish come from the English text: [English text or pattern, de, es]
+const TR = [
+  ['Secure connection (HTTPS)', 'Sichere Verbindung (HTTPS)', 'Conexión segura (HTTPS)'],
+  ['The site loads over HTTPS.', 'Die Website lädt über HTTPS.', 'El sitio carga con HTTPS.'],
+  ['The site loads without HTTPS.', 'Die Website lädt ohne HTTPS.', 'El sitio carga sin HTTPS.'],
+  ['Install an SSL certificate and redirect all traffic to https://.', 'Ein SSL-Zertifikat installieren und den gesamten Verkehr auf https:// umleiten.', 'Instalar un certificado SSL y redirigir todo el tráfico a https://.'],
+  ['The page responds', 'Die Seite antwortet', 'La página responde'],
+  [/^Response code (\d+)\.$/, 'Antwortcode $1.', 'Código de respuesta $1.'],
+  ['The home page should return 200. Check for server errors.', 'Die Startseite sollte 200 zurückgeben. Serverfehler prüfen.', 'La página principal debe responder con 200. Revisar errores del servidor.'],
+  ['Can appear on Google', 'Kann bei Google erscheinen', 'Puede aparecer en Google'],
+  ['The page has "noindex": Google will not show it.', 'Die Seite hat „noindex“: Google zeigt sie nicht an.', 'La página tiene «noindex»: Google no la muestra.'],
+  ['Nothing stops Google from indexing the page.', 'Nichts hindert Google daran, die Seite zu indexieren.', 'Nada impide que Google indexe la página.'],
+  ['Remove "noindex" from the robots meta tag.', '„noindex“ aus dem Robots-Meta-Tag entfernen.', 'Quitar «noindex» de la meta robots.'],
+  ['Page title', 'Seitentitel', 'Título de la página'],
+  [/^"([\s\S]*)" \((\d+) characters\)$/, '„$1“ ($2 Zeichen)', '«$1» ($2 caracteres)'],
+  ['No title.', 'Kein Titel.', 'No tiene título.'],
+  ['Write a unique title of 30 to 60 characters with your service and location.', 'Einen eindeutigen Titel mit 30 bis 60 Zeichen schreiben, mit Leistung und Ort.', 'Escribir un título único de 30 a 60 caracteres con el servicio y la localidad.'],
+  ['Meta description', 'Meta-Beschreibung', 'Meta descripción'],
+  [/^(\d+) characters\.$/, '$1 Zeichen.', '$1 caracteres.'],
+  ['No meta description.', 'Keine Meta-Beschreibung.', 'No tiene meta descripción.'],
+  ['Write a 70 to 160 character description that invites the click.', 'Eine Beschreibung mit 70 bis 160 Zeichen schreiben, die zum Klicken einlädt.', 'Escribir una descripción de 70 a 160 caracteres que invite al clic.'],
+  ['One main heading (H1)', 'Eine Hauptüberschrift (H1)', 'Un título principal (H1)'],
+  ['Has one H1.', 'Hat eine H1.', 'Tiene un H1.'],
+  [/^Has (\d+) H1 tags\.$/, 'Hat $1 H1-Überschriften.', 'Tiene $1 H1.'],
+  ['Use exactly one H1 that says what the business does.', 'Genau eine H1 verwenden, die sagt, was das Unternehmen macht.', 'Usar exactamente un H1 que diga a qué se dedica el negocio.'],
+  ['Subheadings (H2)', 'Zwischenüberschriften (H2)', 'Subtítulos (H2)'],
+  [/^(\d+) H2 subheadings\.$/, '$1 H2-Zwischenüberschriften.', '$1 subtítulos H2.'],
+  ['Organise the content into sections with H2 subheadings.', 'Den Inhalt in Abschnitte mit H2-Zwischenüberschriften gliedern.', 'Organizar el contenido en secciones con subtítulos H2.'],
+  ['Language declared', 'Sprache angegeben', 'Idioma declarado'],
+  ['The lang attribute is missing.', 'Das lang-Attribut fehlt.', 'Falta el atributo lang.'],
+  ['Declare the language on <html>, for example lang="en".', 'Die Sprache im <html> angeben, zum Beispiel lang="de".', 'Indicar el idioma en <html>, por ejemplo lang="es".'],
+  ['Mobile ready', 'Für Smartphones optimiert', 'Preparado para móvil'],
+  ['Has a viewport meta tag.', 'Hat ein Viewport-Meta-Tag.', 'Tiene meta viewport.'],
+  ['The viewport meta tag is missing.', 'Das Viewport-Meta-Tag fehlt.', 'Falta la meta viewport.'],
+  [/^Add (<meta name="viewport"[^>]*>) and a responsive layout\.$/, '$1 und ein responsives Layout hinzufügen.', 'Añadir $1 y un diseño adaptable.'],
+  ['Canonical URL', 'Kanonische URL', 'URL canónica'],
+  ['Has a canonical link.', 'Hat einen Canonical-Link.', 'Tiene enlace canonical.'],
+  ['No canonical link.', 'Kein Canonical-Link.', 'No tiene enlace canonical.'],
+  ['Declare the canonical URL to avoid duplicate content.', 'Die kanonische URL angeben, um doppelte Inhalte zu vermeiden.', 'Indicar la URL canónica para evitar contenido duplicado.'],
+  ['Social sharing (Open Graph)', 'Teilen in sozialen Netzwerken (Open Graph)', 'Compartir en redes (Open Graph)'],
+  ['Has a share image.', 'Hat ein Vorschaubild.', 'Tiene imagen para compartir.'],
+  ['No share image.', 'Kein Vorschaubild.', 'Sin imagen para compartir.'],
+  ['Add og:title, og:description and og:image.', 'og:title, og:description und og:image hinzufügen.', 'Añadir og:title, og:description y og:image.'],
+  ['Structured data', 'Strukturierte Daten', 'Datos estructurados'],
+  ['Has JSON-LD.', 'Hat JSON-LD.', 'Tiene JSON-LD.'],
+  ['No structured data.', 'Keine strukturierten Daten.', 'Sin datos estructurados.'],
+  ['Add Schema.org (LocalBusiness, opening hours, address) as JSON-LD.', 'Schema.org (LocalBusiness, Öffnungszeiten, Adresse) als JSON-LD hinzufügen.', 'Añadir Schema.org (LocalBusiness, horario, dirección) en JSON-LD.'],
+  ['Images with alt text', 'Bilder mit Alt-Text', 'Imágenes con texto alternativo'],
+  [/^(\d+) of (\d+) images without alt\.$/, '$1 von $2 Bildern ohne Alt-Text.', '$1 de $2 imágenes sin alt.'],
+  ['No images on the page.', 'Keine Bilder auf der Seite.', 'No hay imágenes en la página.'],
+  ['Describe every image in its alt attribute.', 'Jedes Bild im alt-Attribut beschreiben.', 'Describir cada imagen en el atributo alt.'],
+  ['Enough content', 'Genug Inhalt', 'Contenido suficiente'],
+  [/^About (\d+) words\.$/, 'Etwa $1 Wörter.', 'Unas $1 palabras.'],
+  ['Explain your services better: at least 300 useful words on the home page.', 'Die Leistungen besser erklären: mindestens 300 hilfreiche Wörter auf der Startseite.', 'Explicar mejor los servicios: al menos 300 palabras útiles en la página principal.'],
+  ['Server response time', 'Server-Antwortzeit', 'Tiempo de respuesta del servidor'],
+  [/^(\d+) ms to first response\.$/, '$1 ms bis zur ersten Antwort.', '$1 ms hasta la primera respuesta.'],
+  ['Improve hosting, enable caching and use a CDN.', 'Hosting verbessern, Caching aktivieren und ein CDN nutzen.', 'Mejorar el alojamiento, activar la caché y usar una CDN.'],
+  ['HTML size', 'HTML-Größe', 'Tamaño del HTML'],
+  ['Cut inline code and unnecessary scripts.', 'Inline-Code und unnötige Skripte reduzieren.', 'Reducir el código inline y los scripts innecesarios.'],
+  ['robots.txt file', 'robots.txt-Datei', 'Archivo robots.txt'],
+  ['Found.', 'Gefunden.', 'Encontrado.'],
+  ['Not found.', 'Nicht gefunden.', 'No encontrado.'],
+  ['Create /robots.txt with the sitemap location.', '/robots.txt mit dem Speicherort der Sitemap anlegen.', 'Crear /robots.txt con la ubicación del sitemap.'],
+  ['Sitemap (sitemap.xml)', 'Sitemap (sitemap.xml)', 'Mapa del sitio (sitemap.xml)'],
+  ['Create /sitemap.xml and submit it in Google Search Console.', '/sitemap.xml anlegen und in der Google Search Console einreichen.', 'Crear /sitemap.xml y enviarlo en Google Search Console.'],
+  ['Site icon', 'Website-Symbol', 'Icono del sitio'],
+  ['Has a favicon.', 'Hat ein Favicon.', 'Tiene favicon.'],
+  ['No favicon declared.', 'Kein Favicon angegeben.', 'Sin favicon declarado.'],
+  ['Add a favicon; Google shows it in mobile results.', 'Ein Favicon hinzufügen; Google zeigt es in den mobilen Ergebnissen.', 'Añadir un favicon; Google lo muestra en los resultados en móvil.'],
+];
+const tr = (text, lang) => {
+  const col = lang === 'de' ? 1 : 2;
+  for (const row of TR) {
+    if (typeof row[0] === 'string') { if (row[0] === text) return row[col]; }
+    else if (row[0].test(text)) return text.replace(row[0], row[col]);
+  }
+  return text;                                                  // anything not in the table stays in English
+};
+
 class Known extends Error { constructor(key) { super(key); this.key = key; } }
 
 // Block anything that is not a public internet address (SSRF guard).
@@ -76,8 +157,9 @@ const pick = (tag, name) => { const m = tag.match(new RegExp(`\\b${name}\\s*=\\s
 const decode = (s = '') => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim();
 
 // ponytail: regex HTML parsing, good enough for a quick public check; swap for a real parser if reports need to be exact.
-function analyse(page, robots, sitemap, en = false) {
-  const L = (pt, eng) => (en ? eng : pt);
+function analyse(page, robots, sitemap, ui = 'pt') {
+  if (ui === true) ui = 'en';
+  const L = (pt, eng) => (ui === 'pt' ? pt : ui === 'en' ? eng : tr(eng, ui));
   const html = page.text;
   const head = (html.match(/<head[\s\S]*?<\/head>/i) || [html])[0];
   const metas = head.match(/<meta\b[^>]*>/gi) || [];
@@ -146,14 +228,14 @@ async function robotsAndSitemap(origin) {
 
 module.exports = async function handler(req, res) {
   const q = new URL(req.url, 'http://x').searchParams;
-  const en = q.get('lang') === 'en';
+  const lang = LANGS.includes(q.get('lang')) ? q.get('lang') : 'pt', li = LANGS.indexOf(lang);
   const send = (code, body) => {
     res.statusCode = code;
     res.setHeader('content-type', 'application/json; charset=utf-8');
     res.setHeader('cache-control', code === 200 ? 'public, s-maxage=600' : 'no-store');
     res.end(JSON.stringify(body));
   };
-  const fail = (code, key) => send(code, { error: ERR[key][en ? 1 : 0] });
+  const fail = (code, key) => send(code, { error: ERR[key][li] });
   let input = (q.get('url') || '').trim();
   if (!input || input.length > 300) return fail(400, 'empty');
   if (!/^https?:\/\//i.test(input)) input = 'https://' + input;
@@ -170,11 +252,11 @@ module.exports = async function handler(req, res) {
     if (page.status >= 400) {
       const wall = page.headers.get('cf-mitigated') || /just a moment|attention required|checking your browser|security checkpoint|captcha/i.test(page.text.slice(0, 5000));
       if (wall || page.status === 403 || page.status === 429) return fail(422, 'shield');
-      return send(422, { error: ERR.status[en ? 1 : 0].replace('{code}', page.status) });
+      return send(422, { error: ERR.status[li].replace('{code}', page.status) });
     }
     if (!/html/i.test(page.headers.get('content-type') || '')) return fail(422, 'html');
     const [robots, sitemap] = await robotsAndSitemap(page.url.origin);
-    send(200, { url: page.url.href, ...analyse(page, robots, sitemap, en) });
+    send(200, { url: page.url.href, ...analyse(page, robots, sitemap, lang) });
   } catch (e) {
     fail(502, e.name === 'AbortError' ? 'timeout' : e.key && ERR[e.key] ? e.key : 'open');
   }
