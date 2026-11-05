@@ -57,6 +57,10 @@ Destaca (destaca.site) is a Portuguese web design and SEO studio. It builds fast
 ## Páginas
 
 - [Página principal](https://destaca.site/): serviços, casos reais, processo, preços, perguntas frequentes e contacto.
+- [Criação de sites](https://destaca.site/criacao-de-sites/): sites à medida para empresas, desde 490 €.
+- [Melhoramento de sites](https://destaca.site/melhoramento-de-sites/): correção de SEO, velocidade e telemóvel de um site existente, 290 €.
+- [SEO local e Google Maps](https://destaca.site/seo-local/): Google Business Profile, pesquisas locais e com IA, desde 90 €/mês.
+- [Análise SEO](https://destaca.site/analise-seo/): as 19 verificações da análise automática.
 - [English version](https://destaca.site/en/): the same page in English.
 - [Informação legal](https://destaca.site/legal.html): privacidade, cookies, termos, Livro de Reclamações e resolução de litígios.
 

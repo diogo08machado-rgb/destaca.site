@@ -1,0 +1,32 @@
+/* service pages: same world as the home page, shorter dark stage, no liquid drop */
+.pg .hero{min-height:82svh}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px}
+.hero .btn-ghost{color:var(--on-ink)}
+@media (hover:hover) and (pointer:fine){.hero .btn-ghost:hover{background:var(--on-ink);color:var(--ink)}}
+.crumbs{font-size:var(--t-s);color:var(--on-ink-soft)}
+.crumbs ol{display:flex;flex-wrap:wrap;gap:6px}
+.crumbs li+li::before{content:"/";margin-right:6px}
+.crumbs a{text-decoration:none}
+@media (hover:hover){.crumbs a:hover{color:var(--on-ink);text-decoration:underline}}
+.intro{display:grid;gap:clamp(40px,4vw,64px)}
+.intro .qa p+p{margin-top:14px}
+.qa .txt{grid-column:8/13;max-width:44ch}
+.qa .txt p{max-width:none}
+.cap a{color:inherit}
+.more-link{display:inline-block;margin-top:10px;font-weight:600;color:var(--hot)!important;text-decoration:none}
+@media (hover:hover){.more-link:hover{text-decoration:underline}}
+.hero .checker{max-width:640px}
+.checks-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px var(--gap);margin-top:clamp(32px,4vw,56px)}
+.checks-list li{padding:14px 0;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.checks-list li::before{content:"";display:inline-block;width:.5em;height:.5em;border-radius:50%;background:var(--hot);margin-right:12px;vertical-align:.08em}
+.others{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:6px var(--gap);margin-top:24px}
+.others a{display:grid;gap:6px;padding:22px clamp(16px,1.6vw,24px);margin:0 calc(-1 * clamp(16px,1.6vw,24px));border-radius:16px;text-decoration:none;transition:background-color .2s}
+.others b{font-size:var(--t-h3);letter-spacing:-.025em;line-height:1.1}
+@media (hover:hover){.others a:hover{background:var(--surface)}}
+.others a:focus-visible{background:var(--surface)}
+@media (max-width:1024px){.qa .txt{grid-column:1/-1}}
+@media (max-width:760px){
+  .pg .hero{min-height:auto;padding-top:132px!important}
+  .hero-cta .btn{flex:1 1 auto}
+  .qa .txt{grid-column:1/-1}
+}

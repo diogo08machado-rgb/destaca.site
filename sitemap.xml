@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://destaca.site/</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
   </url>
   <url>
     <loc>https://destaca.site/en/</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <xhtml:link rel="alternate" hreflang="pt-PT" href="https://destaca.site/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://destaca.site/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://destaca.site/"/>
   </url>
+  <url><loc>https://destaca.site/criacao-de-sites/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://destaca.site/melhoramento-de-sites/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://destaca.site/seo-local/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://destaca.site/analise-seo/</loc><lastmod>2026-11-05</lastmod></url>
   <url><loc>https://destaca.site/legal.html</loc><lastmod>2026-11-02</lastmod></url>
   <url><loc>https://destaca.site/en/legal.html</loc><lastmod>2026-11-02</lastmod></url>
 </urlset>
