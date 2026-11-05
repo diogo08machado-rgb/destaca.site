@@ -18,7 +18,8 @@
     const w = inner.offsetWidth;
     if (w) x.style.fontSize = (100 * x.clientWidth / w * 0.995) + 'px';
   });
-  fit(); d.fonts?.ready.then(fit); addEventListener('resize', fit);
+  const fitIO = new IntersectionObserver(es => { if (!es.some(e => e.isIntersecting)) return; fitIO.disconnect(); (d.fonts?.ready || Promise.resolve()).then(fit); addEventListener('resize', fit); }, { rootMargin: '100% 0px' });
+  $$('[data-fit]').forEach(x => fitIO.observe(x));
 
   const cta = $('.cta');
   if (cta) new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { cta.classList.add('in'); o.disconnect(); } }, { threshold: .35 }).observe(cta);

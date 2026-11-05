@@ -56,7 +56,9 @@
     const w = inner.offsetWidth;                                   // layout width: ignores the settle-in scale
     if (w) x.style.fontSize = (100 * x.clientWidth / w * 0.995) + 'px';
   });
-  fit(); d.fonts?.ready.then(fit); addEventListener('resize', fit);
+  // measured only when the footer gets close, so opening the page never forces a layout
+  const fitIO = new IntersectionObserver(es => { if (!es.some(e => e.isIntersecting)) return; fitIO.disconnect(); (d.fonts?.ready || Promise.resolve()).then(() => { fit(); curtain(); }); addEventListener('resize', fit); }, { rootMargin: '100% 0px' });
+  $$('[data-fit]').forEach(x => fitIO.observe(x));
 
   // The example results page: "your business" climbs to first place and gets highlighted
   const serp = $('#serp'), me = $('#serp-me');
@@ -74,8 +76,8 @@
 
   // Cases: the hovered or focused name shows its site in the frame
   const cases = $('.cases'), frame = $('.case-frame', cases), links = $$('.case', cases);
-  if (frame) {
-    links.forEach(a => { const im = $('img', a).cloneNode(); im.loading = 'eager'; im.alt = ''; frame.append(im); });
+  if (frame && matchMedia('(min-width: 1025px)').matches) {                // the frame only exists on big screens; phones never download it
+    links.forEach(a => { const im = $('img', a).cloneNode(); im.loading = 'eager'; im.alt = ''; im.sizes = '50vw'; frame.append(im); });
     cases.classList.add('has-frame');
     const shots = $$('img', frame);
     const show = i => { links.forEach((a, j) => a.classList.toggle('on', i === j)); shots.forEach((s, j) => s.classList.toggle('on', i === j)); };
@@ -406,7 +408,7 @@ void main(){
   const kickoff = () => { startEvents.forEach(ev => removeEventListener(ev, kickoff)); init3d(); };
   addEventListener('load', () => {
     startEvents.forEach(ev => addEventListener(ev, kickoff, { passive: true, once: true }));
-    setTimeout(kickoff, 900);
+    setTimeout(kickoff, 3500);                                         // without a gesture, wait until the page has settled
   });
   // Phones draw only a band around the drop; big screens get a pixel budget.
   // ponytail: fixed budget; add frame-time based scaling if weak laptops drop frames
@@ -420,8 +422,12 @@ void main(){
   };
   addEventListener('resize', size);
   // the curtain (page lifting off the footer) only when the whole footer fits on screen, otherwise its foot would be cut off
-  const curtain = () => { foot.classList.remove('curtain'); foot.classList.toggle('curtain', innerWidth > 1024 && foot.offsetHeight <= innerHeight); };
-  curtain(); addEventListener('resize', curtain); addEventListener('load', curtain);
+  // measured only on big screens and after load, so phones and the first paint never pay for it
+  const curtain = () => {
+    if (innerWidth <= 1024) return foot.classList.remove('curtain');
+    foot.classList.remove('curtain'); foot.classList.toggle('curtain', foot.offsetHeight <= innerHeight);
+  };
+  addEventListener('resize', curtain); addEventListener('load', () => requestAnimationFrame(curtain));
 
   // Where the drop belongs right now: the spot of the section under the middle of the screen,
   // blended with the next one while their border crosses the middle of the screen.
@@ -448,11 +454,11 @@ void main(){
 
   let px = innerWidth / 2, py = innerHeight / 2;
   addEventListener('pointermove', e => { if (Number.isFinite(e.clientX + e.clientY)) { px = e.clientX; py = e.clientY; } }, { passive: true });
-  let sx = 0, sy = 0, vx = 0, vy = 0, sS = 0, sSh = 0, mnx = 0, mny = 0, spin = 0, lastY = scrollY, last = 0, lastDraw = 0, fresh = true;
+  let sx = 0, sy = 0, vx = 0, vy = 0, sS = 0, sSh = 0, mnx = 0, mny = 0, spin = 0, lastY = scrollY, last = 0, lastDraw = 0, fresh = true, fpLast = '';
   (function frame(now) {
     requestAnimationFrame(frame);
     // footer curtain: the wordmark settles as the footer is uncovered
-    if (!reduce) { const fr = foot.getBoundingClientRect(); foot.style.setProperty('--fp', clamp((innerHeight - fr.top) / (innerHeight * .9)).toFixed(4)); }
+    if (!reduce) { const v = clamp((innerHeight - foot.getBoundingClientRect().top) / (innerHeight * .9)).toFixed(4); if (v !== fpLast) foot.style.setProperty('--fp', fpLast = v); }
     if (!live || d.hidden) return;
     const n = narrow();
     if (n && now - lastDraw < 15) return;                                         // phones: 60 fps is plenty
