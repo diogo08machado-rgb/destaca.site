@@ -233,7 +233,7 @@ ${bad || '- (sin puntos)'}`,
     if (!key) return null;
     const box = el('div', 'ts-box'); $('button[type="submit"]', fm).before(box);
     let wait = [];
-    const id = turnstile.render(box, { sitekey: key, language: lang, appearance: 'interaction-only', action: fm.id,
+    const id = turnstile.render(box, { sitekey: key, language: lang, theme: 'light', size: 'flexible', action: fm.id,
       callback: t => { wait.forEach(f => f(t)); wait = []; }, 'before-interactive-callback': () => { const st = $('.lead-status', fm); st.classList.remove('err'); st.textContent = T.humanAsk; }, 'expired-callback': () => turnstile.reset(id) });
     return { id, token: () => turnstile.getResponse(id) || new Promise(f => { wait.push(f); setTimeout(() => f(''), 120000); }) };
   });
@@ -245,6 +245,9 @@ ${bad || '- (sin puntos)'}`,
     turnstile.reset(w.id);
     return !!(r && r.ok);
   };
+  // the quote form shows the Cloudflare badge as it scrolls near; the consultation form when it gets focus
+  const tsIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { tsIO.unobserve(e.target); human(e.target); } }), { rootMargin: '300px 0px' });
+  tsIO.observe($('#pedido-form'));
   const wire = (fm, build, onDone) => (fm.addEventListener('focusin', () => human(fm), { once: true }), fm.addEventListener('submit', async e => {
     e.preventDefault();
     if (fm.botcheck.checked) return;
