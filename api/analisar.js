@@ -126,7 +126,8 @@ function analyse(page, robots, sitemap, en = false) {
   ];
   const total = checks.reduce((s, x) => s + x.weight, 0);
   const got = checks.reduce((s, x) => s + (x.status === 'ok' ? x.weight : x.status === 'aviso' ? x.weight / 2 : 0), 0);
-  return { score: Math.round((got / total) * 100), checks: checks.map(({ weight, ...x }) => x) };
+  // title/desc in raw form let the page draw the site's own Google snippet
+  return { score: Math.round((got / total) * 100), title: title.slice(0, 120), desc: desc.slice(0, 320), checks: checks.map(({ weight, ...x }) => x) };
 }
 
 // a 200 that is really an HTML "not found" page does not count

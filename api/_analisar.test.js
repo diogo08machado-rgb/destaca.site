@@ -16,4 +16,6 @@ assert.strictEqual(r.score, 100, JSON.stringify(r.checks.filter((c) => c.status 
 const bad = analyse({ url: new URL('http://x.pt/'), status: 200, ms: 2500, size: 2e6, text: '<html><head><meta name="robots" content="noindex"></head><body><h1>a</h1><h1>b</h1><img src=x></body></html>' }, false, false);
 assert.ok(bad.score < 20, String(bad.score));
 assert.strictEqual(bad.checks.find((c) => c.id === 'index').status, 'erro');
+assert.ok(r.title.startsWith('Padaria Aurora') && r.desc.startsWith('Pão de massa-mãe'));
+assert.strictEqual(bad.title, '');
 console.log('ok', r.score, bad.score);
