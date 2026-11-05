@@ -13,7 +13,7 @@
 .qa .txt{grid-column:8/13;max-width:44ch}
 .qa .txt p{max-width:none}
 .cap a{color:inherit}
-.more-link{display:inline-block;margin-top:10px;font-weight:600;color:var(--hot)!important;text-decoration:none}
+.more-link{display:inline-block;margin-top:6px;font-weight:600;color:var(--hot)!important;text-decoration:none}
 @media (hover:hover){.more-link:hover{text-decoration:underline}}
 .hero .checker{max-width:640px}
 .checks-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px var(--gap);margin-top:clamp(32px,4vw,56px)}
@@ -30,3 +30,16 @@
   .hero-cta .btn{flex:1 1 auto}
   .qa .txt{grid-column:1/-1}
 }
+.foot nav:nth-of-type(3){grid-column:9/13}
+@media (max-width:1024px){.foot nav:nth-of-type(3){grid-column:1/-1}}
+@media (max-width:760px){.foot nav:nth-of-type(3){grid-column:auto}}
+/* sector pages: one real site we made for this trade */
+.case-one{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gap);align-items:center}
+.case-one figure{grid-column:1/8}
+.case-one img{width:100%;border-radius:12px;background:var(--surface)}
+.case-one div{grid-column:9/13;display:grid;gap:14px;align-content:start}
+.case-one .btn{justify-self:start}
+@media (max-width:1024px){.case-one figure,.case-one div{grid-column:1/-1}}
+.searches{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(24px,3vw,40px)}
+.searches li{padding:12px 20px;border-radius:999px;background:var(--surface);font-weight:600}
+.searches li::before{content:"";display:inline-block;width:.7em;height:.7em;border:2px solid currentColor;border-radius:50%;margin-right:10px;vertical-align:-.05em}
