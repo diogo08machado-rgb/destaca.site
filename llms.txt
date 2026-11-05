@@ -67,6 +67,15 @@ Destaca (destaca.site) is a Portuguese web design and SEO studio. It builds fast
 - [Sites para oficinas](https://destaca.site/sites-para-oficinas/)
 - [Sites para eletricistas e canalizadores](https://destaca.site/sites-para-eletricistas-e-canalizadores/)
 - [Sites para contabilistas](https://destaca.site/sites-para-contabilistas/)
+- [Casos](https://destaca.site/casos/): os sites que fizemos, com o que cada um tem.
+- [Sites e SEO em Braga](https://destaca.site/sites-e-seo-em-braga/)
+- [Sites e SEO em Guimarães](https://destaca.site/sites-e-seo-em-guimaraes/)
+- [Sites e SEO em Famalicão](https://destaca.site/sites-e-seo-em-famalicao/)
+- [Sites e SEO em Póvoa de Varzim](https://destaca.site/sites-e-seo-na-povoa-de-varzim/)
+- [Guia: quanto custa um site](https://destaca.site/guias/quanto-custa-um-site/)
+- [Guia: como aparecer no Google Maps](https://destaca.site/guias/como-aparecer-no-google-maps/)
+- [Guia: porque é que o meu site não aparece no Google](https://destaca.site/guias/porque-o-meu-site-nao-aparece-no-google/)
+- [Guia: WordPress, Wix ou site à medida](https://destaca.site/guias/wordpress-wix-ou-site-a-medida/)
 - [English version](https://destaca.site/en/): the same page in English.
 - [Informação legal](https://destaca.site/legal.html): privacidade, cookies, termos, Livro de Reclamações e resolução de litígios.
 
