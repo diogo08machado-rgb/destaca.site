@@ -18,7 +18,7 @@
     fixSummary: (u, s, bad) => `I ran the free analysis on ${u} and scored ${s}/100. I'd like help fixing:\n${bad || '- (no issues listed)'}`,
     newsEmail: 'Please type a valid email.', newsConsent: 'Tick the box to confirm you want the newsletter.', newsFail: 'We could not sign you up. Please try again.', newsDone: 'You are on the list. Thank you!',
     sending: 'Sending…', subject: n => `Quote request: ${n}`,
-    sendFail: 'We could not send your request. Please try again or ', mailLink: 'email us directly',
+    humanFail: 'The security check did not pass. Please try again or ', sendFail: 'We could not send your request. Please try again or ', mailLink: 'email us directly',
     consultKind: 'Free consultation', consultSubject: b => `Free consultation: ${b}`
   },
   pt: {
@@ -35,7 +35,7 @@
     fixSummary: (u, s, bad) => `Fiz a análise grátis a ${u} e tive ${s}/100. Gostava de ajuda para corrigir:\n${bad || '- (sem pontos listados)'}`,
     newsEmail: 'Escreve um email válido.', newsConsent: 'Marca a caixa para confirmar que queres receber a newsletter.', newsFail: 'Não conseguimos inscrever-te. Tenta outra vez.', newsDone: 'Estás na lista. Obrigado!',
     sending: 'A enviar…', subject: n => `Pedido de orçamento: ${n}`,
-    sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ', mailLink: 'envia-nos um email',
+    humanFail: 'A verificação de segurança falhou. Tenta outra vez ou ', sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ', mailLink: 'envia-nos um email',
     consultKind: 'Consultoria gratuita', consultSubject: n => `Consultoria gratuita: ${n}`
   },
   de: {
@@ -53,7 +53,7 @@
 ${bad || '- (keine Punkte aufgeführt)'}`,
     newsEmail: 'Bitte gib eine gültige E-Mail-Adresse ein.', newsConsent: 'Bitte bestätige mit dem Häkchen, dass du den Newsletter erhalten möchtest.', newsFail: 'Die Anmeldung hat nicht funktioniert. Bitte versuche es erneut.', newsDone: 'Du bist angemeldet. Danke!',
     sending: 'Wird gesendet…', subject: n => `Angebotsanfrage: ${n}`,
-    sendFail: 'Die Anfrage konnte nicht gesendet werden. Bitte versuche es erneut oder ', mailLink: 'schreib uns direkt',
+    humanFail: 'Die Sicherheitsprüfung ist fehlgeschlagen. Bitte versuche es erneut oder ', sendFail: 'Die Anfrage konnte nicht gesendet werden. Bitte versuche es erneut oder ', mailLink: 'schreib uns direkt',
     consultKind: 'Beratung', consultSubject: b => `Beratung: ${b}`
   },
   es: {
@@ -71,7 +71,7 @@ ${bad || '- (keine Punkte aufgeführt)'}`,
 ${bad || '- (sin puntos)'}`,
     newsEmail: 'Escribe un email válido.', newsConsent: 'Marca la casilla para confirmar que quieres recibir la newsletter.', newsFail: 'No hemos podido suscribirte. Inténtalo de nuevo.', newsDone: 'Ya estás en la lista. ¡Gracias!',
     sending: 'Enviando…', subject: n => `Solicitud de presupuesto: ${n}`,
-    sendFail: 'No hemos podido enviar la solicitud. Inténtalo de nuevo o ', mailLink: 'escríbenos directamente',
+    humanFail: 'La verificación de seguridad ha fallado. Inténtalo de nuevo o ', sendFail: 'No hemos podido enviar la solicitud. Inténtalo de nuevo o ', mailLink: 'escríbenos directamente',
     consultKind: 'Consultoría', consultSubject: b => `Consultoría: ${b}`
   }
   }[lang];
@@ -223,14 +223,38 @@ ${bad || '- (sin puntos)'}`,
   });
   const trackEvent = event => { if (window.dataLayer?.gtmLoaded) dataLayer.push({ event }); }; // conversions, only with consent
   // Both forms post to Web3Forms, which emails contacto@destaca.site; on failure we offer a filled-in mailto
-  const wire = (fm, build, onDone) => fm.addEventListener('submit', async e => {
+  // Cloudflare Turnstile: loads only when someone starts filling a form; /api/verificar confirms the token before sending
+  let tsKey;
+  const tsLib = () => tsKey ??= fetch('/api/verificar').then(r => r.json()).then(({ sitekey }) => sitekey && new Promise((ok, no) => {
+    const sc = d.createElement('script'); sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; sc.async = true;
+    sc.onload = () => ok(sitekey); sc.onerror = no; d.head.append(sc);
+  })).catch(() => '');
+  const human = fm => fm.ts ??= tsLib().then(key => {
+    if (!key) return null;
+    const box = el('div', 'ts-box'); $('button[type="submit"]', fm).before(box);
+    let wait = [];
+    const id = turnstile.render(box, { sitekey: key, language: lang, appearance: 'interaction-only', action: fm.id,
+      callback: t => { wait.forEach(f => f(t)); wait = []; }, 'expired-callback': () => turnstile.reset(id) });
+    return { id, token: () => turnstile.getResponse(id) || new Promise(f => { wait.push(f); setTimeout(() => f(''), 20000); }) };
+  });
+  const verify = async fm => {
+    const w = await human(fm);
+    if (!w) return true;
+    const token = await w.token();
+    const r = token && await fetch('/api/verificar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) }).catch(() => null);
+    turnstile.reset(w.id);
+    return !!(r && r.ok);
+  };
+  const wire = (fm, build, onDone) => (fm.addEventListener('focusin', () => human(fm), { once: true }), fm.addEventListener('submit', async e => {
     e.preventDefault();
     if (fm.botcheck.checked) return;
     const { subject, fields } = build(new FormData(fm));
     const st = $('.lead-status', fm), sb = $('button[type="submit"]', fm);
     const mailto = `mailto:contacto@destaca.site?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join('\n'))}`;
     st.classList.remove('err'); st.textContent = T.sending; sb.setAttribute('aria-busy', 'true');
+    let fail = T.sendFail;
     try {
+      if (!(await verify(fm))) { fail = T.humanFail; throw new Error(); }
       const r = await fetch('https://api.web3forms.com/submit', {
         method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ access_key: fm.dataset.key, subject, from_name: 'destaca.site', replyto: fields.Email, ...fields })
@@ -240,11 +264,11 @@ ${bad || '- (sin puntos)'}`,
       st.textContent = '';
       onDone();
     } catch {
-      st.textContent = T.sendFail;
+      st.textContent = fail;
       const a = el('a', null, T.mailLink); a.href = mailto;
       st.append(a, '.'); st.classList.add('err');
     } finally { sb.removeAttribute('aria-busy'); }
-  });
+  }));
   wire(form, f => {
     const fields = { Nome: f.get('nome'), Empresa: f.get('empresa') || '-', Email: f.get('email'), Telefone: f.get('telefone') || '-', Site: f.get('site') || '-', 'Tópicos': f.getAll('topicos').join(', ') || '-', Plano: f.get('plano'), Resumo: f.get('resumo'), 'Língua': lang.toUpperCase() };
     return { fields, subject: T.subject(fields.Empresa !== '-' ? `${fields.Nome} (${fields.Empresa})` : fields.Nome) };
