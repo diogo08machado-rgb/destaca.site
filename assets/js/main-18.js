@@ -18,7 +18,7 @@
     fixSummary: (u, s, bad) => `I ran the free analysis on ${u} and scored ${s}/100. I'd like help fixing:\n${bad || '- (no issues listed)'}`,
     newsEmail: 'Please type a valid email.', newsConsent: 'Tick the box to confirm you want the newsletter.', newsFail: 'We could not sign you up. Please try again.', newsDone: 'You are on the list. Thank you!',
     sending: 'Sending…', subject: n => `Quote request: ${n}`,
-    humanFail: 'The security check did not pass. Please try again or ', sendFail: 'We could not send your request. Please try again or ', mailLink: 'email us directly',
+    humanAsk: 'Please confirm the Cloudflare check above the button.', humanFail: 'The security check did not pass. Please try again or ', sendFail: 'We could not send your request. Please try again or ', mailLink: 'email us directly',
     consultKind: 'Free consultation', consultSubject: b => `Free consultation: ${b}`
   },
   pt: {
@@ -35,7 +35,7 @@
     fixSummary: (u, s, bad) => `Fiz a análise grátis a ${u} e tive ${s}/100. Gostava de ajuda para corrigir:\n${bad || '- (sem pontos listados)'}`,
     newsEmail: 'Escreve um email válido.', newsConsent: 'Marca a caixa para confirmar que queres receber a newsletter.', newsFail: 'Não conseguimos inscrever-te. Tenta outra vez.', newsDone: 'Estás na lista. Obrigado!',
     sending: 'A enviar…', subject: n => `Pedido de orçamento: ${n}`,
-    humanFail: 'A verificação de segurança falhou. Tenta outra vez ou ', sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ', mailLink: 'envia-nos um email',
+    humanAsk: 'Confirma a verificação da Cloudflare acima do botão.', humanFail: 'A verificação de segurança falhou. Tenta outra vez ou ', sendFail: 'Não conseguimos enviar o pedido. Tenta outra vez ou ', mailLink: 'envia-nos um email',
     consultKind: 'Consultoria gratuita', consultSubject: n => `Consultoria gratuita: ${n}`
   },
   de: {
@@ -53,7 +53,7 @@
 ${bad || '- (keine Punkte aufgeführt)'}`,
     newsEmail: 'Bitte gib eine gültige E-Mail-Adresse ein.', newsConsent: 'Bitte bestätige mit dem Häkchen, dass du den Newsletter erhalten möchtest.', newsFail: 'Die Anmeldung hat nicht funktioniert. Bitte versuche es erneut.', newsDone: 'Du bist angemeldet. Danke!',
     sending: 'Wird gesendet…', subject: n => `Angebotsanfrage: ${n}`,
-    humanFail: 'Die Sicherheitsprüfung ist fehlgeschlagen. Bitte versuche es erneut oder ', sendFail: 'Die Anfrage konnte nicht gesendet werden. Bitte versuche es erneut oder ', mailLink: 'schreib uns direkt',
+    humanAsk: 'Bitte bestätige die Cloudflare-Prüfung über dem Button.', humanFail: 'Die Sicherheitsprüfung ist fehlgeschlagen. Bitte versuche es erneut oder ', sendFail: 'Die Anfrage konnte nicht gesendet werden. Bitte versuche es erneut oder ', mailLink: 'schreib uns direkt',
     consultKind: 'Beratung', consultSubject: b => `Beratung: ${b}`
   },
   es: {
@@ -71,7 +71,7 @@ ${bad || '- (keine Punkte aufgeführt)'}`,
 ${bad || '- (sin puntos)'}`,
     newsEmail: 'Escribe un email válido.', newsConsent: 'Marca la casilla para confirmar que quieres recibir la newsletter.', newsFail: 'No hemos podido suscribirte. Inténtalo de nuevo.', newsDone: 'Ya estás en la lista. ¡Gracias!',
     sending: 'Enviando…', subject: n => `Solicitud de presupuesto: ${n}`,
-    humanFail: 'La verificación de seguridad ha fallado. Inténtalo de nuevo o ', sendFail: 'No hemos podido enviar la solicitud. Inténtalo de nuevo o ', mailLink: 'escríbenos directamente',
+    humanAsk: 'Confirma la verificación de Cloudflare encima del botón.', humanFail: 'La verificación de seguridad ha fallado. Inténtalo de nuevo o ', sendFail: 'No hemos podido enviar la solicitud. Inténtalo de nuevo o ', mailLink: 'escríbenos directamente',
     consultKind: 'Consultoría', consultSubject: b => `Consultoría: ${b}`
   }
   }[lang];
@@ -234,8 +234,8 @@ ${bad || '- (sin puntos)'}`,
     const box = el('div', 'ts-box'); $('button[type="submit"]', fm).before(box);
     let wait = [];
     const id = turnstile.render(box, { sitekey: key, language: lang, appearance: 'interaction-only', action: fm.id,
-      callback: t => { wait.forEach(f => f(t)); wait = []; }, 'expired-callback': () => turnstile.reset(id) });
-    return { id, token: () => turnstile.getResponse(id) || new Promise(f => { wait.push(f); setTimeout(() => f(''), 20000); }) };
+      callback: t => { wait.forEach(f => f(t)); wait = []; }, 'before-interactive-callback': () => { const st = $('.lead-status', fm); st.classList.remove('err'); st.textContent = T.humanAsk; }, 'expired-callback': () => turnstile.reset(id) });
+    return { id, token: () => turnstile.getResponse(id) || new Promise(f => { wait.push(f); setTimeout(() => f(''), 120000); }) };
   });
   const verify = async fm => {
     const w = await human(fm);
