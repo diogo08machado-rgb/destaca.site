@@ -238,7 +238,8 @@ module.exports = async function handler(req, res) {
   const fail = (code, key) => send(code, { error: ERR[key][li] });
   let input = (q.get('url') || '').trim();
   if (!input || input.length > 300) return fail(400, 'empty');
-  if (!/^https?:\/\//i.test(input)) input = 'https://' + input;
+  // always try https first (falls back to http below), so an old http:// link isn't scored as "no HTTPS"
+  input = 'https://' + input.replace(/^https?:\/\//i, '');
   let target;
   try { target = new URL(input); } catch { return fail(400, 'invalid'); }
   if (!target.hostname.includes('.')) return fail(400, 'invalid');
