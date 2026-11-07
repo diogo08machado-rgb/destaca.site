@@ -250,9 +250,12 @@ module.exports = async function handler(req, res) {
       if (target.protocol === 'https:' && !['blocked', 'domain'].includes(e.key)) { target.protocol = 'http:'; page = await get(target.href); } else throw e;
     }
     // a bot wall or an error page is not the site: say so instead of scoring it
+    // some walls answer 200 ("Checking your browser..."), so look at the <title> too
+    const title = (page.text.match(/<title[^>]*>([^<]*)/i) || [])[1] || '';
+    const wall = page.headers.get('cf-mitigated') || /just a moment|attention required|checking your browser|security checkpoint|captcha/i.test(page.status >= 400 ? page.text.slice(0, 5000) : title);
+    if (wall) return fail(422, 'shield');
     if (page.status >= 400) {
-      const wall = page.headers.get('cf-mitigated') || /just a moment|attention required|checking your browser|security checkpoint|captcha/i.test(page.text.slice(0, 5000));
-      if (wall || page.status === 403 || page.status === 429) return fail(422, 'shield');
+      if (page.status === 403 || page.status === 429) return fail(422, 'shield');
       return send(422, { error: ERR.status[li].replace('{code}', page.status) });
     }
     if (!/html/i.test(page.headers.get('content-type') || '')) return fail(422, 'html');
