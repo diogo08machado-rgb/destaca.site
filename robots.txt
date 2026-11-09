@@ -1,6 +1,7 @@
 # Todos os motores de pesquisa e assistentes de IA são bem-vindos
 User-agent: *
 Allow: /
+Disallow: /crm
 
 # Pesquisa do ChatGPT, OpenAI, Claude, Perplexity, Gemini, Bing e Copilot
 User-agent: OAI-SearchBot
@@ -12,5 +13,6 @@ User-agent: PerplexityBot
 User-agent: Google-Extended
 User-agent: Bingbot
 Allow: /
+Disallow: /crm
 
 Sitemap: https://destaca.site/sitemap.xml

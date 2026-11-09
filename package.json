@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "dependencies": {
+    "@neondatabase/serverless": "1.1.0",
+    "imapflow": "2.9.1",
+    "mailparser": "3.12.4",
+    "nodemailer": "10.2.1"
+  }
+}

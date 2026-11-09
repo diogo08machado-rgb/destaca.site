@@ -4,3 +4,4 @@ base.html
 
 .vercel
 .claude/
+node_modules/

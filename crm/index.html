@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>CRM Destaca</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+@font-face { font-family: "Hanken Grotesk"; src: url(/assets/fonts/hanken-grotesk-latin.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+:root {
+  --bg: #f1f3f4; --card: #fff; --ink: #050f16; --mut: #5c6770; --line: #dfe3e6; --or: #ff5a14; --or-soft: #fff0e8;
+  --ok: #11804a; --bad: #c0262d; --r: 10px;
+  --s-lead: #6b7680; --s-contactado: #2f6fd6; --s-respondeu: #8a4bd6; --s-proposta: #d68a00; --s-cliente: #11804a; --s-perdido: #8b8f93; --s-nao_contactar: #c0262d;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 "Hanken Grotesk", system-ui, sans-serif; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 7px 12px; }
+button:hover { border-color: #b9c0c5; }
+button.pri { background: var(--ink); color: #fff; border-color: var(--ink); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+input, select, textarea { border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; background: #fff; width: 100%; }
+textarea { resize: vertical; min-height: 90px; }
+:focus-visible { outline: 2px solid var(--or); outline-offset: 1px; }
+[hidden] { display: none !important; }
+
+@font-face { font-family: "Instrument Serif"; src: url(/assets/fonts/instrument-serif-normal.woff2) format("woff2"); font-display: swap; }
+#login { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px;
+  background: radial-gradient(900px 500px at 85% -10%, rgba(255,122,31,.28), transparent 60%), radial-gradient(700px 400px at -10% 110%, rgba(255,122,31,.12), transparent 60%), var(--ink); }
+.lwrap { width: min(400px, 100%); display: grid; gap: 22px; }
+.brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 700; font-size: 20px; letter-spacing: -.01em; justify-self: center; }
+.brand svg { width: 36px; height: 36px; }
+.brand span { font-size: 24px; letter-spacing: -.02em; } .brand b { color: var(--or); }
+.card { background: var(--card); border-radius: 18px; padding: 28px; display: grid; gap: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+.card .step { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--or); }
+.card h1 { margin: -4px 0 0; font: 400 40px/1.05 "Instrument Serif", Georgia, serif; letter-spacing: -.01em; }
+.card .lead { margin: -6px 0 4px; color: var(--mut); font-size: 15px; }
+.card label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: #26333c; }
+.card input { padding: 11px 12px; border-radius: 10px; font-size: 16px; transition: border-color .15s, box-shadow .15s; }
+.card input:focus { outline: none; border-color: var(--or); box-shadow: 0 0 0 3px rgba(255,90,20,.18); }
+.creds { display: grid; gap: 14px; }
+.card.step2 .creds { display: none; }
+.pw { position: relative; display: block; }
+.pw input { padding-right: 84px; }
+.eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 0; background: none; color: var(--mut); font-size: 13px; font-weight: 600; padding: 6px 8px; }
+.eye:hover { color: var(--ink); }
+.code { text-align: center; font: 600 26px/1 ui-monospace, Consolas, monospace !important; letter-spacing: .35em; padding: 12px !important; }
+.go { background: var(--or); border: 0; color: #fff; font-weight: 700; font-size: 16px; padding: 13px; border-radius: 10px; margin-top: 4px; transition: filter .15s, transform .1s; }
+.go:hover { filter: brightness(1.05); } .go:active { transform: translateY(1px); }
+.go:disabled { opacity: .7; }
+.back { border: 0; background: none; color: var(--mut); font-size: 14px; padding: 2px; justify-self: center; }
+.back:hover { color: var(--ink); }
+.err:empty { display: none; }
+.err { background: #fdecec; color: var(--bad); border: 1px solid #f3c3c5; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.howto { margin: 0; padding-left: 20px; font-size: 14px; color: #26333c; display: grid; gap: 4px; }
+#qr { display: grid; place-items: center; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid var(--line); margin: 12px 0 4px; }
+#qr img { width: 184px; height: 184px; image-rendering: pixelated; }
+.manual { font-size: 13px; color: var(--mut); } .manual summary { cursor: pointer; }
+.manual p { margin: 6px 0 0; }
+.mono { font-family: ui-monospace, Consolas, monospace; font-size: 14px; word-break: break-all; color: var(--ink); background: var(--bg); padding: 8px; border-radius: 8px; }
+.foot { margin: 0; display: flex; gap: 8px; align-items: center; justify-content: center; color: #8ea0ac; font-size: 13px; }
+.foot svg { width: 14px; height: 14px; }
+@media (max-width: 420px) { .card { padding: 22px 18px; } .card h1 { font-size: 34px; } }
+@media (prefers-reduced-motion: reduce) { .card input, .go { transition: none; } }
+
+header { position: sticky; top: 0; z-index: 5; background: var(--ink); color: #fff; display: flex; gap: 12px; align-items: center; padding: 10px 16px; }
+header b { font-size: 18px; letter-spacing: -.02em; white-space: nowrap; } header b span { color: var(--or); }
+header .sp { flex: 1; } header small { color: #9fb0bb; } header button { background: transparent; color: #fff; border-color: #2a4152; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; margin-left: 12px; }
+.tabs button { border: 0; color: #b7c4cc; padding: 7px 12px; border-radius: 8px; font-weight: 600; }
+.tabs button:hover { color: #fff; background: #0c1923; }
+.tabs button[aria-current=page] { color: #fff; background: #132530; }
+.tabs i { font-style: normal; background: var(--or); color: #fff; border-radius: 999px; padding: 0 7px; font-size: 12px; margin-left: 4px; }
+.tabs i:empty { display: none; }
+.vh { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+.inline { display: flex; gap: 6px; align-items: center; font-size: 14px; color: var(--mut); }
+.search { width: min(340px, 100%); }
+.fgrid { columns: 3 320px; column-gap: 12px; }
+.fbox { break-inside: avoid; margin-bottom: 12px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.fbox h3 { margin: 0; padding: 12px 14px; font-size: 14px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid var(--line); }
+.fbox h3 i { font-style: normal; margin-left: auto; color: var(--mut); font-variant-numeric: tabular-nums; }
+.fbox p.e { margin: 0; padding: 12px 14px; color: var(--mut); font-size: 14px; }
+.fbox ul { list-style: none; margin: 0; padding: 0; max-height: 420px; overflow: auto; }
+.fbox li { padding: 9px 14px; border-bottom: 1px solid var(--line); cursor: pointer; display: flex; gap: 10px; align-items: baseline; }
+.fbox li:last-child { border-bottom: 0; } .fbox li:hover { background: var(--or-soft); }
+.fbox li b { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fbox li small { color: var(--mut); white-space: nowrap; }
+.new { display: inline-block; background: var(--or); color: #fff; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 1px 7px; margin-left: 6px; vertical-align: 1px; }
+.hint { color: var(--mut); font-size: 14px; margin: 0 0 12px; } .hint code { background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 0 4px; }
+.tplgrid { display: grid; grid-template-columns: 260px 1fr; gap: 12px; align-items: start; }
+.tpllist { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.tpllist li { padding: 11px 14px; border-bottom: 1px solid var(--line); cursor: pointer; font-weight: 600; }
+.tpllist li:last-child { border-bottom: 0; } .tpllist li:hover, .tpllist li[aria-current=true] { background: var(--or-soft); }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 10px; }
+.panel label { display: grid; gap: 4px; font-size: 13px; color: var(--mut); }
+.danger { color: var(--bad); }
+.compose { display: grid; gap: 10px; }
+.compose label { display: grid; gap: 3px; font-size: 13px; color: var(--mut); }
+.compose .replying { font-size: 13px; background: var(--or-soft); border-radius: 8px; padding: 7px 10px; display: flex; gap: 8px; align-items: center; }
+.compose .replying button { margin-left: auto; border: 0; background: none; padding: 0 4px; color: var(--mut); }
+.go-sm { background: var(--or); color: #fff; border-color: var(--or); font-weight: 700; }
+.tl .acts { margin-top: 6px; display: flex; gap: 6px; }
+.tl .acts button { font-size: 13px; padding: 4px 10px; }
+.tl li.unread { background: linear-gradient(90deg, var(--or-soft), transparent); }
+@media (max-width: 860px) { .tplgrid { grid-template-columns: 1fr; } header { flex-wrap: wrap; } .tabs { order: 5; width: 100%; margin: 0; } }
+main { padding: 16px; max-width: 1280px; margin: 0 auto; }
+.stages { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.stages button { display: flex; gap: 8px; align-items: center; }
+.stages button[aria-pressed=true] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.stages i { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, #999); display: inline-block; flex: none; }
+.bar { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
+.bar select { width: auto; } .bar .sp { flex: 1; }
+table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: var(--r); overflow: hidden; border: 1px solid var(--line); }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--mut); font-weight: 600; background: #fafbfb; }
+tbody tr { cursor: pointer; } tbody tr:hover { background: var(--or-soft); }
+td small { color: var(--mut); display: block; }
+.pill { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; white-space: nowrap; }
+.num { font-variant-numeric: tabular-nums; color: var(--mut); white-space: nowrap; }
+.more { display: block; margin: 12px auto; }
+
+#drawer { position: fixed; inset: 0 0 0 auto; width: min(640px, 100%); background: var(--bg); box-shadow: -10px 0 40px rgba(5,15,22,.18); z-index: 10; overflow-y: auto; }
+#drawer .top { position: sticky; top: 0; background: var(--card); border-bottom: 1px solid var(--line); padding: 12px 16px; display: flex; gap: 10px; align-items: center; z-index: 1; }
+#drawer .top h2 { margin: 0; font-size: 19px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#drawer section { background: var(--card); margin: 12px 16px; border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
+#drawer h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--mut); }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid label { display: grid; gap: 3px; font-size: 13px; color: var(--mut); }
+.grid .full { grid-column: 1 / -1; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+.stop { background: #fdecec; color: var(--bad); border: 1px solid #f3c3c5; border-radius: 8px; padding: 9px 12px; margin-bottom: 10px; font-weight: 600; }
+.tl { list-style: none; margin: 0; padding: 0; }
+.tl li { padding: 10px 0 10px 18px; border-left: 2px solid var(--line); position: relative; }
+.tl li::before { content: ""; position: absolute; left: -6px; top: 15px; width: 10px; height: 10px; border-radius: 50%; background: var(--c, #999); border: 2px solid var(--card); }
+.tl .h { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.tl .h b { font-size: 14px; } .tl .h small { color: var(--mut); }
+.tl .h .x { margin-left: auto; border: 0; padding: 0 4px; color: var(--mut); background: none; }
+.tl .s { font-weight: 600; margin-top: 2px; }
+.tl pre { white-space: pre-wrap; font: inherit; margin: 4px 0 0; color: #26333c; max-height: 12em; overflow: hidden; }
+.tl pre.open { max-height: none; }
+.tl a { color: var(--or); }
+.issues { margin: 0; padding-left: 18px; color: #26333c; font-size: 14px; }
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 9px 16px; border-radius: 8px; z-index: 20; }
+@media (max-width: 720px) {
+  header small, .hide-m { display: none; }
+  .grid { grid-template-columns: 1fr; }
+  th:nth-child(2), td:nth-child(2), th:nth-child(5), td:nth-child(5) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="login" hidden>
+  <div class="lwrap">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#ff7a1f"/><circle cx="27" cy="39" r="11" fill="none" stroke="#050f16" stroke-width="7"/><rect x="34.5" y="11" width="7" height="39" fill="#050f16"/><rect x="47" y="43" width="7" height="7" fill="#050f16"/></svg>
+      <span>Destaca<b>.</b>CRM</span>
+    </div>
+    <form id="loginForm" class="card" autocomplete="on">
+      <p class="step" id="stepLabel">Passo 1 de 2</p>
+      <h1 id="loginTitle">Entrar</h1>
+      <p class="lead" id="loginHint">Área reservada à equipa Destaca.</p>
+      <div class="creds">
+        <label>Utilizador<input name="username" autocomplete="username" required autocapitalize="none" spellcheck="false"></label>
+        <label>Palavra-passe
+          <span class="pw"><input name="password" type="password" autocomplete="current-password" required>
+          <button type="button" class="eye" id="eye" aria-label="Mostrar palavra-passe">Mostrar</button></span>
+        </label>
+      </div>
+      <div id="setup" hidden>
+        <ol class="howto">
+          <li>Abra o <b>Google Authenticator</b> ou o <b>Microsoft Authenticator</b> no telemóvel.</li>
+          <li>Toque em <b>+</b> e leia este código QR.</li>
+          <li>Escreva abaixo o código de 6 dígitos que aparece.</li>
+        </ol>
+        <div id="qr"></div>
+        <details class="manual"><summary>Não consigo ler o QR</summary>
+          <p>Na app, escolha «Introduzir chave» e escreva:</p><p class="mono" id="secret"></p>
+          <p><a id="otpLink" href="#">Ou abra diretamente na app (no telemóvel)</a></p>
+        </details>
+      </div>
+      <label id="codeRow" hidden>Código da app<input name="code" class="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 ]{6,7}" maxlength="7" placeholder="000000"></label>
+      <div class="err" id="loginErr" role="alert"></div>
+      <button class="go" type="submit">Continuar</button>
+      <button type="button" class="back" id="back" hidden>← Voltar</button>
+    </form>
+    <p class="foot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V7a3 3 0 0 0-6 0v3Z" fill="currentColor"/></svg>Protegido com palavra-passe e código no telemóvel</p>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <b>Destaca<span>.</span>CRM</b>
+    <nav class="tabs" aria-label="Secções">
+      <button data-view="follow" aria-current="page">A seguir <i id="followN"></i></button>
+      <button data-view="list">Empresas</button>
+      <button data-view="tpl">Modelos</button>
+    </nav>
+    <span class="sp"></span>
+    <button id="sync" title="Ir buscar emails novos ao Gmail">↻ Gmail <small id="syncAt"></small></button>
+    <small id="me"></small>
+    <button id="logout">Sair</button>
+  </header>
+
+  <main id="vFollow">
+    <div class="bar"><h2 class="vh">A seguir</h2><span class="sp"></span>
+      <label class="inline">Sem resposta há <select id="days"><option>5</option><option selected>7</option><option>10</option><option>14</option></select> dias</label></div>
+    <div id="follow" class="fgrid"></div>
+  </main>
+
+  <main id="vTpl" hidden>
+    <div class="bar"><h2 class="vh">Modelos de email</h2><span class="sp"></span><button class="pri" id="newTpl">+ Novo modelo</button></div>
+    <p class="hint">Campos que se preenchem sozinhos: <code>{empresa}</code> <code>{dominio}</code> <code>{site}</code> <code>{cidade}</code> <code>{setor}</code> <code>{email}</code>. Uma linha só com «—» começa o rodapé em letra pequena (por exemplo, o aviso REMOVER). A assinatura é acrescentada automaticamente.</p>
+    <div class="tplgrid"><ul id="tplList" class="tpllist"></ul>
+      <form id="tplForm" class="panel" hidden>
+        <label>Nome<input name="name" required></label>
+        <label>Assunto<input name="subject"></label>
+        <label>Texto<textarea name="body" rows="16" required></textarea></label>
+        <div class="row"><button class="pri" type="submit">Guardar modelo</button><button type="button" id="delTpl" class="danger">Apagar</button></div>
+      </form>
+    </div>
+  </main>
+
+  <main id="vList" hidden>
+    <div class="stages" id="stages"></div>
+    <div class="bar">
+      <input id="q" type="search" class="search" placeholder="Procurar empresa, email, telefone, cidade…" aria-label="Procurar">
+      <select id="src" aria-label="Origem"><option value="">Todas as origens</option></select>
+      <select id="sort" aria-label="Ordenar">
+        <option value="last">Atividade mais recente</option>
+        <option value="score">Pontuação do site (pior primeiro)</option>
+        <option value="name">Nome</option>
+      </select>
+      <span class="sp"></span>
+      <button class="pri" id="new">+ Nova empresa</button>
+    </div>
+    <table>
+      <thead><tr><th>Empresa</th><th>Setor · cidade</th><th>Estado</th><th>Última atividade</th><th>Registos</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <button class="more" id="more" hidden>Mostrar mais</button>
+  </main>
+</div>
+
+<aside id="drawer" hidden aria-label="Ficha da empresa"></aside>
+
+<script>
+const STAGES = { lead: 'Lead', contactado: 'Contactado', respondeu: 'Respondeu', proposta: 'Proposta', cliente: 'Cliente', perdido: 'Perdido', nao_contactar: 'Não contactar' };
+const KINDS = {
+  email_out: ['Email enviado', '#2f6fd6'], email_in: ['Email recebido', '#8a4bd6'], rascunho: ['Rascunho', '#9aa3aa'],
+  chamada: ['Chamada', '#0f8a8a'],
+  proposta: ['Proposta', '#d68a00'], reuniao: ['Reunião', '#5b5bd6'], trabalho: ['Trabalho feito', '#11804a'], nota: ['Nota', '#6b7680'], estado: ['Mudança de estado', '#c5cbd0'],
+};
+const SRC = { leads: 'Prospeção (email)', chamadas: 'Lista de chamadas', 'lista-150': 'Lista 150', manual: 'Manual', agente: 'Agente' };
+const GMAIL = 'contacto@destaca.site';
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (d) => d ? new Date(d).toLocaleString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+const ago = (d) => { if (!d) return '—'; const s = (Date.now() - new Date(d)) / 1000; return s < 3600 ? 'agora' : s < 86400 ? `há ${Math.floor(s / 3600)} h` : s < 86400 * 60 ? `há ${Math.floor(s / 86400)} d` : new Date(d).toLocaleDateString('pt-PT'); };
+const toast = (m) => { const t = Object.assign(document.createElement('div'), { className: 'toast', textContent: m }); document.body.append(t); setTimeout(() => t.remove(), 2600); };
+const local = (d = new Date()) => new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+
+async function api(a, opts = {}) {
+  const r = await fetch(`/api/crm?a=${a}${opts.qs || ''}`, { method: opts.method || (opts.body ? 'POST' : 'GET'), headers: opts.body ? { 'Content-Type': 'application/json' } : {}, body: opts.body ? JSON.stringify(opts.body) : undefined, credentials: 'same-origin' });
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401) { showLogin(); throw new Error('login'); }
+  if (!r.ok) { toast(j.error || 'Erro'); throw new Error(j.error); }
+  return j;
+}
+
+// ---- login: password, then the 6-digit code from the authenticator app (first time: scan the QR to set it up)
+function step(n, setup) {
+  const f = $('#loginForm');
+  f.classList.toggle('step2', n === 2);
+  $('#stepLabel').textContent = `Passo ${n} de 2`;
+  $('#loginTitle').textContent = n === 1 ? 'Entrar' : setup ? 'Ligar o telemóvel' : 'Código de acesso';
+  $('#loginHint').textContent = n === 1 ? 'Área reservada à equipa Destaca.' : setup ? 'Só é preciso fazer isto na primeira entrada.' : 'Escreva o código de 6 dígitos que está na app autenticadora.';
+  $('#setup').hidden = !setup; $('#codeRow').hidden = n === 1; $('#back').hidden = n === 1;
+  f.querySelector('.go').textContent = n === 1 ? 'Continuar' : 'Entrar';
+  f.code.value = ''; f.code.required = n === 2;
+  (n === 1 ? (f.username.value ? f.password : f.username) : f.code).focus();
+}
+function showLogin(msg) {
+  $('#app').hidden = true; $('#drawer').hidden = true; $('#login').hidden = false;
+  $('#loginForm').password.value = '';
+  step(1);
+  $('#loginErr').textContent = msg || '';
+}
+$('#back').onclick = () => { $('#loginErr').textContent = ''; $('#loginForm').password.value = ''; step(1); };
+$('#eye').onclick = () => {
+  const p = $('#loginForm').password, show = p.type === 'password';
+  p.type = show ? 'text' : 'password';
+  $('#eye').textContent = show ? 'Esconder' : 'Mostrar';
+  $('#eye').setAttribute('aria-label', show ? 'Esconder palavra-passe' : 'Mostrar palavra-passe');
+};
+function loadQr() {
+  return window.qrcode ? Promise.resolve() : new Promise((ok, ko) => document.head.append(Object.assign(document.createElement('script'), {
+    src: 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js', onload: ok, onerror: ko })));
+}
+$('#loginForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const f = e.target, btn = f.querySelector('.go'), label = btn.textContent;
+  btn.disabled = true; btn.textContent = 'A verificar…'; $('#loginErr').textContent = '';
+  try {
+    const r = await fetch('/api/crm?a=login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ username: f.username.value, password: f.password.value, code: f.code.value || undefined }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { $('#loginErr').textContent = j.error || 'Não foi possível entrar.'; f.code.value = ''; return; }
+    if (j.setup) {
+      $('#secret').textContent = j.setup.secret.match(/.{1,4}/g).join(' ');
+      $('#otpLink').href = j.setup.uri;
+      try { await loadQr(); const qr = qrcode(0, 'M'); qr.addData(j.setup.uri); qr.make(); $('#qr').innerHTML = qr.createImgTag(5, 0, 'Código QR para a app autenticadora'); }
+      catch { $('#qr').textContent = 'Não foi possível mostrar o QR: use a chave abaixo.'; }
+      step(2, true); return;
+    }
+    if (j.need_code) { step(2); return; }
+    f.reset(); start();
+  } finally { btn.disabled = false; if (btn.textContent === 'A verificar…') btn.textContent = label; }
+};
+$('#logout').onclick = async () => { await fetch('/api/crm?a=logout', { method: 'POST', credentials: 'same-origin' }); showLogin(); };
+
+// ---- views
+let all = [], stage = '', shown = 200, templates = [], view = 'follow';
+function show(v) {
+  view = v;
+  for (const [id, name] of [['vFollow', 'follow'], ['vList', 'list'], ['vTpl', 'tpl']]) $('#' + id).hidden = name !== v;
+  document.querySelectorAll('.tabs button').forEach((b) => b.dataset.view === v ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+  if (v === 'follow') loadFollow();
+  if (v === 'tpl') loadTemplates().then(renderTpl);
+}
+document.querySelector('.tabs').onclick = (e) => { const b = e.target.closest('[data-view]'); if (b) show(b.dataset.view); };
+
+async function start() {
+  try { const me = await api('me'); $('#me').textContent = me.username; } catch { return; }
+  $('#login').hidden = true; $('#app').hidden = false;
+  await load();
+  show('follow');
+  const id = new URLSearchParams(location.hash.slice(1)).get('e');
+  if (id) open(Number(id));
+  sync(false);
+}
+async function load() {
+  all = await api('companies');
+  const srcs = [...new Set(all.map((c) => c.source).filter(Boolean))];
+  const cur = $('#src').value;
+  $('#src').innerHTML = '<option value="">Todas as origens</option>' + srcs.map((s) => `<option value="${esc(s)}">${esc(SRC[s] || s)}</option>`).join('');
+  $('#src').value = cur;
+  render();
+}
+const refresh = async () => { await load(); if (view === 'follow') loadFollow(); };
+
+// ---- Gmail sync
+async function sync(force) {
+  const b = $('#sync');
+  b.disabled = true; $('#syncAt').textContent = 'a ler…';
+  try {
+    const r = await fetch(`/api/crm?a=sync${force ? '&force=1' : ''}`, { credentials: 'same-origin' });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { $('#syncAt').textContent = r.status === 503 ? 'por ligar' : 'erro'; b.title = j.error || 'Erro ao ler o Gmail'; if (force) toast(j.error || 'Erro ao ler o Gmail'); return; }
+    b.title = 'Ir buscar emails novos ao Gmail';
+    $('#syncAt').textContent = ago(j.synced_at);
+    if (j.added || j.merged) { toast(`${j.added + j.merged} email(s) novos no CRM`); await refresh(); }
+    else if (force) toast('Sem emails novos');
+  } finally { b.disabled = false; }
+}
+$('#sync').onclick = () => sync(true);
+
+// ---- "A seguir"
+async function loadFollow() {
+  const f = await api('followups', { qs: `&days=${$('#days').value}` });
+  const box = (title, color, list, line, empty) => `<section class="fbox"><h3><span class="dot" style="--c:${color}"></span>${title}<i>${list.length}</i></h3>
+    ${list.length ? `<ul>${list.map((c) => `<li data-id="${c.id}"><b>${esc(c.name)}</b>${line(c)}</li>`).join('')}</ul>` : `<p class="e">${empty}</p>`}</section>`;
+  $('#follow').innerHTML =
+    box('Responder', 'var(--or)', f.responder, (c) => `${c.unread ? '<span class="new">nova</span>' : ''}<small>${ago(c.at)}</small>`, 'Nenhuma resposta à espera.') +
+    box('Lembretes para hoje', '#5b5bd6', f.lembretes, (c) => `<small>${esc(c.note || '')} · ${new Date(c.at).toLocaleDateString('pt-PT')}</small>`, 'Sem lembretes. Marque-os na ficha de cada empresa.') +
+    box('Propostas em aberto', 'var(--s-proposta)', f.propostas, (c) => `<small>${ago(c.at)}</small>`, 'Sem propostas em aberto.') +
+    box(`Sem resposta há mais de ${$('#days').value} dias`, 'var(--s-contactado)', f.sem_resposta, (c) => `<small>${c.n > 1 ? `${c.n} emails · ` : ''}${ago(c.at)}</small>`, 'Ninguém à espera de seguimento.');
+  const n = f.responder.length + f.lembretes.length;
+  $('#followN').textContent = n || '';
+}
+$('#follow').onclick = (e) => { const li = e.target.closest('li[data-id]'); if (li) open(Number(li.dataset.id)); };
+$('#days').onchange = loadFollow;
+
+// ---- list
+function filtered() {
+  const q = $('#q').value.trim().toLowerCase(), src = $('#src').value, sort = $('#sort').value;
+  let list = all.filter((c) => (!src || c.source === src) && (!q || [c.name, c.email, c.phone, c.city, c.domain, c.category].join(' ').toLowerCase().includes(q)));
+  const counts = {}; list.forEach((c) => counts[c.stage] = (counts[c.stage] || 0) + 1);
+  if (stage) list = list.filter((c) => c.stage === stage);
+  if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+  if (sort === 'score') list.sort((a, b) => (a.score ?? 999) - (b.score ?? 999));
+  return { list, counts };
+}
+function render() {
+  const { list, counts } = filtered(), total = Object.values(counts).reduce((a, b) => a + b, 0);
+  $('#stages').innerHTML = `<button aria-pressed="${!stage}" data-s="">Todas <i>${total}</i></button>` +
+    Object.entries(STAGES).map(([k, v]) => `<button aria-pressed="${stage === k}" data-s="${k}"><span class="dot" style="--c:var(--s-${k})"></span>${v} <i>${counts[k] || 0}</i></button>`).join('');
+  $('#rows').innerHTML = list.slice(0, shown).map((c) => `<tr data-id="${c.id}">
+    <td><b>${esc(c.name)}</b>${c.unread ? '<span class="new">nova resposta</span>' : ''}<small>${esc(c.email || c.phone || c.domain || '')}</small></td>
+    <td>${esc(c.category || '')}<small>${esc((c.city || '').split('|')[0])}</small></td>
+    <td><span class="pill"><span class="dot" style="--c:var(--s-${c.stage})"></span>${STAGES[c.stage] || c.stage}</span></td>
+    <td class="num">${ago(c.last_at)}</td><td class="num">${c.n || ''}</td></tr>`).join('') || '<tr><td colspan="5">Nada encontrado.</td></tr>';
+  $('#more').hidden = list.length <= shown;
+}
+$('#stages').onclick = (e) => { const b = e.target.closest('button'); if (b) { stage = b.dataset.s; shown = 200; render(); } };
+$('#rows').onclick = (e) => { const tr = e.target.closest('tr[data-id]'); if (tr) open(Number(tr.dataset.id)); };
+$('#more').onclick = () => { shown += 200; render(); };
+['q', 'src', 'sort'].forEach((id) => $('#' + id).addEventListener('input', () => { shown = 200; render(); }));
+$('#new').onclick = () => drawer({ id: 0, name: '', stage: 'lead', events: [] });
+
+// ---- templates
+const FORBIDDEN = /gr[aá]tis|gratuit|sem custo/i;
+async function loadTemplates() { templates = await api('templates'); return templates; }
+let tplSel = null;
+function renderTpl() {
+  $('#tplList').innerHTML = templates.map((t) => `<li data-id="${t.id}" aria-current="${t.id === tplSel}">${esc(t.name)}</li>`).join('') || '<li>Sem modelos.</li>';
+  const t = templates.find((x) => x.id === tplSel);
+  const f = $('#tplForm');
+  f.hidden = tplSel === null;
+  if (f.hidden) return;
+  f.name.value = t?.name || ''; f.subject.value = t?.subject || ''; f.body.value = t?.body || '';
+  $('#delTpl').hidden = !t;
+}
+$('#tplList').onclick = (e) => { const li = e.target.closest('li[data-id]'); if (li) { tplSel = Number(li.dataset.id); renderTpl(); } };
+$('#newTpl').onclick = () => { tplSel = 0; renderTpl(); $('#tplForm').name.focus(); };
+$('#tplForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const f = e.target, body = { id: tplSel || undefined, name: f.name.value, subject: f.subject.value, body: f.body.value };
+  if (FORBIDDEN.test(body.subject + body.body)) return toast('Tire «grátis/gratuito/sem custo» do modelo (risco de spam)');
+  const r = await api('templates', { body });
+  tplSel = r.id; await loadTemplates(); renderTpl(); toast('Modelo guardado');
+};
+$('#delTpl').onclick = async () => {
+  if (!confirm('Apagar este modelo?')) return;
+  await api('templates', { method: 'DELETE', qs: `&id=${tplSel}` });
+  tplSel = null; await loadTemplates(); renderTpl();
+};
+// Fills {empresa}, {dominio}… from the company.
+const shortName = (n) => { let s = String(n || '').split(/\s+[-–|]\s+|,/)[0].replace(/\b(Lda|S\.?A|Unipessoal)\.?$/i, '').trim(); if (s === s.toUpperCase() && s.length > 5) s = s.toLowerCase().replace(/(^|\s)\S/g, (x) => x.toUpperCase()); return s; };
+const fillTpl = (text, c) => String(text || '').replace(/\{(\w+)\}/g, (m, k) => ({
+  empresa: shortName(c.name), dominio: c.domain || '', site: c.website || '', cidade: (c.city || '').split('|')[0].trim(), setor: c.category || '', email: c.email || '',
+}[k] ?? m));
+
+// ---- company drawer
+async function open(id) { drawer(await api('company', { qs: `&id=${id}` })); history.replaceState(null, '', `#e=${id}`); }
+function close() { $('#drawer').hidden = true; history.replaceState(null, '', location.pathname); }
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#drawer').hidden) close(); });
+
+function drawer(c) {
+  const d = $('#drawer'), blocked = c.stage === 'nao_contactar';
+  // issues: list of {label, detail} from the analyser, or older leads with a plain «a; b; c» text
+  if (typeof c.issues === 'string') try { c.issues = JSON.parse(c.issues); } catch { c.issues = c.issues.split(/;\s*/).filter(Boolean).map((label) => ({ label })); }
+  if (!Array.isArray(c.issues)) c.issues = null;
+  const f = (k, label, type = 'text', cls = '') => `<label class="${cls}">${label}<input name="${k}" type="${type}" value="${esc(c[k])}"></label>`;
+  const manual = Object.entries(KINDS).filter(([k]) => !['estado', 'email_out', 'email_in', 'rascunho'].includes(k));
+  d.innerHTML = `
+    <div class="top"><h2>${esc(c.name || 'Nova empresa')}</h2>
+      ${c.id ? `<select id="stage" aria-label="Estado" style="width:auto">${Object.entries(STAGES).map(([k, v]) => `<option value="${k}" ${k === c.stage ? 'selected' : ''}>${v}</option>`).join('')}</select>` : ''}
+      <button id="x" aria-label="Fechar">✕</button></div>
+    ${c.id ? `<section id="mailbox">
+      <h3>Email</h3>
+      ${blocked ? '<div class="stop">Pediu para não ser contactada (REMOVER). Não enviar mais mensagens.</div>'
+        : !c.email ? '<p class="hint">Sem email. Acrescente-o em «Dados» para poder escrever.</p>'
+        : `<div class="compose">
+          <div class="replying" id="replying" hidden></div>
+          <div class="grid">
+            <label>Para<input id="mTo" type="email" value="${esc(c.email)}"></label>
+            <label>Modelo<select id="mTpl"><option value="">— escrever de raiz —</option></select></label>
+            <label class="full">Assunto<input id="mSubj"></label>
+            <label class="full">Texto<textarea id="mBody" rows="9" placeholder="Olá, …&#10;&#10;A assinatura da Destaca é acrescentada automaticamente."></textarea></label>
+          </div>
+          <div class="row"><button class="go-sm" id="mSend">Enviar email</button><small class="num">Sai de contacto@destaca.site e fica registado aqui.</small></div>
+        </div>`}
+    </section>
+    <section>
+      <h3>Registar outra atividade</h3>
+      <div class="grid">
+        <label>Tipo<select id="kind">${manual.map(([k, [v]]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
+        <label>Quando<input id="at" type="datetime-local" value="${local()}"></label>
+        <label class="full">Assunto / resumo<input id="subj"></label>
+        <label class="full">Texto<textarea id="body" placeholder="Notas da chamada, da reunião, o que foi feito…"></textarea></label>
+      </div>
+      <div class="row"><button class="pri" id="save">Guardar registo</button></div>
+    </section>` : ''}
+    <section>
+      <h3>Dados</h3>
+      <form id="form" class="grid">
+        ${f('name', 'Nome', 'text', 'full')}${f('email', 'Email', 'email')}${f('phone', 'Telefone', 'tel')}
+        ${f('website', 'Site', 'url')}${f('category', 'Setor')}${f('city', 'Cidade')}
+        <label>Lembrar em<input name="follow_up_at" type="date" value="${esc(String(c.follow_up_at || '').slice(0, 10))}"></label>
+        <label>Lembrar de quê<input name="follow_up_note" value="${esc(c.follow_up_note)}" placeholder="Ex.: ligar a saber da proposta"></label>
+        <label class="full">Notas<textarea name="notes">${esc(c.notes)}</textarea></label>
+      </form>
+      <div class="row"><button id="saveC">${c.id ? 'Guardar dados' : 'Criar empresa'}</button>
+        ${c.website ? `<a href="${esc(c.website)}" target="_blank" rel="noopener">Abrir site</a>` : ''}
+        ${c.email ? `<a href="https://mail.google.com/mail/?authuser=${GMAIL}#search/${encodeURIComponent(c.email)}" target="_blank" rel="noopener">Conversa no Gmail</a>` : ''}
+        ${c.score != null ? `<span class="num">Análise: ${c.score}/100</span>` : ''}</div>
+      ${c.issues?.length ? `<details style="margin-top:10px"><summary>Problemas encontrados no site (${c.issues.length})</summary><ul class="issues">${c.issues.map((i) => `<li><b>${esc(i.label)}</b>${i.detail ? `: ${esc(i.detail)}` : ''}</li>`).join('')}</ul></details>` : ''}
+    </section>
+    ${c.id ? `<section><h3>Linha do tempo (${c.events.filter((e) => e.kind !== 'estado').length})</h3><ul class="tl">${c.events.map((e) => {
+      const [label, color] = KINDS[e.kind] || [e.kind, '#999'];
+      return `<li style="--c:${color}" class="${e.unread ? 'unread' : ''}"><div class="h"><b>${label}</b><small>${fmt(e.at)}${e.by_user ? ' · ' + esc(e.by_user) : ''}</small>
+        ${e.kind !== 'estado' ? `<button class="x" data-del="${e.id}" aria-label="Apagar registo" title="Apagar registo">✕</button>` : ''}</div>
+        ${e.subject ? `<div class="${e.kind === 'estado' ? 'num' : 's'}">${esc(e.subject)}</div>` : ''}
+        ${e.body ? `<pre>${esc(e.body)}</pre>` : ''}
+        ${e.kind === 'email_in' && !blocked && c.email ? `<div class="acts"><button data-reply="${e.id}">Responder</button>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Ver no Gmail</a>` : ''}</div>`
+          : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Ver no Gmail</a>` : ''}</li>`;
+    }).join('') || '<li>Ainda sem registos.</li>'}</ul></section>` : ''}`;
+  d.hidden = false; d.scrollTop = 0;
+
+  $('#x').onclick = close;
+  $('#saveC').onclick = async () => {
+    const body = Object.fromEntries(new FormData($('#form')));
+    if (!body.name.trim()) return toast('Falta o nome');
+    if (body.website) try { body.domain = new URL(body.website).hostname.replace(/^www\./, ''); } catch { }
+    const r = await api('company', { body: { id: c.id || undefined, ...body, source: c.id ? undefined : 'manual' } });
+    toast('Guardado'); await refresh(); open(r.id);
+  };
+  if (!c.id) return;
+  $('#stage').onchange = async (e) => { await api('company', { body: { id: c.id, stage: e.target.value } }); toast('Estado atualizado'); await refresh(); open(c.id); };
+  $('#save').onclick = async () => {
+    if (!$('#subj').value.trim() && !$('#body').value.trim()) return toast('Escreva um assunto ou texto');
+    await api('event', { body: { company_id: c.id, kind: $('#kind').value, at: new Date($('#at').value || Date.now()).toISOString(), subject: $('#subj').value.trim(), body: $('#body').value.trim() } });
+    toast('Registado'); await refresh(); open(c.id);
+  };
+  d.querySelectorAll('pre').forEach((p) => p.onclick = () => p.classList.toggle('open'));
+  d.querySelectorAll('[data-del]').forEach((b) => b.onclick = async () => {
+    if (!confirm('Apagar este registo do CRM? (o email no Gmail não é apagado)')) return;
+    await api('event', { method: 'DELETE', qs: `&id=${b.dataset.del}` }); await refresh(); open(c.id);
+  });
+
+  // email composer
+  if (blocked || !c.email) return;
+  let replyTo = null;
+  const fillTplList = () => { $('#mTpl').innerHTML = '<option value="">— escrever de raiz —</option>' + templates.map((t) => `<option value="${t.id}">${esc(t.name)}</option>`).join(''); };
+  (templates.length ? Promise.resolve() : loadTemplates()).then(fillTplList);
+  $('#mTpl').onchange = (e) => {
+    const t = templates.find((x) => x.id === Number(e.target.value));
+    if (!t) return;
+    if (($('#mBody').value.trim()) && !confirm('Substituir o texto que já escreveu pelo modelo?')) { e.target.value = ''; return; }
+    if (!replyTo || !$('#mSubj').value) $('#mSubj').value = fillTpl(t.subject, c);
+    $('#mBody').value = fillTpl(t.body, c);
+  };
+  d.querySelectorAll('[data-reply]').forEach((b) => b.onclick = () => {
+    const ev = c.events.find((x) => x.id === Number(b.dataset.reply));
+    replyTo = ev.id;
+    $('#mTo').value = ev.from_addr || c.email;
+    $('#mSubj').value = /^re:/i.test(ev.subject || '') ? ev.subject : `Re: ${ev.subject || ''}`;
+    $('#replying').hidden = false;
+    $('#replying').innerHTML = `A responder a «${esc((ev.subject || '').slice(0, 60))}» de ${fmt(ev.at)}<button aria-label="Cancelar resposta">✕</button>`;
+    $('#replying button').onclick = () => { replyTo = null; $('#replying').hidden = true; $('#mTo').value = c.email; };
+    $('#mailbox').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('#mBody').focus();
+  });
+  $('#mSend').onclick = async () => {
+    const to = $('#mTo').value.trim(), subject = $('#mSubj').value.trim(), body = $('#mBody').value.trim();
+    if (!subject || !body) return toast('Falta o assunto ou o texto');
+    if (FORBIDDEN.test(subject + body)) return toast('Tire «grátis/gratuito/sem custo» do texto (risco de spam)');
+    if (/\[[^\]]*\]/.test(body) && !confirm('O texto ainda tem partes entre [ ] por preencher. Enviar assim?')) return;
+    if (!confirm(`Enviar este email para ${to}?`)) return;
+    const b = $('#mSend'); b.disabled = true; b.textContent = 'A enviar…';
+    try {
+      await api('send', { body: { company_id: c.id, to, subject, body, reply_to: replyTo || undefined } });
+      toast('Email enviado'); await refresh(); open(c.id);
+    } catch { b.disabled = false; b.textContent = 'Enviar email'; }
+  };
+}
+
+start();
+</script>
+
+</body>
+</html>
