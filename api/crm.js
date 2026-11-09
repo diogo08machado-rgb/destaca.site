@@ -287,10 +287,8 @@ async function syncMail({ force } = {}) {
   return { added, merged, read: msgs.length, notified: fresh.length, synced_at: started };
 }
 
-// Phone notifications. Two channels, both free; failing to notify never breaks the sync.
-// 1) Web Push from the CRM itself (shows as "Destaca CRM" with the Destaca logo; on iPhone the CRM must be added to the home screen).
-//    VAPID keys are derived from DATABASE_URL, so there is nothing to configure.
-// 2) ntfy (older channel, see prospeccao/crm-notificacoes.mjs), kept for phones that have not turned on the CRM notifications yet.
+// Phone notifications: Web Push from the CRM itself (shows as "Destaca CRM" with the Destaca logo; on iPhone the CRM
+// must be added to the home screen). VAPID keys are derived from DATABASE_URL. Failing to notify never breaks the sync.
 let vapidPub;
 function vapid() {
   if (vapidPub) return vapidPub;
@@ -309,16 +307,10 @@ async function pushTo(sub, payload, urgency = 'normal') {
     return false;
   }
 }
-const ntfyTopic = () => `destaca-crm-${createHmac('sha256', process.env.DATABASE_URL || '').update('crm-ntfy').digest('hex').slice(0, 20)}`;
 async function notify(title, message, click, priority = 4) {
   const subs = await q('select sub from push_subs').catch(() => []);
   const sent = await Promise.all(subs.map((s) => pushTo(s.sub, { title, body: message, url: click }, priority >= 5 ? 'high' : 'normal')));
-  try {
-    const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(8000),
-      body: JSON.stringify({ topic: ntfyTopic(), title, message, click, priority, tags: ['email'], icon: 'https://destaca.site/icon-512.png' }) });
-    if (!r.ok) console.error('ntfy', r.status);
-    return r.ok || sent.some(Boolean);
-  } catch (e) { console.error('ntfy', e.message); return sent.some(Boolean); }
+  return sent.some(Boolean);
 }
 
 // Sends an email (or a reply) to a company and records it. Refuses "não contactar" and the spam words.
