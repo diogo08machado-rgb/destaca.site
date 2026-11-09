@@ -1,0 +1,19 @@
+# Clock for the CRM's scheduled e-mails (destaca.site/crm → Envios): every 5 minutes it asks the CRM to send what is due.
+# The key lives in the repo secret CRM_CRON_KEY (get it with: node ../prospeccao/crm-cron-key.mjs). It can only trigger sending.
+# GitHub may run scheduled jobs a few minutes late; that is fine for cold e-mails.
+name: CRM envios programados
+on:
+  schedule:
+    - cron: '*/5 5-21 * * *' # UTC (Lisbon is UTC in winter, UTC+1 in summer)
+  workflow_dispatch:
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Enviar emails agendados
+        env:
+          KEY: ${{ secrets.CRM_CRON_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then echo "Falta o segredo CRM_CRON_KEY"; exit 0; fi
+          curl -fsS --max-time 280 -H "Authorization: Bearer $KEY" "https://destaca.site/api/crm?a=tick"

@@ -103,6 +103,32 @@ header .sp { flex: 1; } header small { color: #9fb0bb; } header button { backgro
 .tl .acts { margin-top: 6px; display: flex; gap: 6px; }
 .tl .acts button { font-size: 13px; padding: 4px 10px; }
 .tl li.unread { background: linear-gradient(90deg, var(--or-soft), transparent); }
+.sendgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 12px; align-items: start; }
+.ph { margin: 6px 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--mut); }
+.chk { display: flex !important; flex-direction: row; gap: 8px; align-items: center; align-self: end; padding-bottom: 8px; color: var(--ink) !important; }
+.chk input { width: auto; }
+.picked { list-style: none; margin: 0; padding: 0; max-height: 300px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+.picked:empty { display: none; }
+.picked li { display: flex; gap: 8px; align-items: center; padding: 7px 10px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.picked li:last-child { border-bottom: 0; }
+.picked li span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.picked li small { color: var(--mut); }
+.picked li button { border: 0; background: none; padding: 0 4px; color: var(--mut); }
+.slots { display: grid; gap: 6px; }
+.slots .slot { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.slots .slot input { width: auto; }
+.slots .slot input[type=number] { width: 70px; }
+.slots .slot button { border: 0; background: none; color: var(--mut); }
+.sum { margin: 4px 0 0; font-size: 14px; background: var(--or-soft); border-radius: 8px; padding: 9px 12px; }
+.sum:empty { display: none; }
+.obx { margin-top: 10px; font-size: 14px; }
+.obx td small { display: block; color: var(--mut); }
+.obx .acts2 { white-space: nowrap; text-align: right; }
+.obx .acts2 button { font-size: 12px; padding: 3px 8px; }
+.st { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+.st-agendado { background: #e8f0fd; color: #2f6fd6; } .st-enviado { background: #e6f4ec; color: var(--ok); }
+.st-erro { background: #fdecec; color: var(--bad); } .st-cancelado { background: #eef0f1; color: var(--mut); } .st-a { background: #fff4e0; color: #b36b00; }
+@media (max-width: 1000px) { .sendgrid { grid-template-columns: 1fr; } }
 @media (max-width: 860px) { .tplgrid { grid-template-columns: 1fr; } header { flex-wrap: wrap; } .tabs { order: 5; width: 100%; margin: 0; } }
 main { padding: 16px; max-width: 1280px; margin: 0 auto; }
 .stages { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -196,6 +222,7 @@ td small { color: var(--mut); display: block; }
     <nav class="tabs" aria-label="Secções">
       <button data-view="follow" aria-current="page">A seguir <i id="followN"></i></button>
       <button data-view="list">Empresas</button>
+      <button data-view="send">Envios <i id="sendN"></i></button>
       <button data-view="tpl">Modelos</button>
     </nav>
     <span class="sp"></span>
@@ -208,6 +235,38 @@ td small { color: var(--mut); display: block; }
     <div class="bar"><h2 class="vh">A seguir</h2><span class="sp"></span>
       <label class="inline">Sem resposta há <select id="days"><option>5</option><option selected>7</option><option>10</option><option>14</option></select> dias</label></div>
     <div id="follow" class="fgrid"></div>
+  </main>
+
+  <main id="vSend" hidden>
+    <div class="bar"><h2 class="vh">Envios programados</h2></div>
+    <div class="sendgrid">
+      <form id="plan" class="panel">
+        <h3 class="ph">1. Que email e para quem</h3>
+        <div class="grid">
+          <label>Modelo<select name="tpl" required></select></label>
+          <label>Quantas empresas<input name="n" type="number" min="1" max="100" value="10"></label>
+          <label>Origem<select name="source"><option value="">Todas</option><option value="leads">Prospeção (email)</option><option value="lista-150">Lista 150</option></select></label>
+          <label>Cidade (opcional)<input name="city" placeholder="Ex.: Braga"></label>
+          <label class="full">Setor (opcional)<input name="category" placeholder="Ex.: contabilidade"></label>
+        </div>
+        <div class="row"><button type="button" id="pick">Escolher empresas</button><small class="num">Só leads nunca contactadas, com email geral do site. Piores sites primeiro.</small></div>
+        <ul id="picked" class="picked"></ul>
+        <h3 class="ph">2. Quando</h3>
+        <div class="grid">
+          <label>A partir de<input name="start_date" type="date" required></label>
+          <label class="chk"><input name="weekdays_only" type="checkbox" checked> Só dias úteis</label>
+        </div>
+        <div id="slots" class="slots"></div>
+        <div class="row"><button type="button" id="addSlot">+ Horário</button><small class="num">Cada email sai com 2 a 5 minutos de intervalo. Máximo 40 por dia.</small></div>
+        <p id="planSum" class="sum"></p>
+        <div class="row"><button class="go-sm" type="submit" id="doSchedule" disabled>Agendar envios</button></div>
+      </form>
+      <section class="panel">
+        <div class="row" style="margin:0"><h3 class="ph" style="margin:0">Fila</h3><span class="sp" style="flex:1"></span><button type="button" id="cancelAll" class="danger">Cancelar todos os agendados</button></div>
+        <p id="clockInfo" class="hint" style="margin:8px 0 0"></p>
+        <table class="obx"><thead><tr><th>Quando</th><th>Empresa</th><th>Estado</th><th></th></tr></thead><tbody id="obx"></tbody></table>
+      </section>
+    </div>
   </main>
 
   <main id="vTpl" hidden>
@@ -325,7 +384,8 @@ $('#logout').onclick = async () => { await fetch('/api/crm?a=logout', { method: 
 let all = [], stage = '', shown = 200, templates = [], view = 'follow';
 function show(v) {
   view = v;
-  for (const [id, name] of [['vFollow', 'follow'], ['vList', 'list'], ['vTpl', 'tpl']]) $('#' + id).hidden = name !== v;
+  for (const [id, name] of [['vFollow', 'follow'], ['vList', 'list'], ['vSend', 'send'], ['vTpl', 'tpl']]) $('#' + id).hidden = name !== v;
+  if (v === 'send') openSend();
   document.querySelectorAll('.tabs button').forEach((b) => b.dataset.view === v ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
   if (v === 'follow') loadFollow();
   if (v === 'tpl') loadTemplates().then(renderTpl);
@@ -337,6 +397,7 @@ async function start() {
   $('#login').hidden = true; $('#app').hidden = false;
   await load();
   show('follow');
+  api('outbox').then((o) => { $('#sendN').textContent = o.filter((x) => x.status === 'agendado').length || ''; }).catch(() => {});
   const id = new URLSearchParams(location.hash.slice(1)).get('e');
   if (id) open(Number(id));
   sync(false);
@@ -442,6 +503,110 @@ const shortName = (n) => { let s = String(n || '').split(/\s+[-–|]\s+|,/)[0].r
 const fillTpl = (text, c) => String(text || '').replace(/\{(\w+)\}/g, (m, k) => ({
   empresa: shortName(c.name), dominio: c.domain || '', site: c.website || '', cidade: (c.city || '').split('|')[0].trim(), setor: c.category || '', email: c.email || '',
 }[k] ?? m));
+
+// ---- scheduled sending
+let picked = [];
+const DAYS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+const tomorrow = () => { const d = new Date(); d.setDate(d.getDate() + 1); return local(d).slice(0, 10); };
+function slotRow(time = '09:00', count = 5) {
+  const el = Object.assign(document.createElement('div'), { className: 'slot' });
+  el.innerHTML = `Às <input type="time" value="${time}" aria-label="Hora"> enviar <input type="number" min="1" max="40" value="${count}" aria-label="Quantos"> emails <button type="button" aria-label="Tirar horário">✕</button>`;
+  el.querySelector('button').onclick = () => { el.remove(); planSummary(); };
+  el.addEventListener('input', planSummary);
+  $('#slots').append(el);
+}
+const slotsVal = () => [...document.querySelectorAll('#slots .slot')].map((s) => ({ time: s.querySelector('[type=time]').value, count: Number(s.querySelector('[type=number]').value) }));
+async function openSend() {
+  const f = $('#plan');
+  await loadTemplates();
+  const cur = f.tpl.value;
+  f.tpl.innerHTML = templates.map((t) => `<option value="${t.id}">${esc(t.name)}</option>`).join('');
+  f.tpl.value = cur || templates.find((t) => t.name === 'Primeiro contacto')?.id || '';
+  if (!f.start_date.value) f.start_date.value = tomorrow();
+  if (!$('#slots').children.length) { slotRow('09:00', 5); slotRow('14:00', 5); }
+  loadOutbox();
+}
+function renderPicked() {
+  const t = templates.find((x) => x.id === Number($('#plan').tpl.value));
+  $('#picked').innerHTML = picked.map((c, i) => `<li><span><b>${esc(c.name)}</b> · <small>${esc(c.email)}${c.score != null ? ` · ${c.score}/100` : ''}</small></span>
+    <button type="button" data-prev="${i}" title="Ver o email">Ver</button><button type="button" data-rm="${i}" aria-label="Tirar da lista">✕</button></li>`).join('');
+  planSummary();
+  return t;
+}
+$('#pick').onclick = async () => {
+  const f = $('#plan');
+  picked = await api('candidates', { qs: `&n=${f.n.value}&source=${encodeURIComponent(f.source.value)}&city=${encodeURIComponent(f.city.value)}&category=${encodeURIComponent(f.category.value)}` });
+  if (!picked.length) toast('Não há leads por contactar com esses filtros');
+  renderPicked();
+};
+$('#picked').onclick = (e) => {
+  const rm = e.target.closest('[data-rm]'), pv = e.target.closest('[data-prev]');
+  if (rm) { picked.splice(Number(rm.dataset.rm), 1); renderPicked(); }
+  if (pv) {
+    const c = picked[Number(pv.dataset.prev)], t = templates.find((x) => x.id === Number($('#plan').tpl.value));
+    alert(`Para: ${c.email}\nAssunto: ${fillTpl(t?.subject, c)}\n\n${fillTpl(t?.body, c)}`);
+  }
+};
+function planSummary() {
+  const f = $('#plan'), slots = slotsVal().filter((s) => s.time && s.count > 0);
+  const per = slots.reduce((a, s) => a + s.count, 0), n = picked.length;
+  $('#doSchedule').disabled = !n || !per;
+  if (!n || !per) { $('#planSum').textContent = n ? 'Acrescente pelo menos um horário.' : ''; return; }
+  const d = new Date(`${f.start_date.value}T12:00`);
+  const daysNeeded = Math.ceil(n / per);
+  $('#planSum').textContent = `${n} email(s): ${slots.map((s) => `${s.count} às ${s.time}`).join(' e ')} por dia, a começar ${DAYS[d.getDay()]}, ${d.toLocaleDateString('pt-PT')}`
+    + (daysNeeded > 1 ? ` (${daysNeeded} dias${f.weekdays_only.checked ? ' úteis' : ''}).` : '.') + (per > 40 ? ' Atenção: só saem 40 por dia.' : '');
+}
+['start_date', 'weekdays_only', 'tpl'].forEach((k) => $('#plan')[k].addEventListener('input', planSummary));
+$('#addSlot').onclick = () => { slotRow('11:00', 5); planSummary(); };
+$('#plan').onsubmit = async (e) => {
+  e.preventDefault();
+  const f = e.target, t = templates.find((x) => x.id === Number(f.tpl.value));
+  if (!t) return toast('Escolha um modelo');
+  const items = picked.map((c) => ({ company_id: c.id, to: c.email, subject: fillTpl(t.subject, c), body: fillTpl(t.body, c) }));
+  const bad = items.find((it) => /\{\w+\}|\[[^\]]*\]/.test(it.subject + it.body));
+  if (bad) return toast('O modelo tem partes por preencher ({…} ou […]). Corrija-o em «Modelos».');
+  if (!confirm(`${$('#planSum').textContent}\n\nAgendar estes envios? Saem sozinhos a essas horas.`)) return;
+  const r = await api('schedule', { body: { items, start_date: f.start_date.value, slots: slotsVal(), weekdays_only: f.weekdays_only.checked } });
+  toast(`${r.scheduled} emails agendados`);
+  picked = []; renderPicked(); loadOutbox();
+};
+const ST = { agendado: ['Agendado', 'st-agendado'], 'a enviar': ['A enviar', 'st-a'], enviado: ['Enviado', 'st-enviado'], erro: ['Erro', 'st-erro'], cancelado: ['Cancelado', 'st-cancelado'] };
+let outbox = [];
+async function loadOutbox() {
+  outbox = await api('outbox');
+  const waiting = outbox.filter((o) => o.status === 'agendado').length;
+  $('#sendN').textContent = waiting || '';
+  $('#obx').innerHTML = outbox.map((o) => {
+    const [label, cls] = ST[o.status] || [o.status, ''];
+    return `<tr><td class="num">${fmt(o.status === 'enviado' ? o.sent_at : o.send_at)}</td>
+      <td><b>${esc(o.name)}</b><small>${esc(o.subject)}</small>${o.error ? `<small style="color:var(--bad)">${esc(o.error)}</small>` : ''}</td>
+      <td><span class="st ${cls}">${label}</span></td>
+      <td class="acts2">${o.status === 'agendado' ? `<button data-edit="${o.id}">Editar</button> <button data-cancel="${o.id}">Cancelar</button>` : ''}
+        ${['erro', 'cancelado'].includes(o.status) ? `<button data-retry="${o.id}">Enviar já</button>` : ''}</td></tr>`;
+  }).join('') || '<tr><td colspan="4">Nada agendado.</td></tr>';
+  const st = await api('status');
+  $('#clockInfo').textContent = st.gmail ? 'Os emails saem sozinhos à hora marcada, mesmo com o CRM fechado.' : 'Atenção: o Gmail ainda não está ligado (falta GMAIL_APP_PASSWORD na Vercel). Os agendados ficam à espera até estar.';
+}
+$('#obx').onclick = async (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  const id = Number(b.dataset.edit || b.dataset.cancel || b.dataset.retry), o = outbox.find((x) => x.id === id);
+  if (b.dataset.cancel && confirm(`Cancelar o envio para ${o.name}?`)) await api('outbox', { body: { id, action: 'cancel' } });
+  if (b.dataset.retry && confirm(`Enviar já para ${o.name}?`)) await api('outbox', { body: { id, action: 'retry' } });
+  if (b.dataset.edit) {
+    const subject = prompt('Assunto:', o.subject); if (subject === null) return;
+    const body = prompt('Texto (pode colar o texto todo):', o.body); if (body === null) return;
+    await api('outbox', { body: { id, subject, body } });
+  }
+  loadOutbox();
+};
+$('#cancelAll').onclick = async () => {
+  if (!outbox.some((o) => o.status === 'agendado')) return toast('Não há envios agendados');
+  if (!confirm('Cancelar TODOS os envios agendados?')) return;
+  await api('outbox', { body: { action: 'cancel_all' } }); loadOutbox();
+};
+// While the CRM is open it also sends what is due (the GitHub clock does it when nobody has it open).
+setInterval(() => { if (!$('#app').hidden) fetch('/api/crm?a=tick', { credentials: 'same-origin' }).then((r) => r.json()).then((j) => { if (j.sent) { toast(`${j.sent} email(s) agendados enviados`); if (view === 'send') loadOutbox(); } }).catch(() => {}); }, 60000);
 
 // ---- company drawer
 async function open(id) { drawer(await api('company', { qs: `&id=${id}` })); history.replaceState(null, '', `#e=${id}`); }

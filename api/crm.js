@@ -44,7 +44,11 @@ const ensure = () => (ready ||= `
   alter table companies add column if not exists follow_up_at date;
   alter table companies add column if not exists follow_up_note text;
   create table if not exists templates (id serial primary key, name text unique not null, subject text, body text not null, updated_at timestamptz not null default now());
-  create table if not exists settings (key text primary key, value text)
+  create table if not exists settings (key text primary key, value text);
+  create table if not exists outbox (id serial primary key, company_id int not null references companies(id) on delete cascade,
+    to_addr text not null, subject text not null, body text not null, send_at timestamptz not null, status text not null default 'agendado',
+    sent_at timestamptz, error text, message_id text, created_by text, created_at timestamptz not null default now());
+  create index if not exists outbox_due on outbox(status, send_at)
 `.split(';').filter((s) => s.trim()).reduce((p, s) => p.then(() => q(s)), Promise.resolve()).catch((e) => { ready = null; throw e; }));
 
 const apiKey = () => createHmac('sha256', process.env.DATABASE_URL || '').update('crm-api').digest('base64url');
@@ -350,6 +354,93 @@ async function followUps(days = 7) {
   };
 }
 
+// ---- Scheduled sending (outbox): pick leads, schedule by time slots, a clock (GitHub Actions / open CRM page) sends what is due.
+
+// ponytail: fixed daily cap to protect the domain's reputation; make it a setting if it ever needs changing often.
+const MAX_PER_DAY = 40;
+const cronKey = () => createHmac('sha256', process.env.DATABASE_URL || '').update('crm-cron').digest('base64url');
+const lisbonNow = () => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Lisbon', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date()).replace(',', ''); // "2026-11-09 14:05"
+
+// Leads never e-mailed and not already queued, generic company addresses only, worst site score first.
+async function candidates({ n = 10, source = '', city = '', category = '' }) {
+  return q(`select c.id,c.name,c.email,c.domain,c.website,c.city,c.category,c.score,c.source from companies c
+    where c.stage='lead' and coalesce(c.email,'')<>'' and c.email !~* '@(gmail|googlemail|hotmail|outlook|live|sapo|yahoo|icloud|msn)\\.'
+    and not exists (select 1 from events e where e.company_id=c.id and e.kind in ('email_out','email_in','rascunho'))
+    and not exists (select 1 from outbox o where o.company_id=c.id and o.status in ('agendado','a enviar','enviado'))
+    and ($1='' or c.source=$1) and ($2='' or c.city ilike '%'||$2||'%') and ($3='' or c.category ilike '%'||$3||'%')
+    order by c.score asc nulls last, c.id limit $4`, [source, city, category, Math.min(Number(n) || 10, 100)]);
+}
+
+// Turns slots like [{time:'09:00',count:5},{time:'14:00',count:5}] into Lisbon date/time + seconds offset for each e-mail.
+function plan(n, { start_date, slots, weekdays_only = true, gap = [2, 5] }) {
+  const out = [], now = lisbonNow(), clean = (slots || []).filter((s) => /^\d{2}:\d{2}$/.test(s.time) && s.count > 0).sort((a, b) => a.time.localeCompare(b.time));
+  if (!clean.length || !/^\d{4}-\d{2}-\d{2}$/.test(start_date || '')) throw fail('Escolha a data e pelo menos um horário.', 400);
+  const day = new Date(`${start_date}T12:00:00Z`);
+  for (let guard = 0; out.length < n && guard < 366; guard++, day.setUTCDate(day.getUTCDate() + 1)) {
+    const wd = day.getUTCDay(), date = day.toISOString().slice(0, 10);
+    if (weekdays_only && (wd === 0 || wd === 6)) continue;
+    for (const s of clean) {
+      if (`${date} ${s.time}` <= now) continue; // slot already passed
+      let secs = 0;
+      for (let i = 0; i < s.count && out.length < n; i++) {
+        out.push({ date, time: s.time, secs });
+        secs += Math.round((gap[0] + Math.random() * (gap[1] - gap[0])) * 60); // a few minutes apart, like a person
+      }
+    }
+  }
+  return out;
+}
+
+async function schedule(b, by) {
+  const items = (b.items || []).slice(0, 200);
+  if (!items.length) throw fail('Não há emails para agendar.', 400);
+  const times = plan(items.length, b);
+  if (times.length < items.length) throw fail('Os horários escolhidos não chegam para todos os emails.', 400);
+  const rows = [];
+  for (const [i, it] of items.entries()) {
+    const [c] = await q('select * from companies where id=$1', [it.company_id]);
+    const subject = String(it.subject || '').trim().slice(0, 300), body = String(it.body || '').trim().slice(0, 20000);
+    const to = String(it.to || c?.email || '').trim().toLowerCase();
+    if (!c || c.stage === 'nao_contactar') throw fail(`${c?.name || 'Empresa'}: não pode ser contactada.`, 409);
+    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(to)) throw fail(`${c.name}: email inválido.`, 400);
+    if (!subject || !body) throw fail(`${c.name}: falta o assunto ou o texto.`, 400);
+    if (mail.FORBIDDEN.test(subject + body)) throw fail(`${c.name}: tire «grátis/gratuito/sem custo» (risco de spam).`, 400);
+    if (/\{\w+\}|\[[^\]]*\]/.test(subject + body)) throw fail(`${c.name}: o texto ainda tem partes por preencher ({…} ou […]).`, 400);
+    rows.push([c.id, to, subject, body, times[i].date, times[i].time, times[i].secs, by]);
+  }
+  for (const r of rows) {
+    await q(`insert into outbox (company_id,to_addr,subject,body,send_at,created_by)
+      values ($1,$2,$3,$4,(($5::date + $6::time) at time zone 'Europe/Lisbon') + make_interval(secs=>$7::int),$8)`, r);
+  }
+  return { scheduled: rows.length, first: `${times[0].date} ${times[0].time}`, last: `${times.at(-1).date} ${times.at(-1).time}` };
+}
+
+// Sends what is due. Safe to call often and from several places at once (rows are claimed with SKIP LOCKED).
+async function tick() {
+  if (!mail.ready()) return { sent: 0, waiting: 'gmail' };
+  const [{ today }] = await q(`select count(*)::int as today from outbox where status='enviado' and sent_at >= date_trunc('day', now() at time zone 'Europe/Lisbon') at time zone 'Europe/Lisbon'`);
+  const room = Math.max(0, Math.min(8, MAX_PER_DAY - today));
+  if (!room) return { sent: 0, waiting: 'limite diário' };
+  const due = await q(`update outbox set status='a enviar' where id in (select id from outbox where status='agendado' and send_at<=now()
+    order by send_at limit $1 for update skip locked) returning *`, [room]);
+  let sent = 0;
+  for (const o of due) {
+    try {
+      const [c] = await q('select stage from companies where id=$1', [o.company_id]);
+      const [replied] = await q(`select 1 from events where company_id=$1 and kind='email_in' and at>$2 limit 1`, [o.company_id, o.created_at]);
+      const why = !c ? 'empresa apagada' : c.stage === 'nao_contactar' ? 'pediu REMOVER' : replied ? 'respondeu entretanto' : null;
+      if (why) { await q(`update outbox set status='cancelado', error=$2 where id=$1`, [o.id, why]); continue; }
+      const r = await sendMail({ company_id: o.company_id, to: o.to_addr, subject: o.subject, body: o.body }, `${o.created_by || 'equipa'} (agendado)`);
+      await q(`update outbox set status='enviado', sent_at=now(), message_id=$2, error=null where id=$1`, [o.id, r.event?.message_id || null]);
+      sent++;
+    } catch (e) {
+      await q(`update outbox set status='erro', error=$2 where id=$1`, [o.id, String(e.message).slice(0, 300)]);
+    }
+  }
+  await q(`update outbox set status='erro', error='envio interrompido' where status='a enviar' and send_at < now()-interval '30 minutes'`);
+  return { sent };
+}
+
 module.exports = async function handler(req, res) {
   const send = (code, body, headers = {}) => {
     res.statusCode = code;
@@ -375,6 +466,9 @@ module.exports = async function handler(req, res) {
       if (m) await q('delete from sessions where token_hash=$1', [sha(m[1])]);
       return send(200, { ok: true }, { 'Set-Cookie': cookie('', 0) });
     }
+
+    // The clock (GitHub Actions) only gets to send what is due, with its own key.
+    if (a === 'tick' && same(String(req.headers.authorization || ''), `Bearer ${cronKey()}`)) return send(200, await tick());
 
     const by = await who(req);
     if (!by) return send(401, { error: 'login' });
@@ -431,6 +525,28 @@ module.exports = async function handler(req, res) {
       return send(200, t);
     }
     if (a === 'templates' && req.method === 'DELETE') { await q('delete from templates where id=$1', [Number(url.searchParams.get('id'))]); return send(200, { ok: true }); }
+    if (a === 'tick') return send(200, await tick());
+    if (a === 'candidates') return send(200, await candidates(Object.fromEntries(url.searchParams)));
+    if (a === 'schedule' && req.method === 'POST') return send(200, await schedule(await readBody(req), by));
+    if (a === 'outbox' && req.method === 'GET') {
+      return send(200, await q(`select o.id,o.company_id,c.name,o.to_addr,o.subject,o.body,o.send_at,o.status,o.sent_at,o.error,o.created_by
+        from outbox o join companies c on c.id=o.company_id
+        where o.status in ('agendado','a enviar','erro') or o.created_at > now()-interval '30 days'
+        order by (o.status in ('agendado','a enviar')) desc, o.send_at limit 400`));
+    }
+    if (a === 'outbox' && req.method === 'POST') {
+      const b = await readBody(req);
+      if (b.action === 'cancel') await q(`update outbox set status='cancelado', error='cancelado por '||$2 where id=$1 and status in ('agendado','erro')`, [b.id, by]);
+      else if (b.action === 'retry') await q(`update outbox set status='agendado', send_at=now(), error=null where id=$1 and status in ('erro','cancelado')`, [b.id]);
+      else if (b.action === 'cancel_all') await q(`update outbox set status='cancelado', error='cancelado por '||$1 where status='agendado'`, [by]);
+      else {
+        const subject = String(b.subject || '').trim(), body = String(b.body || '').trim();
+        if (!subject || !body) return send(400, { error: 'Falta o assunto ou o texto.' });
+        if (mail.FORBIDDEN.test(subject + body)) return send(400, { error: 'Tire «grátis/gratuito/sem custo» (risco de spam).' });
+        await q(`update outbox set subject=$2, body=$3 where id=$1 and status='agendado'`, [b.id, subject, body]);
+      }
+      return send(200, { ok: true });
+    }
     if (a === 'status') { const [s] = await q("select value from settings where key='mail_synced_at'"); return send(200, { gmail: mail.ready(), synced_at: s?.value || null }); }
     // Admin actions: only with the api key (scripts in prospeccao/).
     if (a === 'import' && req.method === 'POST' && by === 'agente') return send(200, await importAll(await readBody(req)));
@@ -463,3 +579,4 @@ module.exports.totp = totp;
 module.exports.checkTotp = checkTotp;
 module.exports.checkPassword = checkPassword;
 module.exports.hashPassword = hashPassword;
+module.exports.plan = plan;

@@ -34,3 +34,15 @@ assert.strictEqual(mail.trimQuoted('REMOVER\n\nDe: contacto primario <contacto@d
 assert.deepStrictEqual(mail.formLead('Nome: Joana Silva\nEmail: joana@empresa.pt\nMensagem: quero site'), { email: 'joana@empresa.pt', name: 'Joana Silva' });
 assert.ok(mail.AUTO.test('Resposta automática: Re: Sobre o site'));
 console.log('mail ok');
+
+// scheduling: 2030-01-04 is a Friday
+const { plan } = require('./crm.js');
+const slots = [{ time: '14:00', count: 5 }, { time: '09:00', count: 5 }];
+const p10 = plan(10, { start_date: '2030-01-04', slots, gap: [2, 5] });
+assert.deepStrictEqual(p10.map((x) => `${x.date} ${x.time}`), [...Array(5).fill('2030-01-04 09:00'), ...Array(5).fill('2030-01-04 14:00')]);
+assert.ok(p10[1].secs >= 120 && p10[1].secs <= 300, 'emails a few minutes apart');
+const p12 = plan(12, { start_date: '2030-01-04', slots });
+assert.strictEqual(p12[10].date, '2030-01-07', 'weekend skipped');
+assert.strictEqual(plan(12, { start_date: '2030-01-04', slots, weekdays_only: false })[10].date, '2030-01-05');
+assert.throws(() => plan(3, { start_date: '2030-01-04', slots: [] }));
+console.log('schedule ok');
