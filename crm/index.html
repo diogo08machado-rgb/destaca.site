@@ -311,7 +311,7 @@ td small { color: var(--mut); display: block; }
         <div class="row"><button class="go-sm" type="submit" id="doSchedule" disabled>Agendar envios</button></div>
       </form>
       <section class="panel">
-        <div class="row" style="margin:0"><h3 class="ph" style="margin:0">Fila</h3><span class="sp" style="flex:1"></span><button type="button" id="cancelAll" class="danger">Cancelar todos os agendados</button></div>
+        <div class="row" style="margin:0"><h3 class="ph" style="margin:0">Fila</h3><span class="sp" style="flex:1"></span><button type="button" id="sendNow" title="Reserva: envia já todos os agendados, com 30 a 60 segundos entre cada">Enviar já</button><button type="button" id="cancelAll" class="danger">Cancelar todos os agendados</button></div>
         <p id="clockInfo" class="hint" style="margin:8px 0 0"></p>
         <table class="obx"><thead><tr><th>Quando</th><th>Empresa</th><th>Estado</th><th></th></tr></thead><tbody id="obx"></tbody></table>
       </section>
@@ -701,6 +701,13 @@ $('#obx').onclick = async (e) => {
   if (b.dataset.cancel && confirm(`Cancelar o envio para ${o.name}?`)) await api('outbox', { body: { id, action: 'cancel' } });
   if (b.dataset.retry && confirm(`Enviar já para ${o.name}?`)) await api('outbox', { body: { id, action: 'retry' } });
   loadOutbox();
+};
+$('#sendNow').onclick = async () => {
+  const n = outbox.filter((o) => o.status === 'agendado').length;
+  if (!n) return toast('Não há envios agendados');
+  if (!confirm(`Enviar já os ${n} emails agendados, com 30 a 60 segundos entre cada?\n\nEnviar muitos seguidos aumenta o risco de irem para spam. Mantenha o CRM aberto até saírem todos.`)) return;
+  const r = await api('outbox', { body: { action: 'send_now' } });
+  toast(`${r.moved} emails a sair nos próximos minutos`); loadOutbox();
 };
 $('#cancelAll').onclick = async () => {
   if (!outbox.some((o) => o.status === 'agendado')) return toast('Não há envios agendados');

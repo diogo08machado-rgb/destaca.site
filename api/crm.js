@@ -582,6 +582,12 @@ module.exports = async function handler(req, res) {
       if (b.action === 'cancel') await q(`update outbox set status='cancelado', error='cancelado por '||$2 where id=$1 and status in ('agendado','erro')`, [b.id, by]);
       else if (b.action === 'retry') await q(`update outbox set status='agendado', send_at=now(), error=null where id=$1 and status in ('erro','cancelado')`, [b.id]);
       else if (b.action === 'cancel_all') await q(`update outbox set status='cancelado', error='cancelado por '||$1 where status='agendado'`, [by]);
+      // Reserve button: everything scheduled goes out now, 30-60 s apart (still under the daily cap).
+      else if (b.action === 'send_now') {
+        const r = await q(`with x as (select id, row_number() over (order by send_at) - 1 as n from outbox where status='agendado')
+          update outbox o set send_at = now() + make_interval(secs => (x.n * 45 + floor(random() * 15))::int) from x where o.id = x.id returning o.id`);
+        return send(200, { ok: true, moved: r.length });
+      }
       else {
         const subject = String(b.subject || '').trim(), body = String(b.body || '').trim();
         if (!subject || !body) return send(400, { error: 'Falta o assunto ou o texto.' });
