@@ -282,7 +282,6 @@ td small { color: var(--mut); display: block; }
 
   <main id="vFollow">
     <div class="bar"><h2 class="vh">A seguir</h2><span class="sp"></span>
-      <button type="button" id="ntfyTest" title="Envia uma notificação de teste para os telemóveis inscritos no canal ntfy">🔔 Testar notificação</button>
       <label class="inline">Sem resposta há <select id="days"><option>5</option><option selected>7</option><option>10</option><option>14</option></select> dias</label></div>
     <div id="follow" class="fgrid"></div>
   </main>
@@ -505,8 +504,6 @@ async function loadFollow() {
 }
 $('#follow').onclick = (e) => { const li = e.target.closest('li[data-id]'); if (li) open(Number(li.dataset.id)); };
 $('#days').onchange = loadFollow;
-$('#ntfyTest').onclick = async () => { await api('notify_test', { body: {} }); toast('Notificação enviada: deve chegar ao telemóvel em segundos'); };
-
 // ---- list
 function filtered() {
   const q = $('#q').value.trim().toLowerCase(), src = $('#src').value, sort = $('#sort').value;

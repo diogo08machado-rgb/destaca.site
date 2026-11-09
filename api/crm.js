@@ -555,10 +555,6 @@ module.exports = async function handler(req, res) {
     }
     if (a === 'templates' && req.method === 'DELETE') { await q('delete from templates where id=$1', [Number(url.searchParams.get('id'))]); return send(200, { ok: true }); }
     if (a === 'tick') return send(200, await tick());
-    if (a === 'notify_test' && req.method === 'POST') {
-      const ok = await notify('✅ Notificações do CRM ligadas', `Teste enviado por ${by}. A partir de agora recebes aqui um aviso quando uma empresa escrever.`, 'https://destaca.site/crm/', 3);
-      return send(ok ? 200 : 502, ok ? { ok } : { error: 'Não foi possível enviar a notificação.' });
-    }
     if (a === 'candidates') return send(200, await candidates(Object.fromEntries(url.searchParams)));
     if (a === 'schedule' && req.method === 'POST') return send(200, await schedule(await readBody(req), by));
     if (a === 'outbox' && req.method === 'GET') {
