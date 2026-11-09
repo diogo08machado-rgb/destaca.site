@@ -224,7 +224,8 @@ const gmailLink = (messageId) => `https://mail.google.com/mail/?authuser=${mail.
 async function syncMail({ force } = {}) {
   if (!mail.ready()) throw fail('Falta a palavra-passe de app do Gmail (GMAIL_APP_PASSWORD).', 503);
   const [last] = await q(`select value from settings where key='mail_synced_at'`);
-  if (!force && last && Date.now() - new Date(last.value) < 2 * 60000) return { skipped: true, synced_at: last.value };
+  // at most once a minute (the clocks call every 2-5 min; opening the CRM also triggers a read)
+  if (!force && last && Date.now() - new Date(last.value) < 60000) return { skipped: true, synced_at: last.value };
   const started = new Date().toISOString();
   const since = last ? new Date(new Date(last.value) - 2 * 86400000) : new Date('2026-10-27');
   const msgs = await mail.fetchSince(since);
