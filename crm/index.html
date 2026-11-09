@@ -456,12 +456,13 @@ document.querySelector('.tabs').onclick = (e) => { const b = e.target.closest('[
 async function start() {
   try { const me = await api('me'); $('#me').textContent = me.username; } catch { return; }
   $('#login').hidden = true; $('#app').hidden = false;
-  await load();
+  // everything at once: the follow-up lists, the company list, the queue count and the company in the link
   show('follow');
+  load();
   api('outbox').then((o) => { $('#sendN').textContent = o.filter((x) => x.status === 'agendado').length || ''; }).catch(() => {});
   const id = new URLSearchParams(location.hash.slice(1)).get('e');
   if (id) open(Number(id));
-  sync(false);
+  setTimeout(() => sync(false), 1500); // Gmail read after the screen is filled
 }
 async function load() {
   all = await api('companies');
@@ -783,14 +784,14 @@ function drawer(c) {
     if (!body.name.trim()) return toast('Falta o nome');
     if (body.website) try { body.domain = new URL(body.website).hostname.replace(/^www\./, ''); } catch { }
     const r = await api('company', { body: { id: c.id || undefined, ...body, source: c.id ? undefined : 'manual' } });
-    toast('Guardado'); await refresh(); open(r.id);
+    toast('Guardado'); open(r.id); refresh();
   };
   if (!c.id) return;
-  $('#stage').onchange = async (e) => { await api('company', { body: { id: c.id, stage: e.target.value } }); toast('Estado atualizado'); await refresh(); open(c.id); };
+  $('#stage').onchange = async (e) => { await api('company', { body: { id: c.id, stage: e.target.value } }); toast('Estado atualizado'); open(c.id); refresh(); };
   $('#save').onclick = async () => {
     if (!$('#subj').value.trim() && !$('#body').value.trim()) return toast('Escreva um assunto ou texto');
     await api('event', { body: { company_id: c.id, kind: $('#kind').value, at: new Date($('#at').value || Date.now()).toISOString(), subject: $('#subj').value.trim(), body: $('#body').value.trim() } });
-    toast('Registado'); await refresh(); open(c.id);
+    toast('Registado'); open(c.id); refresh();
   };
   d.querySelectorAll('pre').forEach((p) => p.onclick = () => p.classList.toggle('open'));
   d.querySelectorAll('[data-look]').forEach((b) => b.onclick = () => {
@@ -799,7 +800,7 @@ function drawer(c) {
   });
   d.querySelectorAll('[data-del]').forEach((b) => b.onclick = async () => {
     if (!confirm('Apagar este registo do CRM? (o email no Gmail não é apagado)')) return;
-    await api('event', { method: 'DELETE', qs: `&id=${b.dataset.del}` }); await refresh(); open(c.id);
+    await api('event', { method: 'DELETE', qs: `&id=${b.dataset.del}` }); open(c.id); refresh();
   });
 
   // email composer
@@ -838,7 +839,7 @@ function drawer(c) {
     const b = $('#mSend'); b.disabled = true; b.textContent = 'A enviar…';
     try {
       await api('send', { body: { company_id: c.id, to, subject, body, reply_to: replyTo || undefined } });
-      toast('Email enviado'); await refresh(); open(c.id);
+      toast('Email enviado'); open(c.id); refresh();
     } catch { b.disabled = false; b.textContent = 'Enviar email'; }
   };
 }

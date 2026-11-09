@@ -18,7 +18,15 @@ const FREE_MAIL = /^(gmail|googlemail|hotmail|outlook|live|sapo|yahoo|icloud|msn
 let sql, ready;
 const db = () => (sql ||= neon(process.env.DATABASE_URL));
 const q = (text, params = []) => db().query(text, params);
-const ensure = () => (ready ||= `
+// Schema: created/updated only when SCHEMA changes (bump it after editing DDL), so a cold start costs one query, not twenty.
+const SCHEMA = '2026-11-09b';
+const ensure = () => (ready ||= (async () => {
+  const [v] = await q(`select value from settings where key='schema'`).catch(() => []);
+  if (v?.value === SCHEMA) return;
+  for (const s of DDL.split(';').filter((x) => x.trim())) await q(s);
+  await q(`insert into settings (key,value) values ('schema',$1) on conflict (key) do update set value=$1`, [SCHEMA]);
+})().catch((e) => { ready = null; throw e; }));
+const DDL = `
   create table if not exists companies (
     id serial primary key, key text unique not null, name text not null, category text, city text,
     website text, domain text, email text, phone text, instagram text, score int, issues jsonb,
@@ -48,8 +56,10 @@ const ensure = () => (ready ||= `
   create table if not exists outbox (id serial primary key, company_id int not null references companies(id) on delete cascade,
     to_addr text not null, subject text not null, body text not null, send_at timestamptz not null, status text not null default 'agendado',
     sent_at timestamptz, error text, message_id text, created_by text, created_at timestamptz not null default now());
-  create index if not exists outbox_due on outbox(status, send_at)
-`.split(';').filter((s) => s.trim()).reduce((p, s) => p.then(() => q(s)), Promise.resolve()).catch((e) => { ready = null; throw e; }));
+  create index if not exists outbox_due on outbox(status, send_at);
+  create index if not exists events_unread on events(company_id) where unread;
+  create index if not exists sessions_exp on sessions(expires_at)
+`;
 
 const apiKey = () => createHmac('sha256', process.env.DATABASE_URL || '').update('crm-api').digest('base64url');
 const same = (a, b) => a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
@@ -507,11 +517,13 @@ module.exports = async function handler(req, res) {
 
     if (a === 'me') return send(200, { username: by });
     if (a === 'companies') {
-      return send(200, await q(`select c.id,c.name,c.category,c.city,c.domain,c.website,c.email,c.phone,c.stage,c.source,c.score,c.updated_at,
-        (select max(at) from events e where e.company_id=c.id and e.kind<>'estado') as last_at,
-        (select count(*)::int from events e where e.company_id=c.id and e.kind<>'estado') as n,
-        (select count(*)::int from events e where e.company_id=c.id and e.unread) as unread, c.follow_up_at
-        from companies c order by last_at desc nulls last, c.name`));
+      // one pass over events instead of three sub-queries per company
+      return send(200, await q(`select c.id,c.name,c.category,c.city,c.domain,c.website,c.email,c.phone,c.stage,c.source,c.score,c.follow_up_at,
+        e.last_at, coalesce(e.n,0) as n, coalesce(e.unread,0) as unread
+        from companies c left join (select company_id, max(at) filter (where kind<>'estado') as last_at,
+          (count(*) filter (where kind<>'estado'))::int as n, (count(*) filter (where unread))::int as unread
+          from events group by company_id) e on e.company_id=c.id
+        order by e.last_at desc nulls last, c.name`));
     }
     if (a === 'company' && req.method === 'GET') {
       const id = Number(url.searchParams.get('id'));
