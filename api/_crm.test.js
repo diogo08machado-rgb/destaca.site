@@ -46,3 +46,10 @@ assert.strictEqual(p12[10].date, '2030-01-07', 'weekend skipped');
 assert.strictEqual(plan(12, { start_date: '2030-01-04', slots, weekdays_only: false })[10].date, '2030-01-05');
 assert.throws(() => plan(3, { start_date: '2030-01-04', slots: [] }));
 console.log('schedule ok');
+
+const built = mail.build('Olá,\n\nVejam https://destaca.site/#consultoria.\n\nCom os melhores cumprimentos,\n\n—\nAviso REMOVER <teste>');
+assert.ok(built.html.includes('<a href="https://destaca.site/#consultoria"'), 'link clickable, without the final dot');
+assert.ok(built.html.includes('Equipa Destaca') && built.html.includes('font-size:12px'), 'signature and small footer');
+assert.ok(built.html.includes('&lt;teste&gt;'), 'text is escaped');
+assert.ok(built.text.indexOf('Equipa Destaca') < built.text.indexOf('Aviso REMOVER'), 'signature before footer');
+console.log('preview ok');

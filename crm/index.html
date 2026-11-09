@@ -129,6 +129,22 @@ header .sp { flex: 1; } header small { color: #9fb0bb; } header button { backgro
 .st-agendado { background: #e8f0fd; color: #2f6fd6; } .st-enviado { background: #e6f4ec; color: var(--ok); }
 .st-erro { background: #fdecec; color: var(--bad); } .st-cancelado { background: #eef0f1; color: var(--mut); } .st-a { background: #fff4e0; color: #b36b00; }
 @media (max-width: 1000px) { .sendgrid { grid-template-columns: 1fr; } }
+.nota { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 6px; padding: 1px 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.n-lo { background: #fdecec; color: var(--bad); } .n-mid { background: #fff4e0; color: #9a5b00; } .n-hi { background: #e6f4ec; color: var(--ok); } .n-none { background: #eef0f1; color: var(--mut); }
+a.site { color: var(--mut); font-size: 12px; text-decoration: none; white-space: nowrap; } a.site:hover { color: var(--or); text-decoration: underline; }
+#modal { width: min(760px, calc(100% - 24px)); max-height: calc(100dvh - 24px); border: 0; border-radius: 14px; padding: 0; box-shadow: 0 30px 80px rgba(5,15,22,.35); display: none; flex-direction: column; }
+#modal[open] { display: flex; }
+#modal::backdrop { background: rgba(5,15,22,.55); }
+.mhead { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.mhead h2 { margin: 0; font-size: 17px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mhead button { border: 0; background: none; font-size: 16px; color: var(--mut); }
+.mmeta { padding: 10px 18px; font-size: 14px; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; border-bottom: 1px solid var(--line); background: #fafbfb; }
+.mmeta dt { color: var(--mut); } .mmeta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.medit { padding: 12px 18px; display: grid; gap: 8px; border-bottom: 1px solid var(--line); }
+.medit label { display: grid; gap: 3px; font-size: 13px; color: var(--mut); }
+.mframe { flex: 1; overflow: auto; background: #eef1f3; padding: 14px; min-height: 200px; }
+.mframe iframe { width: 100%; border: 0; background: #fff; border-radius: 8px; display: block; min-height: 260px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.mfoot { display: flex; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--line); }
 @media (max-width: 860px) { .tplgrid { grid-template-columns: 1fr; } header { flex-wrap: wrap; } .tabs { order: 5; width: 100%; margin: 0; } }
 main { padding: 16px; max-width: 1280px; margin: 0 auto; }
 .stages { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -172,7 +188,7 @@ td small { color: var(--mut); display: block; }
 @media (max-width: 720px) {
   header small, .hide-m { display: none; }
   .grid { grid-template-columns: 1fr; }
-  th:nth-child(2), td:nth-child(2), th:nth-child(5), td:nth-child(5) { display: none; }
+  .ctable th:nth-child(2), .ctable td:nth-child(2), .ctable th:nth-child(6), .ctable td:nth-child(6) { display: none; }
 }
 </style>
 </head>
@@ -189,7 +205,7 @@ td small { color: var(--mut); display: block; }
       <h1 id="loginTitle">Entrar</h1>
       <p class="lead" id="loginHint">Área reservada à equipa Destaca.</p>
       <div class="creds">
-        <label>Utilizador<input name="username" autocomplete="username" required autocapitalize="none" spellcheck="false"></label>
+        <label>Utilizador<input name="username" autocomplete="username" required autocapitalize="none" spellcheck="false" placeholder="ex.: diogo"></label>
         <label>Palavra-passe
           <span class="pw"><input name="password" type="password" autocomplete="current-password" required>
           <button type="button" class="eye" id="eye" aria-label="Mostrar palavra-passe">Mostrar</button></span>
@@ -295,8 +311,8 @@ td small { color: var(--mut); display: block; }
       <span class="sp"></span>
       <button class="pri" id="new">+ Nova empresa</button>
     </div>
-    <table>
-      <thead><tr><th>Empresa</th><th>Setor · cidade</th><th>Estado</th><th>Última atividade</th><th>Registos</th></tr></thead>
+    <table class="ctable">
+      <thead><tr><th>Empresa</th><th>Setor · cidade</th><th>Estado</th><th>Nota</th><th>Última atividade</th><th>Registos</th></tr></thead>
       <tbody id="rows"></tbody>
     </table>
     <button class="more" id="more" hidden>Mostrar mais</button>
@@ -304,6 +320,18 @@ td small { color: var(--mut); display: block; }
 </div>
 
 <aside id="drawer" hidden aria-label="Ficha da empresa"></aside>
+
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="mhead"><h2 id="mTitle">Pré-visualização</h2><button type="button" id="mClose" aria-label="Fechar">✕</button></div>
+  <div class="mmeta" id="mMeta"></div>
+  <div class="medit" id="mEdit" hidden>
+    <label>Assunto<input id="eSubj"></label>
+    <label>Texto<textarea id="eBody" rows="12"></textarea></label>
+    <div class="row" style="margin:0"><button type="button" id="eApply">Atualizar pré-visualização</button><button type="button" class="go-sm" id="eSave">Guardar alterações</button></div>
+  </div>
+  <div class="mframe"><iframe id="mFrame" title="Email como o cliente o vai ver" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></div>
+  <div class="mfoot"><button type="button" id="mEditBtn" hidden>Editar texto</button><span class="sp" style="flex:1"></span><button type="button" id="mOk" class="pri">Fechar</button></div>
+</dialog>
 
 <script>
 const STAGES = { lead: 'Lead', contactado: 'Contactado', respondeu: 'Respondeu', proposta: 'Proposta', cliente: 'Cliente', perdido: 'Perdido', nao_contactar: 'Não contactar' };
@@ -459,10 +487,11 @@ function render() {
   $('#stages').innerHTML = `<button aria-pressed="${!stage}" data-s="">Todas <i>${total}</i></button>` +
     Object.entries(STAGES).map(([k, v]) => `<button aria-pressed="${stage === k}" data-s="${k}"><span class="dot" style="--c:var(--s-${k})"></span>${v} <i>${counts[k] || 0}</i></button>`).join('');
   $('#rows').innerHTML = list.slice(0, shown).map((c) => `<tr data-id="${c.id}">
-    <td><b>${esc(c.name)}</b>${c.unread ? '<span class="new">nova resposta</span>' : ''}<small>${esc(c.email || c.phone || c.domain || '')}</small></td>
+    <td><b>${esc(c.name)}</b>${c.unread ? '<span class="new">nova resposta</span>' : ''}<small>${esc(c.email || c.phone || '')} ${siteLink(c)}</small></td>
     <td>${esc(c.category || '')}<small>${esc((c.city || '').split('|')[0])}</small></td>
     <td><span class="pill"><span class="dot" style="--c:var(--s-${c.stage})"></span>${STAGES[c.stage] || c.stage}</span></td>
-    <td class="num">${ago(c.last_at)}</td><td class="num">${c.n || ''}</td></tr>`).join('') || '<tr><td colspan="5">Nada encontrado.</td></tr>';
+    <td>${c.score != null || c.website ? nota(c.score) : ''}</td>
+    <td class="num">${ago(c.last_at)}</td><td class="num">${c.n || ''}</td></tr>`).join('') || '<tr><td colspan="6">Nada encontrado.</td></tr>';
   $('#more').hidden = list.length <= shown;
 }
 $('#stages').onclick = (e) => { const b = e.target.closest('button'); if (b) { stage = b.dataset.s; shown = 200; render(); } };
@@ -504,8 +533,45 @@ const fillTpl = (text, c) => String(text || '').replace(/\{(\w+)\}/g, (m, k) => 
   empresa: shortName(c.name), dominio: c.domain || '', site: c.website || '', cidade: (c.city || '').split('|')[0].trim(), setor: c.category || '', email: c.email || '',
 }[k] ?? m));
 
+// ---- site link, analysis score, e-mail preview
+const nota = (s) => s == null ? '<span class="nota n-none" title="Site sem análise">sem nota</span>'
+  : `<span class="nota ${s < 60 ? 'n-lo' : s < 80 ? 'n-mid' : 'n-hi'}" title="Nota da análise SEO ao site">${s}/100</span>`;
+const siteLink = (c) => { const u = c.website || (c.domain ? `https://${c.domain}` : ''); return u ? `<a class="site" href="${esc(u)}" target="_blank" rel="noopener" title="Abrir o site num separador novo">${esc(c.domain || u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))} ↗</a>` : ''; };
+document.addEventListener('click', (e) => { if (e.target.closest('a.site')) e.stopPropagation(); }, true); // a site link never opens the row behind it
+
+// Shows the e-mail exactly as it will arrive (same HTML the server sends). With onSave, the text can be edited in place.
+async function preview({ title, to, subject, body, company, onSave }) {
+  const m = $('#modal');
+  $('#mTitle').textContent = title || 'Pré-visualização';
+  const meta = () => `<dt>De</dt><dd>Destaca &lt;contacto@destaca.site&gt;</dd><dt>Para</dt><dd>${esc(to || '')}</dd><dt>Assunto</dt><dd><b>${esc(subject || '')}</b></dd>`
+    + (company ? `<dt>Empresa</dt><dd>${esc(company.name)} · ${siteLink(company)} ${nota(company.score)}</dd>` : '');
+  const render = async () => {
+    $('#mMeta').innerHTML = meta();
+    const { html } = await api('preview', { body: { body } });
+    const f = $('#mFrame');
+    f.onload = () => { try { f.style.height = f.contentDocument.documentElement.scrollHeight + 'px'; } catch { } };
+    f.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><base target="_blank"><style>body{margin:0;padding:22px;background:#fff}</style></head><body>${html}</body></html>`;
+  };
+  $('#mEdit').hidden = true; $('#mEditBtn').hidden = !onSave;
+  $('#mEditBtn').onclick = () => { $('#eSubj').value = subject; $('#eBody').value = body; $('#mEdit').hidden = false; $('#mEditBtn').hidden = true; $('#eBody').focus(); };
+  $('#eApply').onclick = () => { subject = $('#eSubj').value; body = $('#eBody').value; render(); };
+  $('#eSave').onclick = async () => {
+    subject = $('#eSubj').value.trim(); body = $('#eBody').value.trim();
+    if (!subject || !body) return toast('Falta o assunto ou o texto');
+    if (FORBIDDEN.test(subject + body)) return toast('Tire «grátis/gratuito/sem custo» do texto (risco de spam)');
+    await onSave({ subject, body });
+    $('#mEdit').hidden = true; $('#mEditBtn').hidden = false; render(); toast('Guardado');
+  };
+  await render();
+  if (!m.open) m.showModal();
+}
+$('#mClose').onclick = $('#mOk').onclick = () => $('#modal').close();
+$('#modal').addEventListener('click', (e) => { if (e.target === $('#modal')) $('#modal').close(); }); // click outside closes
+
 // ---- scheduled sending
 let picked = [];
+// The e-mail for one picked company: the template filled in, or the text edited for that company in the preview.
+const itemFor = (c, t) => ({ company_id: c.id, to: c.email, subject: c.custom?.subject ?? fillTpl(t?.subject, c), body: c.custom?.body ?? fillTpl(t?.body, c) });
 const DAYS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 const tomorrow = () => { const d = new Date(); d.setDate(d.getDate() + 1); return local(d).slice(0, 10); };
 function slotRow(time = '09:00', count = 5) {
@@ -528,8 +594,8 @@ async function openSend() {
 }
 function renderPicked() {
   const t = templates.find((x) => x.id === Number($('#plan').tpl.value));
-  $('#picked').innerHTML = picked.map((c, i) => `<li><span><b>${esc(c.name)}</b> · <small>${esc(c.email)}${c.score != null ? ` · ${c.score}/100` : ''}</small></span>
-    <button type="button" data-prev="${i}" title="Ver o email">Ver</button><button type="button" data-rm="${i}" aria-label="Tirar da lista">✕</button></li>`).join('');
+  $('#picked').innerHTML = picked.map((c, i) => `<li>${nota(c.score)}<span><b>${esc(c.name)}</b>${c.custom ? ' <small>(texto editado)</small>' : ''}<br><small>${esc(c.email)}</small> ${siteLink(c)}</span>
+    <button type="button" data-prev="${i}" title="Ver como o email vai ficar">Ver email</button><button type="button" data-rm="${i}" aria-label="Tirar da lista">✕</button></li>`).join('');
   planSummary();
   return t;
 }
@@ -544,7 +610,9 @@ $('#picked').onclick = (e) => {
   if (rm) { picked.splice(Number(rm.dataset.rm), 1); renderPicked(); }
   if (pv) {
     const c = picked[Number(pv.dataset.prev)], t = templates.find((x) => x.id === Number($('#plan').tpl.value));
-    alert(`Para: ${c.email}\nAssunto: ${fillTpl(t?.subject, c)}\n\n${fillTpl(t?.body, c)}`);
+    const it = itemFor(c, t);
+    preview({ title: `Email para ${c.name}`, to: c.email, subject: it.subject, body: it.body, company: c,
+      onSave: async (v) => { c.custom = v; renderPicked(); } });
   }
 };
 function planSummary() {
@@ -563,7 +631,7 @@ $('#plan').onsubmit = async (e) => {
   e.preventDefault();
   const f = e.target, t = templates.find((x) => x.id === Number(f.tpl.value));
   if (!t) return toast('Escolha um modelo');
-  const items = picked.map((c) => ({ company_id: c.id, to: c.email, subject: fillTpl(t.subject, c), body: fillTpl(t.body, c) }));
+  const items = picked.map((c) => itemFor(c, t));
   const bad = items.find((it) => /\{\w+\}|\[[^\]]*\]/.test(it.subject + it.body));
   if (bad) return toast('O modelo tem partes por preencher ({…} ou […]). Corrija-o em «Modelos».');
   if (!confirm(`${$('#planSum').textContent}\n\nAgendar estes envios? Saem sozinhos a essas horas.`)) return;
@@ -580,9 +648,10 @@ async function loadOutbox() {
   $('#obx').innerHTML = outbox.map((o) => {
     const [label, cls] = ST[o.status] || [o.status, ''];
     return `<tr><td class="num">${fmt(o.status === 'enviado' ? o.sent_at : o.send_at)}</td>
-      <td><b>${esc(o.name)}</b><small>${esc(o.subject)}</small>${o.error ? `<small style="color:var(--bad)">${esc(o.error)}</small>` : ''}</td>
+      <td><b>${esc(o.name)}</b> ${nota(o.score)}<small>${siteLink(o)}</small><small>${esc(o.subject)}</small>${o.error ? `<small style="color:var(--bad)">${esc(o.error)}</small>` : ''}</td>
       <td><span class="st ${cls}">${label}</span></td>
-      <td class="acts2">${o.status === 'agendado' ? `<button data-edit="${o.id}">Editar</button> <button data-cancel="${o.id}">Cancelar</button>` : ''}
+      <td class="acts2"><button data-view="${o.id}">${o.status === 'agendado' ? 'Ver / editar' : 'Ver'}</button>
+        ${o.status === 'agendado' ? `<button data-cancel="${o.id}">Cancelar</button>` : ''}
         ${['erro', 'cancelado'].includes(o.status) ? `<button data-retry="${o.id}">Enviar já</button>` : ''}</td></tr>`;
   }).join('') || '<tr><td colspan="4">Nada agendado.</td></tr>';
   const st = await api('status');
@@ -590,14 +659,14 @@ async function loadOutbox() {
 }
 $('#obx').onclick = async (e) => {
   const b = e.target.closest('button'); if (!b) return;
-  const id = Number(b.dataset.edit || b.dataset.cancel || b.dataset.retry), o = outbox.find((x) => x.id === id);
+  const id = Number(b.dataset.view || b.dataset.cancel || b.dataset.retry), o = outbox.find((x) => x.id === id);
+  if (b.dataset.view) {
+    const when = o.status === 'enviado' ? `enviado ${fmt(o.sent_at)}` : `${ST[o.status]?.[0] || o.status} · ${fmt(o.send_at)}`;
+    return preview({ title: `${o.name} (${when})`, to: o.to_addr, subject: o.subject, body: o.body, company: o,
+      onSave: o.status === 'agendado' ? async (v) => { await api('outbox', { body: { id, ...v } }); loadOutbox(); } : null });
+  }
   if (b.dataset.cancel && confirm(`Cancelar o envio para ${o.name}?`)) await api('outbox', { body: { id, action: 'cancel' } });
   if (b.dataset.retry && confirm(`Enviar já para ${o.name}?`)) await api('outbox', { body: { id, action: 'retry' } });
-  if (b.dataset.edit) {
-    const subject = prompt('Assunto:', o.subject); if (subject === null) return;
-    const body = prompt('Texto (pode colar o texto todo):', o.body); if (body === null) return;
-    await api('outbox', { body: { id, subject, body } });
-  }
   loadOutbox();
 };
 $('#cancelAll').onclick = async () => {
@@ -636,7 +705,7 @@ function drawer(c) {
             <label class="full">Assunto<input id="mSubj"></label>
             <label class="full">Texto<textarea id="mBody" rows="9" placeholder="Olá, …&#10;&#10;A assinatura da Destaca é acrescentada automaticamente."></textarea></label>
           </div>
-          <div class="row"><button class="go-sm" id="mSend">Enviar email</button><small class="num">Sai de contacto@destaca.site e fica registado aqui.</small></div>
+          <div class="row"><button type="button" id="mPrev">Pré-visualizar</button><button class="go-sm" id="mSend">Enviar email</button><small class="num">Sai de contacto@destaca.site e fica registado aqui.</small></div>
         </div>`}
     </section>
     <section>
@@ -661,7 +730,7 @@ function drawer(c) {
       <div class="row"><button id="saveC">${c.id ? 'Guardar dados' : 'Criar empresa'}</button>
         ${c.website ? `<a href="${esc(c.website)}" target="_blank" rel="noopener">Abrir site</a>` : ''}
         ${c.email ? `<a href="https://mail.google.com/mail/?authuser=${GMAIL}#search/${encodeURIComponent(c.email)}" target="_blank" rel="noopener">Conversa no Gmail</a>` : ''}
-        ${c.score != null ? `<span class="num">Análise: ${c.score}/100</span>` : ''}</div>
+        ${c.score != null ? `<span class="num">Nota da análise:</span> ${nota(c.score)}` : ''}</div>
       ${c.issues?.length ? `<details style="margin-top:10px"><summary>Problemas encontrados no site (${c.issues.length})</summary><ul class="issues">${c.issues.map((i) => `<li><b>${esc(i.label)}</b>${i.detail ? `: ${esc(i.detail)}` : ''}</li>`).join('')}</ul></details>` : ''}
     </section>
     ${c.id ? `<section><h3>Linha do tempo (${c.events.filter((e) => e.kind !== 'estado').length})</h3><ul class="tl">${c.events.map((e) => {
@@ -671,6 +740,7 @@ function drawer(c) {
         ${e.subject ? `<div class="${e.kind === 'estado' ? 'num' : 's'}">${esc(e.subject)}</div>` : ''}
         ${e.body ? `<pre>${esc(e.body)}</pre>` : ''}
         ${e.kind === 'email_in' && !blocked && c.email ? `<div class="acts"><button data-reply="${e.id}">Responder</button>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Ver no Gmail</a>` : ''}</div>`
+          : e.kind === 'email_out' && e.body ? `<div class="acts"><button data-look="${e.id}">Ver como ficou</button>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Ver no Gmail</a>` : ''}</div>`
           : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Ver no Gmail</a>` : ''}</li>`;
     }).join('') || '<li>Ainda sem registos.</li>'}</ul></section>` : ''}`;
   d.hidden = false; d.scrollTop = 0;
@@ -691,6 +761,10 @@ function drawer(c) {
     toast('Registado'); await refresh(); open(c.id);
   };
   d.querySelectorAll('pre').forEach((p) => p.onclick = () => p.classList.toggle('open'));
+  d.querySelectorAll('[data-look]').forEach((b) => b.onclick = () => {
+    const ev = c.events.find((x) => x.id === Number(b.dataset.look));
+    preview({ title: `Enviado ${fmt(ev.at)}`, to: ev.to_addr || c.email, subject: ev.subject, body: ev.body, company: c });
+  });
   d.querySelectorAll('[data-del]').forEach((b) => b.onclick = async () => {
     if (!confirm('Apagar este registo do CRM? (o email no Gmail não é apagado)')) return;
     await api('event', { method: 'DELETE', qs: `&id=${b.dataset.del}` }); await refresh(); open(c.id);
@@ -718,6 +792,11 @@ function drawer(c) {
     $('#replying button').onclick = () => { replyTo = null; $('#replying').hidden = true; $('#mTo').value = c.email; };
     $('#mailbox').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('#mBody').focus();
   });
+  $('#mPrev').onclick = () => {
+    if (!$('#mBody').value.trim()) return toast('Escreva primeiro o texto');
+    preview({ title: `Email para ${c.name}`, to: $('#mTo').value, subject: $('#mSubj').value, body: $('#mBody').value, company: c,
+      onSave: async (v) => { $('#mSubj').value = v.subject; $('#mBody').value = v.body; } });
+  };
   $('#mSend').onclick = async () => {
     const to = $('#mTo').value.trim(), subject = $('#mSubj').value.trim(), body = $('#mBody').value.trim();
     if (!subject || !body) return toast('Falta o assunto ou o texto');

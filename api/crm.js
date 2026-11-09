@@ -476,7 +476,7 @@ module.exports = async function handler(req, res) {
 
     if (a === 'me') return send(200, { username: by });
     if (a === 'companies') {
-      return send(200, await q(`select c.id,c.name,c.category,c.city,c.domain,c.email,c.phone,c.stage,c.source,c.score,c.updated_at,
+      return send(200, await q(`select c.id,c.name,c.category,c.city,c.domain,c.website,c.email,c.phone,c.stage,c.source,c.score,c.updated_at,
         (select max(at) from events e where e.company_id=c.id and e.kind<>'estado') as last_at,
         (select count(*)::int from events e where e.company_id=c.id and e.kind<>'estado') as n,
         (select count(*)::int from events e where e.company_id=c.id and e.unread) as unread, c.follow_up_at
@@ -529,7 +529,7 @@ module.exports = async function handler(req, res) {
     if (a === 'candidates') return send(200, await candidates(Object.fromEntries(url.searchParams)));
     if (a === 'schedule' && req.method === 'POST') return send(200, await schedule(await readBody(req), by));
     if (a === 'outbox' && req.method === 'GET') {
-      return send(200, await q(`select o.id,o.company_id,c.name,o.to_addr,o.subject,o.body,o.send_at,o.status,o.sent_at,o.error,o.created_by
+      return send(200, await q(`select o.id,o.company_id,c.name,c.website,c.domain,c.score,o.to_addr,o.subject,o.body,o.send_at,o.status,o.sent_at,o.error,o.created_by
         from outbox o join companies c on c.id=o.company_id
         where o.status in ('agendado','a enviar','erro') or o.created_at > now()-interval '30 days'
         order by (o.status in ('agendado','a enviar')) desc, o.send_at limit 400`));
@@ -547,6 +547,7 @@ module.exports = async function handler(req, res) {
       }
       return send(200, { ok: true });
     }
+    if (a === 'preview' && req.method === 'POST') { const b = await readBody(req); return send(200, mail.build(String(b.body || '').slice(0, 20000))); }
     if (a === 'status') { const [s] = await q("select value from settings where key='mail_synced_at'"); return send(200, { gmail: mail.ready(), synced_at: s?.value || null }); }
     // Admin actions: only with the api key (scripts in prospeccao/).
     if (a === 'import' && req.method === 'POST' && by === 'agente') return send(200, await importAll(await readBody(req)));

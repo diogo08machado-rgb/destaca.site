@@ -75,16 +75,22 @@ const SIGNATURE = `<table cellpadding="0" cellspacing="0" border="0" style="marg
 <div style="font-size:13px;line-height:21px;color:#050f16;"><b style="color:#ff5a14;">ig</b>&nbsp;<a href="https://instagram.com/destacasite" style="color:#050f16;text-decoration:none;">@destacasite</a></div></td></tr></table>`;
 const SIGNATURE_TEXT = '\n\nEquipa Destaca\nSites de Apresentação Personalizados & SEO\ncontacto@destaca.site · destaca.site · @destacasite';
 
+// The exact HTML and plain text that go out (also used for the preview in the CRM).
+// A line with only "—" or "--" starts a small-print footer (e.g. the REMOVER notice). Links become clickable, as Gmail does.
+const linkify = (s) => s.replace(/https?:\/\/[^\s<]+[^\s<.,;:!?)»]/g, (u) => `<a href="${u}" style="color:#ff5a14;">${u}</a>`);
+function build(text) {
+  const [main, foot] = String(text).split(/\n(?=—\n|--\n)/);
+  const html = `<div style="${P}">${linkify(esc(main.trim())).replace(/\n/g, '<br>')}</div>${SIGNATURE}`
+    + (foot ? `<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#6b7680;margin-top:18px;">${esc(foot.trim()).replace(/\n/g, '<br>')}</div>` : '');
+  return { html, text: main.trim() + SIGNATURE_TEXT + (foot ? `\n\n${foot.trim()}` : '') };
+}
+
 // Sends from contacto@destaca.site (Gmail keeps a copy in "Enviados"). Replies carry In-Reply-To/References so Gmail threads them.
 async function send({ to, subject, text, inReplyTo, references }) {
   if (FORBIDDEN.test(subject + text)) throw Object.assign(new Error('Tire «grátis/gratuito/sem custo» do texto (risco de spam).'), { code: 400 });
   const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 465, secure: true, auth: { user: USER, pass: process.env.GMAIL_APP_PASSWORD } });
-  // Lines starting with "—" or "--" begin a small-print footer (e.g. the REMOVER notice).
-  const [main, foot] = String(text).split(/\n(?=—\n|--\n)/);
-  const html = `<div style="${P}">${esc(main.trim()).replace(/\n/g, '<br>')}</div>${SIGNATURE}`
-    + (foot ? `<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#6b7680;margin-top:18px;">${esc(foot.trim()).replace(/\n/g, '<br>')}</div>` : '');
-  const info = await t.sendMail({ from: { name: 'Destaca', address: USER }, to, subject, text: main.trim() + SIGNATURE_TEXT + (foot ? `\n\n${foot.trim()}` : ''), html, inReplyTo, references });
+  const info = await t.sendMail({ from: { name: 'Destaca', address: USER }, to, subject, ...build(text), inReplyTo, references });
   return info.messageId;
 }
 
-module.exports = { USER, AUTO, FORBIDDEN, ready, fetchSince, send, formLead, trimQuoted };
+module.exports = { USER, AUTO, FORBIDDEN, ready, fetchSince, send, build, formLead, trimQuoted };
