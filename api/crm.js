@@ -514,7 +514,7 @@ async function callLists() {
       and (c.call_result is null or (c.call_result='nao_atendeu' and c.call_attempts<$1))
       and not exists (select 1 from events e where e.company_id=c.id and e.kind in ('email_out','email_in'))
       and not exists (select 1 from outbox o where o.company_id=c.id and o.status in ('agendado','a enviar'))
-    order by c.call_attempts, (c.call_brief is null), c.id`, [MAX_TRIES_CALL]);
+    order by c.call_attempts, (c.source = 'manual') desc, (c.call_brief is null), c.id`, [MAX_TRIES_CALL]); // companies added by hand first
   const done = await q(`select ${CALL_COLS} from companies c
     where c.call_result is not null and not (c.call_result='nao_atendeu' and c.call_attempts<$1)
     order by c.call_at desc nulls last limit 400`, [MAX_TRIES_CALL]);
