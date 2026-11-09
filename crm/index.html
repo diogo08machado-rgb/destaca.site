@@ -136,6 +136,31 @@ header .sp { flex: 1; } header small { color: #9fb0bb; } header button { backgro
 .st-agendado { background: #e8f0fd; color: #2f6fd6; } .st-enviado { background: #e6f4ec; color: var(--ok); }
 .st-erro { background: #fdecec; color: var(--bad); } .st-cancelado { background: #eef0f1; color: var(--mut); } .st-a { background: #fff4e0; color: #b36b00; }
 @media (max-width: 1000px) { .sendgrid { grid-template-columns: 1fr; } }
+.seg { display: inline-flex; background: #e6e9eb; border-radius: 9px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: none; padding: 6px 12px; border-radius: 7px; font-weight: 600; color: var(--mut); }
+.seg button[aria-pressed=true] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.seg i { font-style: normal; font-variant-numeric: tabular-nums; margin-left: 4px; }
+.calls { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 12px; align-items: start; }
+.ccard { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.ccard .ch { display: flex; gap: 8px; align-items: flex-start; }
+.ccard .ch b { font-size: 16px; flex: 1; min-width: 0; overflow-wrap: anywhere; cursor: pointer; }
+.ccard .ch b:hover { color: var(--or); }
+.ccard .meta { color: var(--mut); font-size: 13px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.tries { font-size: 12px; font-weight: 700; background: #fff4e0; color: #9a5b00; border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+a.dial { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--ok); color: #fff; text-decoration: none; font-weight: 700; font-size: 17px; border-radius: 10px; padding: 11px; font-variant-numeric: tabular-nums; }
+a.dial:hover { filter: brightness(1.05); }
+.brief { font-size: 14px; line-height: 1.5; color: #26333c; white-space: pre-line; background: #fafbfb; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-wrap: anywhere; }
+.brief.none { color: var(--mut); font-style: italic; }
+.cform { display: grid; gap: 8px; border-top: 1px dashed var(--line); padding-top: 10px; }
+.cform .opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.cform .opts label { display: flex; gap: 6px; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 13px; cursor: pointer; }
+.cform .opts label:has(input:checked) { border-color: var(--ink); background: var(--or-soft); }
+.cform .opts input { width: auto; }
+.cform label.f { display: grid; gap: 3px; font-size: 13px; color: var(--mut); }
+.res { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+.r-interessado { background: #e6f4ec; color: var(--ok); } .r-ligar_depois { background: #e8f0fd; color: #2f6fd6; }
+.r-sem_interesse, .r-nao_contactar { background: #fdecec; color: var(--bad); } .r-nao_atende, .r-numero_errado, .r-nao_atendeu { background: #eef0f1; color: var(--mut); }
+@media (max-width: 720px) { .cform .opts { grid-template-columns: minmax(0, 1fr); } .seg { order: 3; } }
 .nota { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 6px; padding: 1px 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .n-lo { background: #fdecec; color: var(--bad); } .n-mid { background: #fff4e0; color: #9a5b00; } .n-hi { background: #e6f4ec; color: var(--ok); } .n-none { background: #eef0f1; color: var(--mut); }
 a.site { color: var(--mut); font-size: 12px; text-decoration: none; white-space: nowrap; } a.site:hover { color: var(--or); text-decoration: underline; }
@@ -277,6 +302,7 @@ td small { color: var(--mut); display: block; }
     <nav class="tabs" aria-label="Secções">
       <button data-view="follow" aria-current="page">A seguir <i id="followN"></i></button>
       <button data-view="list">Empresas</button>
+      <button data-view="call">Chamadas <i id="callN"></i></button>
       <button data-view="send">Envios <i id="sendN"></i></button>
       <button data-view="tpl">Modelos</button>
     </nav>
@@ -292,6 +318,19 @@ td small { color: var(--mut); display: block; }
       <label class="inline">Sem resposta há <select id="days"><option>5</option><option selected>7</option><option>10</option><option>14</option></select> dias</label></div>
     <p id="pushHint" class="hint" hidden></p>
     <div id="follow" class="fgrid"></div>
+  </main>
+
+  <main id="vCall" hidden>
+    <div class="bar"><h2 class="vh">Chamadas</h2>
+      <div class="seg" role="tablist" aria-label="Lista">
+        <button type="button" data-calls="todo" aria-pressed="true">Por ligar <i id="cTodoN"></i></button>
+        <button type="button" data-calls="done" aria-pressed="false">Feitas <i id="cDoneN"></i></button>
+      </div>
+      <span class="sp"></span>
+      <input id="cq" type="search" class="search" placeholder="Procurar nome, setor, cidade…" aria-label="Procurar nas chamadas">
+    </div>
+    <div id="calls" class="calls"></div>
+    <button class="more" id="cMore" hidden>Mostrar mais</button>
   </main>
 
   <main id="vSend" hidden>
@@ -453,7 +492,8 @@ $('#logout').onclick = async () => { await fetch('/api/crm?a=logout', { method: 
 let all = [], stage = '', shown = 200, templates = [], view = 'follow';
 function show(v) {
   view = v;
-  for (const [id, name] of [['vFollow', 'follow'], ['vList', 'list'], ['vSend', 'send'], ['vTpl', 'tpl']]) $('#' + id).hidden = name !== v;
+  for (const [id, name] of [['vFollow', 'follow'], ['vList', 'list'], ['vCall', 'call'], ['vSend', 'send'], ['vTpl', 'tpl']]) $('#' + id).hidden = name !== v;
+  if (v === 'call') loadCalls();
   if (v === 'send') openSend();
   document.querySelectorAll('.tabs button').forEach((b) => b.dataset.view === v ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
   if (v === 'follow') loadFollow();
@@ -468,6 +508,7 @@ async function start() {
   show('follow');
   load();
   api('outbox').then((o) => { $('#sendN').textContent = o.filter((x) => x.status === 'agendado').length || ''; }).catch(() => {});
+  api('calls').then((c) => { calls = c; $('#callN').textContent = c.todo.length || ''; }).catch(() => {});
   const id = new URLSearchParams(location.hash.slice(1)).get('e');
   if (id) open(Number(id));
   setTimeout(() => sync(false), 1500); // Gmail read after the screen is filled
@@ -608,6 +649,73 @@ const shortName = (n) => { let s = String(n || '').split(/\s+[-–|]\s+|,/)[0].r
 const fillTpl = (text, c) => String(text || '').replace(/\{(\w+)\}/g, (m, k) => ({
   empresa: shortName(c.name), dominio: c.domain || '', site: c.website || '', cidade: (c.city || '').split('|')[0].trim(), setor: c.category || '', email: c.email || '',
 }[k] ?? m));
+
+// ---- call center
+const CALL_RES = {
+  interessado: '✅ Interessado (quer proposta ou reunião)', ligar_depois: '🕐 Pediu para ligar mais tarde', sem_interesse: '❌ Sem interesse',
+  nao_atendeu: '📵 Não atendeu', numero_errado: '☎️ Número errado / não existe', nao_contactar: '🚫 Não quer ser contactado',
+};
+const CALL_DONE = { ...CALL_RES, nao_atende: '📵 Não atende (3 tentativas)' };
+let calls = { todo: [], done: [] }, callTab = 'todo', callShown = 60;
+const telHref = (p) => { const d = String(p || '').replace(/\D/g, ''); return `tel:+${d.length === 9 ? '351' + d : d}`; };
+const telText = (p) => { const d = String(p || '').replace(/\D/g, '').replace(/^351(?=\d{9}$)/, ''); return d.length === 9 ? d.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3') : p; };
+async function loadCalls() {
+  calls = await api('calls');
+  $('#cTodoN').textContent = calls.todo.length; $('#cDoneN').textContent = calls.done.length;
+  $('#callN').textContent = calls.todo.length || '';
+  renderCalls();
+}
+function renderCalls() {
+  document.querySelectorAll('[data-calls]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.calls === callTab));
+  const qq = $('#cq').value.trim().toLowerCase();
+  const list = calls[callTab].filter((c) => !qq || [c.name, c.category, c.city, c.phone].join(' ').toLowerCase().includes(qq));
+  $('#calls').innerHTML = list.slice(0, callShown).map((c) => callTab === 'todo' ? `
+    <article class="ccard" data-id="${c.id}">
+      <div class="ch"><b data-open="${c.id}" title="Abrir a ficha">${esc(c.name)}</b>${c.call_attempts ? `<span class="tries">${c.call_attempts}.ª tentativa feita</span>` : ''}</div>
+      <div class="meta">${esc(c.category || '')}${c.city ? ` · ${esc(String(c.city).split('|')[0])}` : ''} ${siteLink(c)} ${c.score != null ? nota(c.score) : ''}</div>
+      <a class="dial" href="${telHref(c.phone)}">📞 ${esc(telText(c.phone))}</a>
+      <div class="brief${c.call_brief ? '' : ' none'}">${esc(c.call_brief || 'Ainda sem descrição para esta empresa.')}</div>
+      ${c.call_feedback ? `<div class="meta">Última tentativa: ${esc(c.call_feedback)}</div>` : ''}
+      <button type="button" class="pri" data-log="${c.id}">Registar chamada</button>
+    </article>` : `
+    <article class="ccard" data-id="${c.id}">
+      <div class="ch"><b data-open="${c.id}" title="Abrir a ficha">${esc(c.name)}</b><span class="res r-${c.call_result}">${esc((CALL_DONE[c.call_result] || c.call_result).replace(/ \(.*\)$/, ''))}</span></div>
+      <div class="meta">${esc(c.category || '')}${c.city ? ` · ${esc(String(c.city).split('|')[0])}` : ''} · <a href="${telHref(c.phone)}">${esc(telText(c.phone))}</a></div>
+      ${c.call_feedback ? `<div class="brief">${esc(c.call_feedback)}</div>` : '<div class="meta">Sem notas.</div>'}
+      <div class="meta">${fmt(c.call_at)}${c.call_by ? ` · ${esc(c.call_by)}` : ''}<span class="sp" style="flex:1"></span><button type="button" data-reset="${c.id}">Voltar à lista</button></div>
+    </article>`).join('') || `<p class="hint">${callTab === 'todo' ? 'Não há empresas por ligar.' : 'Ainda não há chamadas feitas.'}</p>`;
+  $('#cMore').hidden = list.length <= callShown;
+}
+document.querySelectorAll('[data-calls]').forEach((b) => b.onclick = () => { callTab = b.dataset.calls; callShown = 60; renderCalls(); });
+$('#cq').addEventListener('input', () => { callShown = 60; renderCalls(); });
+$('#cMore').onclick = () => { callShown += 60; renderCalls(); };
+$('#calls').onclick = async (e) => {
+  const op = e.target.closest('[data-open]'), lg = e.target.closest('[data-log]'), rs = e.target.closest('[data-reset]');
+  if (op) return open(Number(op.dataset.open));
+  if (rs) { await api('call', { body: { company_id: Number(rs.dataset.reset), action: 'reset' } }); toast('Voltou à lista de chamadas'); return loadCalls(); }
+  if (!lg) return;
+  const card = lg.closest('.ccard'), id = Number(lg.dataset.log);
+  if (card.querySelector('.cform')) return;
+  lg.hidden = true;
+  card.insertAdjacentHTML('beforeend', `<form class="cform">
+    <div class="opts">${Object.entries(CALL_RES).map(([k, v]) => `<label><input type="radio" name="r" value="${k}" required> ${v}</label>`).join('')}</div>
+    <label class="f" data-when hidden>Ligar outra vez a partir de<input type="date" name="when" value="${local(new Date(Date.now() + 2 * 864e5)).slice(0, 10)}"></label>
+    <label class="f">O que disseram / próximo passo<textarea name="fb" rows="3" placeholder="Ex.: falei com o dono, quer orçamento para site novo; ligar 5.ª às 15h"></textarea></label>
+    <div class="row" style="margin:0"><button class="go-sm" type="submit">Guardar</button><button type="button" data-cancel>Cancelar</button></div>
+  </form>`);
+  const f = card.querySelector('.cform');
+  f.addEventListener('change', () => { f.querySelector('[data-when]').hidden = f.r.value !== 'ligar_depois'; });
+  f.querySelector('[data-cancel]').onclick = () => { f.remove(); lg.hidden = false; };
+  f.onsubmit = async (ev) => {
+    ev.preventDefault();
+    const btn = f.querySelector('[type=submit]'); btn.disabled = true;
+    try {
+      const r = await api('call', { body: { company_id: id, result: f.r.value, feedback: f.fb.value, callback_at: f.when.value } });
+      toast(r.result === 'nao_atendeu' ? `Fica na lista (${r.attempts}.ª tentativa)` : 'Chamada registada: passou para «Feitas»');
+      loadCalls(); load();
+    } catch { btn.disabled = false; }
+  };
+};
 
 // ---- site link, analysis score, e-mail preview
 const nota = (s) => s == null ? '<span class="nota n-none" title="Site sem análise">sem nota</span>'

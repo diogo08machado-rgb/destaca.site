@@ -20,7 +20,7 @@ let sql, ready;
 const db = () => (sql ||= neon(process.env.DATABASE_URL));
 const q = (text, params = []) => db().query(text, params);
 // Schema: created/updated only when SCHEMA changes (bump it after editing DDL), so a cold start costs one query, not twenty.
-const SCHEMA = '2026-11-10a';
+const SCHEMA = '2026-11-10b';
 const ensure = () => (ready ||= (async () => {
   const [v] = await q(`select value from settings where key='schema'`).catch(() => []);
   if (v?.value === SCHEMA) return;
@@ -60,7 +60,13 @@ const DDL = `
   create index if not exists outbox_due on outbox(status, send_at);
   create index if not exists events_unread on events(company_id) where unread;
   create index if not exists sessions_exp on sessions(expires_at);
-  create table if not exists push_subs (endpoint text primary key, sub jsonb not null, username text, created_at timestamptz not null default now())
+  create table if not exists push_subs (endpoint text primary key, sub jsonb not null, username text, created_at timestamptz not null default now());
+  alter table companies add column if not exists call_brief text;
+  alter table companies add column if not exists call_result text;
+  alter table companies add column if not exists call_feedback text;
+  alter table companies add column if not exists call_attempts int not null default 0;
+  alter table companies add column if not exists call_at timestamptz;
+  alter table companies add column if not exists call_by text
 `;
 
 const apiKey = () => createHmac('sha256', process.env.DATABASE_URL || '').update('crm-api').digest('base64url');
@@ -493,6 +499,67 @@ async function tick() {
   return { sent };
 }
 
+// ---- Call center: companies with a phone that were never contacted, a short brief for the caller, and the call outcome.
+
+const CALL_RESULTS = {
+  interessado: 'Interessado', ligar_depois: 'Pediu para ligar mais tarde', sem_interesse: 'Sem interesse',
+  nao_atendeu: 'Não atendeu', numero_errado: 'Número errado', nao_contactar: 'Não quer ser contactado',
+};
+const MAX_TRIES_CALL = 3; // after 3 unanswered calls the company leaves the list as «não atende»
+const CALL_COLS = 'c.id,c.name,c.category,c.city,c.phone,c.website,c.domain,c.score,c.stage,c.call_brief,c.call_attempts,c.call_result,c.call_feedback,c.call_at,c.call_by';
+
+async function callLists() {
+  const todo = await q(`select ${CALL_COLS} from companies c
+    where coalesce(c.phone,'')<>'' and c.stage='lead'
+      and (c.call_result is null or (c.call_result='nao_atendeu' and c.call_attempts<$1))
+      and not exists (select 1 from events e where e.company_id=c.id and e.kind in ('email_out','email_in'))
+      and not exists (select 1 from outbox o where o.company_id=c.id and o.status in ('agendado','a enviar'))
+    order by c.call_attempts, (c.call_brief is null), c.id`, [MAX_TRIES_CALL]);
+  const done = await q(`select ${CALL_COLS} from companies c
+    where c.call_result is not null and not (c.call_result='nao_atendeu' and c.call_attempts<$1)
+    order by c.call_at desc nulls last limit 400`, [MAX_TRIES_CALL]);
+  return { todo, done };
+}
+
+// Records one call: timeline event, funnel stage, reminder for the team, and whether the company stays in the list.
+async function registerCall(b, by) {
+  const [c] = await q('select * from companies where id=$1', [b.company_id]);
+  if (!c) throw fail('empresa não encontrada', 404);
+  if (b.action === 'reset') { // put it back in the list
+    await q('update companies set call_result=null, call_feedback=null where id=$1', [c.id]);
+    return { ok: true };
+  }
+  const r = b.result;
+  if (!CALL_RESULTS[r]) throw fail('Escolha o resultado da chamada.', 400);
+  const feedback = String(b.feedback || '').trim().slice(0, 4000);
+  const attempts = (c.call_attempts || 0) + 1;
+  const final = r === 'nao_atendeu' && attempts >= MAX_TRIES_CALL ? 'nao_atende' : r;
+  const label = final === 'nao_atende' ? `Não atende (${attempts} tentativas)` : r === 'nao_atendeu' ? `Não atendeu (${attempts}.ª tentativa)` : CALL_RESULTS[r];
+  await addEvent({ company_id: c.id, kind: 'chamada', subject: `📞 ${label}`, body: feedback || null }, by);
+  const to = { interessado: ['lead', 'contactado'].includes(c.stage) ? 'respondeu' : c.stage, ligar_depois: c.stage === 'lead' ? 'contactado' : c.stage,
+    sem_interesse: 'perdido', nao_contactar: 'nao_contactar' }[r];
+  if (to && to !== c.stage && c.stage !== 'cliente') await setStage(c.id, c.stage, to, by, 'chamada');
+  // reminders land in «A seguir → Lembretes»
+  const callback = /^\d{4}-\d{2}-\d{2}$/.test(b.callback_at || '') ? b.callback_at : null;
+  if (r === 'ligar_depois') await q('update companies set follow_up_at=coalesce($2::date, current_date + 2), follow_up_note=$3 where id=$1', [c.id, callback, `Ligar outra vez${feedback ? `: ${feedback.slice(0, 80)}` : ''}`]);
+  if (r === 'interessado') await q(`update companies set follow_up_at=current_date, follow_up_note=$2 where id=$1`, [c.id, `Interessado ao telefone${feedback ? `: ${feedback.slice(0, 80)}` : ''}`]);
+  await q('update companies set call_result=$2, call_attempts=$3, call_feedback=$4, call_at=now(), call_by=$5, updated_at=now() where id=$1', [c.id, final, attempts, feedback || null, by]);
+  if (r === 'interessado') await notify(`📞 ${c.name} está interessado`, `${by} falou com eles${feedback ? `: ${feedback.slice(0, 140)}` : ''}.\nPreparem a proposta.`, `https://destaca.site/crm/#e=${c.id}`, 5);
+  return { ok: true, result: final, attempts };
+}
+
+// Bulk update from prospeccao/crm-chamadas.mjs: brief for the caller, plus site, score, problems and a PT-PT sector name.
+async function setBriefs(list = []) {
+  let n = 0;
+  for (const x of list.slice(0, 2000)) {
+    const r = await q(`update companies set call_brief=$2, website=coalesce(nullif($3,''),website), domain=coalesce(nullif($4,''),domain),
+      score=coalesce($5::int,score), issues=coalesce($6::jsonb,issues), category=coalesce(nullif($7,''),category) where key=$1 returning id`,
+    [x.key, x.brief || null, x.website || '', x.domain || '', x.score ?? null, x.issues ? JSON.stringify(x.issues) : null, x.category || '']);
+    n += r.length;
+  }
+  return { updated: n };
+}
+
 module.exports = async function handler(req, res) {
   const send = (code, body, headers = {}) => {
     res.statusCode = code;
@@ -584,6 +651,9 @@ module.exports = async function handler(req, res) {
     }
     if (a === 'templates' && req.method === 'DELETE') { await q('delete from templates where id=$1', [Number(url.searchParams.get('id'))]); return send(200, { ok: true }); }
     if (a === 'tick') return send(200, await tick());
+    if (a === 'calls') return send(200, await callLists());
+    if (a === 'call' && req.method === 'POST') return send(200, await registerCall(await readBody(req), by));
+    if (a === 'briefs' && req.method === 'POST' && by === 'agente') return send(200, await setBriefs((await readBody(req)).list));
     // Web Push: the page asks for the public key, subscribes the phone, and the CRM keeps the subscription.
     if (a === 'push_key') return send(200, { key: vapid() });
     if (a === 'push_sub' && req.method === 'POST') {
