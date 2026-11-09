@@ -229,6 +229,7 @@ async function syncMail({ force } = {}) {
   const since = last ? new Date(new Date(last.value) - 2 * 86400000) : new Date('2026-10-27');
   const msgs = await mail.fetchSince(since);
   let added = 0, merged = 0;
+  const fresh = [];
   for (const m of msgs) {
     const out = m.from === mail.USER;
     const ext = `gmail:${m.messageId}`;
@@ -255,10 +256,34 @@ async function syncMail({ force } = {}) {
     if (upd[0]) { merged++; continue; }
     const r = await addEvent({ company_id: c.id, kind, at: m.date, subject, body: m.text, ext_id: ext, link: vals[6], message_id: m.messageId,
       thread_id: vals[5], from_addr: m.from, to_addr: vals[8], unread: !out, already_sent: true }, 'gmail');
-    if (!r.duplicate) added++;
+    if (r.duplicate) continue;
+    added++;
+    // New message from a company in the last day (not old mail, not holiday auto-replies): tell the team's phones.
+    if (!out && Date.now() - new Date(m.date) < 86400000 && !mail.AUTO.test(subject || '')) {
+      const [co] = await q('select name, stage from companies where id=$1', [c.id]);
+      fresh.push({ id: c.id, name: co.name, subject, snippet: String(m.text || '').replace(/\s+/g, ' ').slice(0, 140), remover: co.stage === 'nao_contactar' });
+    }
   }
   await q(`insert into settings (key,value) values ('mail_synced_at',$1) on conflict (key) do update set value=$1`, [started]);
-  return { added, merged, read: msgs.length, synced_at: started };
+  for (const f of fresh.slice(0, 5)) {
+    await notify(f.remover ? `${f.name} pediu REMOVER` : `📩 ${f.name} respondeu`,
+      f.remover ? 'Já ficou em «Não contactar». Não é preciso responder.' : `${f.subject}\n${f.snippet}\n\nResponde o mais rápido possível.`,
+      `https://destaca.site/crm/#e=${f.id}`, f.remover ? 3 : 5);
+  }
+  if (fresh.length > 5) await notify(`📩 Mais ${fresh.length - 5} emails de empresas`, 'Vê a lista «A seguir → Responder» no CRM.', 'https://destaca.site/crm/', 4);
+  return { added, merged, read: msgs.length, notified: fresh.length, synced_at: started };
+}
+
+// Phone notifications through ntfy (free app, Android/iPhone). The channel name is secret and derived from DATABASE_URL
+// (see prospeccao/crm-notificacoes.mjs); anyone subscribed to it gets the alerts. Failing to notify never breaks the sync.
+const ntfyTopic = () => `destaca-crm-${createHmac('sha256', process.env.DATABASE_URL || '').update('crm-ntfy').digest('hex').slice(0, 20)}`;
+async function notify(title, message, click, priority = 4) {
+  try {
+    const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(8000),
+      body: JSON.stringify({ topic: ntfyTopic(), title, message, click, priority, tags: ['email'] }) });
+    if (!r.ok) console.error('ntfy', r.status);
+    return r.ok;
+  } catch (e) { console.error('ntfy', e.message); return false; }
 }
 
 // Sends an email (or a reply) to a company and records it. Refuses "não contactar" and the spam words.
@@ -468,7 +493,11 @@ module.exports = async function handler(req, res) {
     }
 
     // The clock (GitHub Actions) only gets to send what is due, with its own key.
-    if (a === 'tick' && same(String(req.headers.authorization || ''), `Bearer ${cronKey()}`)) return send(200, await tick());
+    // Every 5 min: read Gmail (and notify phones of new client mail), then send what is due.
+    if (a === 'tick' && same(String(req.headers.authorization || ''), `Bearer ${cronKey()}`)) {
+      const read = mail.ready() ? await syncMail().catch((e) => ({ error: e.message })) : { waiting: 'gmail' };
+      return send(200, { read, ...(await tick()) });
+    }
 
     const by = await who(req);
     if (!by) return send(401, { error: 'login' });
@@ -526,6 +555,10 @@ module.exports = async function handler(req, res) {
     }
     if (a === 'templates' && req.method === 'DELETE') { await q('delete from templates where id=$1', [Number(url.searchParams.get('id'))]); return send(200, { ok: true }); }
     if (a === 'tick') return send(200, await tick());
+    if (a === 'notify_test' && req.method === 'POST') {
+      const ok = await notify('✅ Notificações do CRM ligadas', `Teste enviado por ${by}. A partir de agora recebes aqui um aviso quando uma empresa escrever.`, 'https://destaca.site/crm/', 3);
+      return send(ok ? 200 : 502, ok ? { ok } : { error: 'Não foi possível enviar a notificação.' });
+    }
     if (a === 'candidates') return send(200, await candidates(Object.fromEntries(url.searchParams)));
     if (a === 'schedule' && req.method === 'POST') return send(200, await schedule(await readBody(req), by));
     if (a === 'outbox' && req.method === 'GET') {
