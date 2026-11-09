@@ -280,7 +280,8 @@ const ntfyTopic = () => `destaca-crm-${createHmac('sha256', process.env.DATABASE
 async function notify(title, message, click, priority = 4) {
   try {
     const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(8000),
-      body: JSON.stringify({ topic: ntfyTopic(), title, message, click, priority, tags: ['email'] }) });
+      // icon: the Destaca logo inside the notification (Android shows it; iPhone always shows the ntfy app icon)
+      body: JSON.stringify({ topic: ntfyTopic(), title, message, click, priority, tags: ['email'], icon: 'https://destaca.site/icon-512.png' }) });
     if (!r.ok) console.error('ntfy', r.status);
     return r.ok;
   } catch (e) { console.error('ntfy', e.message); return false; }
