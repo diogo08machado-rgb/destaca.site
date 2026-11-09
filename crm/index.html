@@ -4,8 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>CRM Destaca</title>
+<title>Destaca CRM</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/crm/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Destaca CRM">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#050f16">
 <style>
 @font-face { font-family: "Hanken Grotesk"; src: url(/assets/fonts/hanken-grotesk-latin.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
 :root {
@@ -282,7 +288,9 @@ td small { color: var(--mut); display: block; }
 
   <main id="vFollow">
     <div class="bar"><h2 class="vh">A seguir</h2><span class="sp"></span>
+      <button type="button" id="pushBtn" hidden>🔔 Ativar notificações</button>
       <label class="inline">Sem resposta há <select id="days"><option>5</option><option selected>7</option><option>10</option><option>14</option></select> dias</label></div>
+    <p id="pushHint" class="hint" hidden></p>
     <div id="follow" class="fgrid"></div>
   </main>
 
@@ -463,6 +471,7 @@ async function start() {
   const id = new URLSearchParams(location.hash.slice(1)).get('e');
   if (id) open(Number(id));
   setTimeout(() => sync(false), 1500); // Gmail read after the screen is filled
+  setupPush().catch((e) => console.error('push', e));
 }
 async function load() {
   all = await api('companies');
@@ -505,6 +514,40 @@ async function loadFollow() {
 }
 $('#follow').onclick = (e) => { const li = e.target.closest('li[data-id]'); if (li) open(Number(li.dataset.id)); };
 $('#days').onchange = loadFollow;
+
+// ---- phone notifications from the CRM (Web Push). iPhone: only from the icon added to the home screen (iOS 16.4+).
+const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const pushOk = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const b64u = (s) => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)), (c) => c.charCodeAt(0));
+async function setupPush() {
+  const btn = $('#pushBtn'), hint = $('#pushHint');
+  const say = (text) => { hint.textContent = text; hint.hidden = !text; };
+  if (!pushOk) {
+    btn.hidden = true;
+    say(isIOS && !standalone ? 'Para receber notificações no iPhone: no Safari carregue em Partilhar → «Adicionar ao ecrã principal» e abra o CRM a partir desse ícone.' : '');
+    return;
+  }
+  const reg = await navigator.serviceWorker.register('/crm/sw.js', { scope: '/crm/' });
+  const current = await reg.pushManager.getSubscription();
+  if (current && Notification.permission === 'granted') { // already on: refresh it on the server, hide the button
+    api('push_sub', { body: { sub: current.toJSON() } }).catch(() => {});
+    btn.hidden = true; say(''); return;
+  }
+  if (Notification.permission === 'denied') { btn.hidden = true; say('As notificações estão bloqueadas neste dispositivo. Ative-as nas definições do telemóvel ou do browser para o Destaca CRM.'); return; }
+  btn.hidden = false; say('');
+  btn.onclick = async () => {
+    btn.disabled = true;
+    try {
+      if (await Notification.requestPermission() !== 'granted') { toast('Sem autorização não é possível enviar notificações'); return setupPush(); }
+      const { key } = await api('push_key');
+      const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(key) });
+      await api('push_sub', { body: { sub: sub.toJSON() } });
+      toast('Notificações ligadas: deve chegar uma de confirmação');
+      btn.hidden = true;
+    } catch (e) { toast('Não foi possível ligar as notificações'); console.error(e); } finally { btn.disabled = false; }
+  };
+}
 // ---- list
 function filtered() {
   const q = $('#q').value.trim().toLowerCase(), src = $('#src').value, sort = $('#sort').value;

@@ -1,0 +1,14 @@
+{
+  "name": "Destaca CRM",
+  "short_name": "Destaca CRM",
+  "lang": "pt-PT",
+  "start_url": "/crm/",
+  "scope": "/crm/",
+  "display": "standalone",
+  "background_color": "#050f16",
+  "theme_color": "#050f16",
+  "icons": [
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}

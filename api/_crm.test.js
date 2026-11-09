@@ -53,3 +53,18 @@ assert.ok(built.html.includes('Equipa Destaca') && built.html.includes('font-siz
 assert.ok(built.html.includes('&lt;teste&gt;'), 'text is escaped');
 assert.ok(built.text.indexOf('Equipa Destaca') < built.text.indexOf('Aviso REMOVER'), 'signature before footer');
 console.log('preview ok');
+
+// Web Push: the derived VAPID key and the payload encryption work against a fake phone subscription
+{
+  process.env.DATABASE_URL ||= 'postgres://teste';
+  const webpush = require('web-push'), { createECDH, randomBytes } = require('node:crypto');
+  const crmPush = require('./crm.js');
+  const pub = crmPush.vapid();
+  assert.strictEqual(Buffer.from(pub, 'base64url').length, 65, 'uncompressed P-256 public key');
+  const phone = createECDH('prime256v1'); phone.generateKeys();
+  const sub = { endpoint: 'https://fcm.googleapis.com/fcm/send/teste', keys: { p256dh: phone.getPublicKey().toString('base64url'), auth: randomBytes(16).toString('base64url') } };
+  const req = webpush.generateRequestDetails(sub, JSON.stringify({ title: 't', body: 'b' }));
+  assert.ok(req.headers.Authorization.startsWith('vapid t='), 'VAPID header');
+  assert.strictEqual(req.headers['Content-Encoding'], 'aes128gcm');
+  console.log('push ok');
+}

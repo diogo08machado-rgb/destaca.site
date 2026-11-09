@@ -5,9 +5,10 @@
 // Scripts and agents use "Authorization: Bearer <api key>"; the key is derived from DATABASE_URL.
 // Users are created with prospeccao/crm-user.mjs.
 // ponytail: rotating the Neon password rotates the api key too; give it its own env var if that ever hurts.
-const { createHmac, createHash, randomBytes, scryptSync, timingSafeEqual } = require('node:crypto');
+const { createHmac, createHash, createECDH, randomBytes, scryptSync, timingSafeEqual } = require('node:crypto');
 const { neon } = require('@neondatabase/serverless');
 const mail = require('./_mail.js');
+const webpush = require('web-push');
 
 const STAGES = ['lead', 'contactado', 'respondeu', 'proposta', 'cliente', 'perdido', 'nao_contactar'];
 const KINDS = ['email_out', 'email_in', 'rascunho', 'chamada', 'proposta', 'reuniao', 'trabalho', 'nota', 'estado'];
@@ -19,7 +20,7 @@ let sql, ready;
 const db = () => (sql ||= neon(process.env.DATABASE_URL));
 const q = (text, params = []) => db().query(text, params);
 // Schema: created/updated only when SCHEMA changes (bump it after editing DDL), so a cold start costs one query, not twenty.
-const SCHEMA = '2026-11-09b';
+const SCHEMA = '2026-11-10a';
 const ensure = () => (ready ||= (async () => {
   const [v] = await q(`select value from settings where key='schema'`).catch(() => []);
   if (v?.value === SCHEMA) return;
@@ -58,7 +59,8 @@ const DDL = `
     sent_at timestamptz, error text, message_id text, created_by text, created_at timestamptz not null default now());
   create index if not exists outbox_due on outbox(status, send_at);
   create index if not exists events_unread on events(company_id) where unread;
-  create index if not exists sessions_exp on sessions(expires_at)
+  create index if not exists sessions_exp on sessions(expires_at);
+  create table if not exists push_subs (endpoint text primary key, sub jsonb not null, username text, created_at timestamptz not null default now())
 `;
 
 const apiKey = () => createHmac('sha256', process.env.DATABASE_URL || '').update('crm-api').digest('base64url');
@@ -285,17 +287,38 @@ async function syncMail({ force } = {}) {
   return { added, merged, read: msgs.length, notified: fresh.length, synced_at: started };
 }
 
-// Phone notifications through ntfy (free app, Android/iPhone). The channel name is secret and derived from DATABASE_URL
-// (see prospeccao/crm-notificacoes.mjs); anyone subscribed to it gets the alerts. Failing to notify never breaks the sync.
+// Phone notifications. Two channels, both free; failing to notify never breaks the sync.
+// 1) Web Push from the CRM itself (shows as "Destaca CRM" with the Destaca logo; on iPhone the CRM must be added to the home screen).
+//    VAPID keys are derived from DATABASE_URL, so there is nothing to configure.
+// 2) ntfy (older channel, see prospeccao/crm-notificacoes.mjs), kept for phones that have not turned on the CRM notifications yet.
+let vapidPub;
+function vapid() {
+  if (vapidPub) return vapidPub;
+  const priv = createHmac('sha256', process.env.DATABASE_URL || '').update('crm-vapid').digest();
+  const ecdh = createECDH('prime256v1'); ecdh.setPrivateKey(priv);
+  vapidPub = ecdh.getPublicKey().toString('base64url');
+  webpush.setVapidDetails('mailto:contacto@destaca.site', vapidPub, priv.toString('base64url'));
+  return vapidPub;
+}
+async function pushTo(sub, payload, urgency = 'normal') {
+  vapid();
+  try { await webpush.sendNotification(sub, JSON.stringify(payload), { TTL: 86400, urgency }); return true; }
+  catch (e) {
+    if ([404, 410].includes(e.statusCode)) await q('delete from push_subs where endpoint=$1', [sub.endpoint]); // phone unsubscribed
+    else console.error('push', e.statusCode || e.message);
+    return false;
+  }
+}
 const ntfyTopic = () => `destaca-crm-${createHmac('sha256', process.env.DATABASE_URL || '').update('crm-ntfy').digest('hex').slice(0, 20)}`;
 async function notify(title, message, click, priority = 4) {
+  const subs = await q('select sub from push_subs').catch(() => []);
+  const sent = await Promise.all(subs.map((s) => pushTo(s.sub, { title, body: message, url: click }, priority >= 5 ? 'high' : 'normal')));
   try {
     const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(8000),
-      // icon: the Destaca logo inside the notification (Android shows it; iPhone always shows the ntfy app icon)
       body: JSON.stringify({ topic: ntfyTopic(), title, message, click, priority, tags: ['email'], icon: 'https://destaca.site/icon-512.png' }) });
     if (!r.ok) console.error('ntfy', r.status);
-    return r.ok;
-  } catch (e) { console.error('ntfy', e.message); return false; }
+    return r.ok || sent.some(Boolean);
+  } catch (e) { console.error('ntfy', e.message); return sent.some(Boolean); }
 }
 
 // Sends an email (or a reply) to a company and records it. Refuses "não contactar" and the spam words.
@@ -569,6 +592,17 @@ module.exports = async function handler(req, res) {
     }
     if (a === 'templates' && req.method === 'DELETE') { await q('delete from templates where id=$1', [Number(url.searchParams.get('id'))]); return send(200, { ok: true }); }
     if (a === 'tick') return send(200, await tick());
+    // Web Push: the page asks for the public key, subscribes the phone, and the CRM keeps the subscription.
+    if (a === 'push_key') return send(200, { key: vapid() });
+    if (a === 'push_sub' && req.method === 'POST') {
+      const { sub } = await readBody(req);
+      if (!sub?.endpoint || !/^https:\/\//.test(sub.endpoint) || !sub.keys?.p256dh || !sub.keys?.auth) return send(400, { error: 'subscrição inválida' });
+      const [old] = await q('select 1 from push_subs where endpoint=$1', [sub.endpoint]);
+      await q(`insert into push_subs (endpoint,sub,username) values ($1,$2,$3) on conflict (endpoint) do update set sub=$2, username=$3`, [sub.endpoint, JSON.stringify(sub), by]);
+      if (!old) await pushTo(sub, { title: '✅ Notificações do CRM ligadas', body: 'A partir de agora recebes aqui um aviso quando uma empresa escrever.', url: 'https://destaca.site/crm/' });
+      return send(200, { ok: true, new: !old });
+    }
+    if (a === 'push_unsub' && req.method === 'POST') { const { endpoint } = await readBody(req); await q('delete from push_subs where endpoint=$1', [String(endpoint || '')]); return send(200, { ok: true }); }
     if (a === 'candidates') return send(200, await candidates(Object.fromEntries(url.searchParams)));
     if (a === 'schedule' && req.method === 'POST') return send(200, await schedule(await readBody(req), by));
     if (a === 'outbox' && req.method === 'GET') {
@@ -630,3 +664,4 @@ module.exports.checkTotp = checkTotp;
 module.exports.checkPassword = checkPassword;
 module.exports.hashPassword = hashPassword;
 module.exports.plan = plan;
+module.exports.vapid = vapid;
