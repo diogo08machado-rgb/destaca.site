@@ -73,6 +73,7 @@ textarea { resize: vertical; min-height: 90px; }
 
 header { position: sticky; top: 0; z-index: 5; background: var(--ink); color: #fff; display: flex; gap: 12px; align-items: center; padding: 10px 16px; }
 header b { font-size: 18px; letter-spacing: -.02em; white-space: nowrap; } header b span { color: var(--or); } header .home { color: inherit; text-decoration: none; }
+.ic { width: 1.05em; height: 1.05em; vertical-align: -.17em; flex: none; } button .ic, a .ic { margin-right: 2px; } button.x .ic, #mClose .ic { margin: 0; }
 header .sp { flex: 1; } header small { color: #9fb0bb; } header button { background: transparent; color: #fff; border-color: #2a4152; white-space: nowrap; }
 .tabs { display: flex; gap: 4px; margin-left: 12px; }
 .tabs button { border: 0; color: #b7c4cc; padding: 7px 12px; border-radius: 8px; font-weight: 600; }
@@ -290,7 +291,7 @@ td small { color: var(--mut); display: block; }
       <label id="codeRow" hidden>Código da app<input name="code" class="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 ]{6,7}" maxlength="7" placeholder="000000"></label>
       <div class="err" id="loginErr" role="alert"></div>
       <button class="go" type="submit">Continuar</button>
-      <button type="button" class="back" id="back" hidden>← Voltar</button>
+      <button type="button" class="back" id="back" hidden><i data-ic="back"></i>Voltar</button>
     </form>
     <p class="foot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h6V7a3 3 0 0 0-6 0v3Z" fill="currentColor"/></svg>Protegido com palavra-passe e código no telemóvel</p>
   </div>
@@ -307,14 +308,14 @@ td small { color: var(--mut); display: block; }
       <button data-view="tpl">Modelos</button>
     </nav>
     <span class="sp"></span>
-    <button id="sync" title="Ir buscar emails novos ao Gmail">↻ Gmail <small id="syncAt"></small></button>
+    <button id="sync" title="Ir buscar emails novos ao Gmail"><i data-ic="refresh"></i>Gmail <small id="syncAt"></small></button>
     <small id="me"></small>
     <button id="logout">Sair</button>
   </header>
 
   <main id="vFollow">
     <div class="bar"><h2 class="vh">A seguir</h2><span class="sp"></span>
-      <button type="button" id="pushBtn" hidden>🔔 Ativar notificações</button>
+      <button type="button" id="pushBtn" hidden><i data-ic="bell"></i>Ativar notificações</button>
       <label class="inline">Sem resposta há <select id="days"><option>5</option><option selected>7</option><option>10</option><option>14</option></select> dias</label></div>
     <p id="pushHint" class="hint" hidden></p>
     <div id="follow" class="fgrid"></div>
@@ -402,7 +403,7 @@ td small { color: var(--mut); display: block; }
 <aside id="drawer" hidden aria-label="Ficha da empresa"></aside>
 
 <dialog id="modal" aria-labelledby="mTitle">
-  <div class="mhead"><h2 id="mTitle">Pré-visualização</h2><button type="button" id="mClose" aria-label="Fechar">✕</button></div>
+  <div class="mhead"><h2 id="mTitle">Pré-visualização</h2><button type="button" id="mClose" aria-label="Fechar"><i data-ic="x"></i></button></div>
   <div class="mmeta" id="mMeta"></div>
   <div class="medit" id="mEdit" hidden>
     <label>Assunto<input id="eSubj"></label>
@@ -423,6 +424,19 @@ const KINDS = {
 const SRC = { leads: 'Prospeção (email)', chamadas: 'Lista de chamadas', 'lista-150': 'Lista 150', manual: 'Manual', agente: 'Agente' };
 const GMAIL = 'contacto@destaca.site';
 const $ = (s) => document.querySelector(s);
+// line icons (Lucide paths); static HTML uses <i data-ic="name"></i>, filled at start
+const IC = {
+  x: '<path d="M18 6 6 18M6 6l12 12"/>', back: '<path d="m12 19-7-7 7-7M19 12H5"/>', ext: '<path d="M7 17 17 7M7 7h10v10"/>',
+  refresh: '<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M3 21v-5h5M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5"/>',
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  ok: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>', clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  no: '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/>', ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+  help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>',
+};
+IC.missed = IC.phone + '<path d="m16 2 6 6M22 2l-6 6"/>';
+const ic = (n) => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n] || ''}</svg>`;
+document.querySelectorAll('i[data-ic]').forEach((el) => { el.outerHTML = ic(el.dataset.ic); });
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = (d) => d ? new Date(d).toLocaleString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
 const ago = (d) => { if (!d) return '—'; const s = (Date.now() - new Date(d)) / 1000; return s < 3600 ? 'agora' : s < 86400 ? `há ${Math.floor(s / 3600)} h` : s < 86400 * 60 ? `há ${Math.floor(s / 86400)} d` : new Date(d).toLocaleDateString('pt-PT'); };
@@ -652,10 +666,11 @@ const fillTpl = (text, c) => String(text || '').replace(/\{(\w+)\}/g, (m, k) => 
 
 // ---- call center
 const CALL_RES = {
-  interessado: '✅ Interessado (quer proposta ou reunião)', ligar_depois: '🕐 Pediu para ligar mais tarde', sem_interesse: '❌ Sem interesse',
-  nao_atendeu: '📵 Não atendeu', numero_errado: '☎️ Número errado / não existe', nao_contactar: '🚫 Não quer ser contactado',
+  interessado: 'Interessado (quer proposta ou reunião)', ligar_depois: 'Pediu para ligar mais tarde', sem_interesse: 'Sem interesse',
+  nao_atendeu: 'Não atendeu', numero_errado: 'Número errado / não existe', nao_contactar: 'Não quer ser contactado',
 };
-const CALL_DONE = { ...CALL_RES, nao_atende: '📵 Não atende (3 tentativas)' };
+const CALL_DONE = { ...CALL_RES, nao_atende: 'Não atende (3 tentativas)' };
+const CALL_IC = { interessado: 'ok', ligar_depois: 'clock', sem_interesse: 'no', nao_atendeu: 'missed', nao_atende: 'missed', numero_errado: 'help', nao_contactar: 'ban' };
 let calls = { todo: [], done: [] }, callTab = 'todo', callShown = 60;
 const telHref = (p) => { const d = String(p || '').replace(/\D/g, ''); return `tel:+${d.length === 9 ? '351' + d : d}`; };
 const telText = (p) => { const d = String(p || '').replace(/\D/g, '').replace(/^351(?=\d{9}$)/, ''); return d.length === 9 ? d.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3') : p; };
@@ -673,13 +688,13 @@ function renderCalls() {
     <article class="ccard" data-id="${c.id}">
       <div class="ch"><b data-open="${c.id}" title="Abrir a ficha">${esc(c.name)}</b>${c.call_attempts ? `<span class="tries">${c.call_attempts}.ª tentativa feita</span>` : ''}</div>
       <div class="meta">${esc(c.category || '')}${c.city ? ` · ${esc(String(c.city).split('|')[0])}` : ''} ${siteLink(c)} ${c.score != null ? nota(c.score) : ''}</div>
-      <a class="dial" href="${telHref(c.phone)}">📞 ${esc(telText(c.phone))}</a>
+      <a class="dial" href="${telHref(c.phone)}">${ic('phone')} ${esc(telText(c.phone))}</a>
       <div class="brief${c.call_brief ? '' : ' none'}">${esc(c.call_brief || 'Ainda sem descrição para esta empresa.')}</div>
       ${c.call_feedback ? `<div class="meta">Última tentativa: ${esc(c.call_feedback)}</div>` : ''}
       <button type="button" class="pri" data-log="${c.id}">Registar chamada</button>
     </article>` : `
     <article class="ccard" data-id="${c.id}">
-      <div class="ch"><b data-open="${c.id}" title="Abrir a ficha">${esc(c.name)}</b><span class="res r-${c.call_result}">${esc((CALL_DONE[c.call_result] || c.call_result).replace(/ \(.*\)$/, ''))}</span></div>
+      <div class="ch"><b data-open="${c.id}" title="Abrir a ficha">${esc(c.name)}</b><span class="res r-${c.call_result}">${ic(CALL_IC[c.call_result])} ${esc((CALL_DONE[c.call_result] || c.call_result).replace(/ \(.*\)$/, ''))}</span></div>
       <div class="meta">${esc(c.category || '')}${c.city ? ` · ${esc(String(c.city).split('|')[0])}` : ''} · <a href="${telHref(c.phone)}">${esc(telText(c.phone))}</a></div>
       ${c.call_feedback ? `<div class="brief">${esc(c.call_feedback)}</div>` : '<div class="meta">Sem notas.</div>'}
       <div class="meta">${fmt(c.call_at)}${c.call_by ? ` · ${esc(c.call_by)}` : ''}<span class="sp" style="flex:1"></span><button type="button" data-reset="${c.id}">Voltar à lista</button></div>
@@ -698,7 +713,7 @@ $('#calls').onclick = async (e) => {
   if (card.querySelector('.cform')) return;
   lg.hidden = true;
   card.insertAdjacentHTML('beforeend', `<form class="cform">
-    <div class="opts">${Object.entries(CALL_RES).map(([k, v]) => `<label><input type="radio" name="r" value="${k}" required> ${v}</label>`).join('')}</div>
+    <div class="opts">${Object.entries(CALL_RES).map(([k, v]) => `<label><input type="radio" name="r" value="${k}" required> ${ic(CALL_IC[k])} ${v}</label>`).join('')}</div>
     <label class="f" data-when hidden>Ligar outra vez a partir de<input type="date" name="when" value="${local(new Date(Date.now() + 2 * 864e5)).slice(0, 10)}"></label>
     <label class="f">O que disseram / próximo passo<textarea name="fb" rows="3" placeholder="Ex.: falei com o dono, quer orçamento para site novo; ligar 5.ª às 15h"></textarea></label>
     <div class="row" style="margin:0"><button class="go-sm" type="submit">Guardar</button><button type="button" data-cancel>Cancelar</button></div>
@@ -720,7 +735,7 @@ $('#calls').onclick = async (e) => {
 // ---- site link, analysis score, e-mail preview
 const nota = (s) => s == null ? '<span class="nota n-none" title="Site sem análise">sem nota</span>'
   : `<span class="nota ${s < 60 ? 'n-lo' : s < 80 ? 'n-mid' : 'n-hi'}" title="Nota da análise SEO ao site">${s}/100</span>`;
-const siteLink = (c) => { const u = c.website || (c.domain ? `https://${c.domain}` : ''); return u ? `<a class="site" href="${esc(u)}" target="_blank" rel="noopener" title="Abrir o site num separador novo">${esc(c.domain || u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))} ↗</a>` : ''; };
+const siteLink = (c) => { const u = c.website || (c.domain ? `https://${c.domain}` : ''); return u ? `<a class="site" href="${esc(u)}" target="_blank" rel="noopener" title="Abrir o site num separador novo">${esc(c.domain || u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''))} ${ic('ext')}</a>` : ''; };
 document.addEventListener('click', (e) => { if (e.target.closest('a.site')) e.stopPropagation(); }, true); // a site link never opens the row behind it
 
 // Shows the e-mail exactly as it will arrive (same HTML the server sends). With onSave, the text can be edited in place.
@@ -760,7 +775,7 @@ const DAYS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sáb
 const tomorrow = () => { const d = new Date(); d.setDate(d.getDate() + 1); return local(d).slice(0, 10); };
 function slotRow(time = '09:00', count = 5) {
   const el = Object.assign(document.createElement('div'), { className: 'slot' });
-  el.innerHTML = `Às <input type="time" value="${time}" aria-label="Hora"> enviar <input type="number" min="1" max="40" value="${count}" aria-label="Quantos"> emails <button type="button" aria-label="Tirar horário">✕</button>`;
+  el.innerHTML = `Às <input type="time" value="${time}" aria-label="Hora"> enviar <input type="number" min="1" max="40" value="${count}" aria-label="Quantos"> emails <button type="button" aria-label="Tirar horário">${ic('x')}</button>`;
   el.querySelector('button').onclick = () => { el.remove(); planSummary(); };
   el.addEventListener('input', planSummary);
   $('#slots').append(el);
@@ -779,7 +794,7 @@ async function openSend() {
 function renderPicked() {
   const t = templates.find((x) => x.id === Number($('#plan').tpl.value));
   $('#picked').innerHTML = picked.map((c, i) => `<li>${nota(c.score)}<span><b>${esc(c.name)}</b>${c.custom ? ' <small>(texto editado)</small>' : ''}<br><small>${esc(c.email)}</small> ${siteLink(c)}</span>
-    <button type="button" data-prev="${i}" title="Ver como o email vai ficar">Ver email</button><button type="button" data-rm="${i}" aria-label="Tirar da lista">✕</button></li>`).join('');
+    <button type="button" data-prev="${i}" title="Ver como o email vai ficar">Ver email</button><button type="button" data-rm="${i}" aria-label="Tirar da lista">${ic('x')}</button></li>`).join('');
   planSummary();
   return t;
 }
@@ -883,7 +898,7 @@ function drawer(c) {
   d.innerHTML = `
     <div class="top"><h2>${esc(c.name || 'Nova empresa')}</h2>
       ${c.id ? `<select id="stage" aria-label="Estado" style="width:auto">${Object.entries(STAGES).map(([k, v]) => `<option value="${k}" ${k === c.stage ? 'selected' : ''}>${v}</option>`).join('')}</select>` : ''}
-      <button id="x" aria-label="Fechar">✕</button></div>
+      <button id="x" aria-label="Fechar">${ic('x')}</button></div>
     ${c.id ? `<section id="mailbox">
       <h3>Email</h3>
       ${blocked ? '<div class="stop">Pediu para não ser contactada (REMOVER). Não enviar mais mensagens.</div>'
@@ -927,8 +942,8 @@ function drawer(c) {
     ${c.id ? `<section><h3>Linha do tempo (${c.events.filter((e) => e.kind !== 'estado').length})</h3><ul class="tl">${c.events.map((e) => {
       const [label, color] = KINDS[e.kind] || [e.kind, '#999'];
       return `<li style="--c:${color}" class="${e.unread ? 'unread' : ''}"><div class="h"><b>${label}</b><small>${fmt(e.at)}${e.by_user ? ' · ' + esc(e.by_user) : ''}</small>
-        ${e.kind !== 'estado' ? `<button class="x" data-del="${e.id}" aria-label="Apagar registo" title="Apagar registo">✕</button>` : ''}</div>
-        ${e.subject ? `<div class="${e.kind === 'estado' ? 'num' : 's'}">${esc(e.subject)}</div>` : ''}
+        ${e.kind !== 'estado' ? `<button class="x" data-del="${e.id}" aria-label="Apagar registo" title="Apagar registo">${ic('x')}</button>` : ''}</div>
+        ${e.subject ? `<div class="${e.kind === 'estado' ? 'num' : 's'}">${esc(e.subject.replace(/^📞\s*/u, ''))}</div>` : ''}
         ${e.body ? `<pre>${esc(e.body)}</pre>` : ''}
         ${e.kind === 'email_in' && !blocked && c.email ? `<div class="acts"><button data-reply="${e.id}">Responder</button>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Ver no Gmail</a>` : ''}</div>`
           : e.kind === 'email_out' && e.body ? `<div class="acts"><button data-look="${e.id}">Ver como ficou</button>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Ver no Gmail</a>` : ''}</div>`
@@ -979,7 +994,7 @@ function drawer(c) {
     $('#mTo').value = ev.from_addr || c.email;
     $('#mSubj').value = /^re:/i.test(ev.subject || '') ? ev.subject : `Re: ${ev.subject || ''}`;
     $('#replying').hidden = false;
-    $('#replying').innerHTML = `A responder a «${esc((ev.subject || '').slice(0, 60))}» de ${fmt(ev.at)}<button aria-label="Cancelar resposta">✕</button>`;
+    $('#replying').innerHTML = `A responder a «${esc((ev.subject || '').slice(0, 60))}» de ${fmt(ev.at)}<button aria-label="Cancelar resposta">${ic('x')}</button>`;
     $('#replying button').onclick = () => { replyTo = null; $('#replying').hidden = true; $('#mTo').value = c.email; };
     $('#mailbox').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('#mBody').focus();
   });

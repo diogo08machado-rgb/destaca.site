@@ -535,7 +535,7 @@ async function registerCall(b, by) {
   const attempts = (c.call_attempts || 0) + 1;
   const final = r === 'nao_atendeu' && attempts >= MAX_TRIES_CALL ? 'nao_atende' : r;
   const label = final === 'nao_atende' ? `Não atende (${attempts} tentativas)` : r === 'nao_atendeu' ? `Não atendeu (${attempts}.ª tentativa)` : CALL_RESULTS[r];
-  await addEvent({ company_id: c.id, kind: 'chamada', subject: `📞 ${label}`, body: feedback || null }, by);
+  await addEvent({ company_id: c.id, kind: 'chamada', subject: label, body: feedback || null }, by);
   const to = { interessado: ['lead', 'contactado'].includes(c.stage) ? 'respondeu' : c.stage, ligar_depois: c.stage === 'lead' ? 'contactado' : c.stage,
     sem_interesse: 'perdido', nao_contactar: 'nao_contactar' }[r];
   if (to && to !== c.stage && c.stage !== 'cliente') await setStage(c.id, c.stage, to, by, 'chamada');
