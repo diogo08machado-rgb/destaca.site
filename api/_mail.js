@@ -7,7 +7,8 @@ const nodemailer = require('nodemailer');
 const USER = 'contacto@destaca.site';
 // Senders that are never clients: services, reports, bounces (bounces are handled apart).
 const NOISE = /(no-?reply|notifications?@|notify@(?!web3forms)|dmarc|@e-goi\.|@mcafee\.|@sophos\.|@kaspersky\.|@vercel\.|@google\.com|@.*google\.com|metamail|mailchimp|@web3forms\.com|dmarcchecker|@accounts\.|@facebookmail|@linkedin)/i;
-const AUTO = /^(resposta autom|automatic reply|auto(matic)?[- ]?reply|out of office|ausente|ausência|f[eé]rias|abwesen)/i;
+// also used in SQL (~*) via .source: no \b (Postgres reads it as backspace)
+const AUTO = /^(resposta autom|automatic reply|auto(matic)?[- ]?reply|out of office|ausente|ausência|f[eé]rias|abwesen)|e-?mail autom[aá]tico|mensagem autom[aá]tica/i;
 const FORBIDDEN = /gr[aá]tis|gratuit|sem custo/i;
 
 const ready = () => !!process.env.GMAIL_APP_PASSWORD;

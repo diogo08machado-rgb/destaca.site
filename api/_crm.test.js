@@ -33,6 +33,7 @@ assert.strictEqual(mail.trimQuoted('Obrigado, enviem proposta.\n\nEm qua., 5/11/
 assert.strictEqual(mail.trimQuoted('REMOVER\n\nDe: contacto primario <contacto@destaca.site>\nEnviada: 30 de outubro'), 'REMOVER');
 assert.deepStrictEqual(mail.formLead('Nome: Joana Silva\nEmail: joana@empresa.pt\nMensagem: quero site'), { email: 'joana@empresa.pt', name: 'Joana Silva' });
 assert.ok(mail.AUTO.test('Resposta automática: Re: Sobre o site'));
+assert.ok(mail.AUTO.test('«e-mail automático» ') && !mail.AUTO.test('Re: Sobre o site sameiro.com'));
 console.log('mail ok');
 
 // scheduling: 2030-01-04 is a Friday
