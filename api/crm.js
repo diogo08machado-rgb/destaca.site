@@ -589,7 +589,7 @@ module.exports = async function handler(req, res) {
     // The clock (GitHub Actions) only gets to send what is due, with its own key.
     // Every 5 min: read Gmail (and notify phones of new client mail), then send what is due.
     if (a === 'tick' && same(String(req.headers.authorization || ''), `Bearer ${cronKey()}`)) {
-      const read = mail.ready() ? await syncMail().catch((e) => ({ error: e.message })) : { waiting: 'gmail' };
+      const read = mail.ready() ? await syncMail().catch((e) => ({ error: e.message, detail: e.responseText || e.response || undefined, auth_failed: e.authenticationFailed || undefined })) : { waiting: 'gmail' };
       return send(200, { read, ...(await tick()) });
     }
 
